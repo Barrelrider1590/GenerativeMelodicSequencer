@@ -166,7 +166,8 @@ bool GenerativeMelodicSequencerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GenerativeMelodicSequencerAudioProcessor::createEditor()
 {
-    return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
+    //return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -188,4 +189,17 @@ void GenerativeMelodicSequencerAudioProcessor::setStateInformation (const void* 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new GenerativeMelodicSequencerAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout{};
+
+    layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 30, 300, 120));
+    layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, 16, 8));
+    layout.add(std::make_unique < juce::AudioParameterFloat>("gate", "Gate", 0.f, 1.f, .5f));
+    layout.add(std::make_unique < juce::AudioParameterFloat>("density", "Density", 0.f, 1.f, .5f));
+    layout.add(std::make_unique < juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, .5f));
+
+    return layout;
 }
