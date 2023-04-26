@@ -10,6 +10,14 @@
 
 #include <JuceHeader.h>
 
+struct ChainSettings
+{
+    int m_bpm{ 0 }, m_length{ 0 };
+    float m_gate{ 0 }, m_density{ 0 }, m_mutate{ 0 };
+};
+
+ChainSettings getChainSettings(const juce::AudioProcessorValueTreeState& apvts);
+
 //==============================================================================
 /**
 */

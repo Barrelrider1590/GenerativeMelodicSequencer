@@ -191,6 +191,19 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new GenerativeMelodicSequencerAudioProcessor();
 }
 
+ChainSettings getChainSettings(const juce::AudioProcessorValueTreeState& apvts)
+{
+    ChainSettings settings;
+
+    settings.m_bpm = apvts.getRawParameterValue("bpm")->load();
+    settings.m_length = apvts.getRawParameterValue("length")->load();
+    settings.m_gate = apvts.getRawParameterValue("gate")->load();
+    settings.m_density = apvts.getRawParameterValue("density")->load();
+    settings.m_mutate = apvts.getRawParameterValue("mutate")->load();
+
+    return settings;
+}
+
 juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAudioProcessor::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout{};
