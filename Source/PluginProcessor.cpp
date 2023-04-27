@@ -19,8 +19,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ),
-    m_midiChannel(10), m_startTime(juce::Time::getMillisecondCounterHiRes() * .001)
+                       )
 #endif
 {
 }
@@ -94,10 +93,8 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    auto currentTime = juce::Time::getMillisecondCounterHiRes() * 0.001 - m_startTime;
-    auto currentSampleNumber = (int)(currentTime * sampleRate);
-
-    populateMidiBuffer(m_midiBuffer, m_midiChannel, currentSampleNumber);
+    // Use this method as the place to do any pre-playback
+    // initialisation that you need..
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -135,7 +132,6 @@ bool GenerativeMelodicSequencerAudioProcessor::isBusesLayoutSupported (const Bus
 void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
-    
 }
 
 //==============================================================================
@@ -195,14 +191,4 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
     layout.add(std::make_unique < juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, .5f));
 
     return layout;
-}
-
-void GenerativeMelodicSequencerAudioProcessor::populateMidiBuffer(juce::MidiBuffer& midiBuffer, int midiChannel, int sampleNr)
-{
-    for (int i = 0; i < 2; ++i)
-    {
-        auto timeStamp{ juce::Time::getMillisecondCounterHiRes };
-
-        midiBuffer.addEvent(juce::MidiMessage::noteOn(midiChannel, 36, (juce::uint8)127), sampleNr + (i * 500));
-    }
 }

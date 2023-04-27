@@ -70,14 +70,7 @@ public:
 
 private:
     //==============================================================================
-    void populateMidiBuffer(juce::MidiBuffer& midiBuffer, int midiChannel, int sampleNr);
-
     juce::AudioParameterFloat* m_bpm;
-
-    const int m_midiChannel;
-    const double m_startTime;
-
-    juce::MidiBuffer m_midiBuffer;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
 };
