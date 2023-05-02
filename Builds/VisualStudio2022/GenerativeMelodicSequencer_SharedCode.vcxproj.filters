@@ -577,6 +577,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\SineOscillator.cpp">
+      <Filter>GenerativeMelodicSequencer\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClCompile>
@@ -2907,6 +2910,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\SineOscillator.h">
+      <Filter>GenerativeMelodicSequencer\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClInclude>

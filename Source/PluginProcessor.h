@@ -69,6 +69,7 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
+    float m_level;
 
     //==============================================================================
 

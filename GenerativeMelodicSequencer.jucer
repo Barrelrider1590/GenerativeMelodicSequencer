@@ -6,6 +6,10 @@
               pluginCharacteristicsValue="pluginIsSynth">
   <MAINGROUP id="HqLPJY" name="GenerativeMelodicSequencer">
     <GROUP id="{F6DC3AC9-8FC0-1D05-1B17-C7C5A75C5BED}" name="Source">
+      <FILE id="t9pgVL" name="SineOscillator.cpp" compile="1" resource="0"
+            file="Source/SineOscillator.cpp"/>
+      <FILE id="N3hS91" name="SineOscillator.h" compile="0" resource="0"
+            file="Source/SineOscillator.h"/>
       <FILE id="KsBTgC" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="TI8RU6" name="PluginProcessor.h" compile="0" resource="0"
