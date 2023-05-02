@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SineOscillator.h"
 
 struct ChainSettings
 {
@@ -70,6 +71,8 @@ public:
 
 private:
     float m_level;
+
+    juce::OwnedArray<SineOscillator> m_oscArr;
 
     //==============================================================================
 
