@@ -19,13 +19,15 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    m_level(.25)
 #endif
 {
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
 {
+    m_oscillatorsArr.clear(true);
 }
 
 //==============================================================================
@@ -93,7 +95,21 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    int nrOfOscillators{ 200 };
+    for (int i{ 0 }; i < nrOfOscillators; ++i)
+    {
+        SineOscillator* osc = new SineOscillator();
 
+        double midiNote{ juce::Random::getSystemRandom().nextDouble() * 36.0 + 48.0 };
+        double semitoneDistance{ midiNote - 69 };                                           // calculate the distance in semitones between 440.hz and the generated midiNote
+        double frequency{ 440.0 * pow(2, semitoneDistance / 12.0) };                        // for clarification on this formula, go here:
+        // https://www.music.mcgill.ca/~gary/307/week1/node28.html
+        osc->setFrequency(static_cast<float>(frequency), static_cast<float>(sampleRate));
+        m_oscillatorsArr.add(osc);
+
+    }
+
+    m_level = .5f / static_cast<float>(nrOfOscillators);                                   // devide level by nr of oscillators to prevent clipping
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -130,7 +146,19 @@ bool GenerativeMelodicSequencerAudioProcessor::isBusesLayoutSupported (const Bus
 
 void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    float* leftBuffer = buffer.getWritePointer(0);
+    float* rightBuffer = buffer.getWritePointer(1);
 
+    for (int oscIndex{ 0 }; oscIndex < m_oscillatorsArr.size(); ++oscIndex)
+    {
+        for (int sample{ 0 }; sample < buffer.getNumSamples(); ++sample)
+        {
+            int levelSample = sample * m_level;
+
+            leftBuffer[sample] = levelSample;
+            rightBuffer[sample] = levelSample;
+        }
+    }
 }
 
 //==============================================================================
@@ -179,6 +207,7 @@ ChainSettings getChainSettings(const juce::AudioProcessorValueTreeState& apvts)
 
     settings.m_bpm = apvts.getRawParameterValue("bpm")->load();
     settings.m_length = apvts.getRawParameterValue("length")->load();
+    settings.m_level = apvts.getRawParameterValue("level")->load();
     settings.m_gate = apvts.getRawParameterValue("gate")->load();
     settings.m_density = apvts.getRawParameterValue("density")->load();
     settings.m_mutate = apvts.getRawParameterValue("mutate")->load();
@@ -192,6 +221,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 30, 300, 120));
     layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, 16, 8));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("level", "Level", 0.f, 1.f, .0f));
     layout.add(std::make_unique < juce::AudioParameterFloat>("gate", "Gate", 0.f, 1.f, .5f));
     layout.add(std::make_unique < juce::AudioParameterFloat>("density", "Density", 0.f, 1.f, .5f));
     layout.add(std::make_unique < juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, .5f));
