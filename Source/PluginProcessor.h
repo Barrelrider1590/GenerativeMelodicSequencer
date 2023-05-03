@@ -69,8 +69,17 @@ public:
 
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
+    void generateMidiEvents();
+    void addMessageToBuffer( const juce::MidiMessage& message);
+
 private:
+    int m_sampleRate;
+
+    double m_startTime, m_elapsedTime;
+
     float m_level;
+
+    juce::MidiBuffer m_midiBuffer;
 
     juce::OwnedArray<SineOscillator> m_oscillatorsArr;
 

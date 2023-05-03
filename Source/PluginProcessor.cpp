@@ -20,9 +20,10 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    m_level(.25)
+    m_level(.25), m_startTime(juce::Time::getMillisecondCounterHiRes())
 #endif
 {
+    
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
@@ -95,7 +96,10 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    m_elapsedTime += juce::Time::getMillisecondCounterHiRes() - m_startTime;
+
     int nrOfOscillators{ 200 };
+
     for (int i{ 0 }; i < nrOfOscillators; ++i)
     {
         SineOscillator* osc = new SineOscillator();
@@ -228,5 +232,23 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
+
+void GenerativeMelodicSequencerAudioProcessor::generateMidiEvents()
+{
+    auto message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
+    message.setTimeStamp((juce::Time::getMillisecondCounterHiRes() * .001) - m_startTime);
+
+    auto messageOff{ juce::MidiMessage::noteOff(message.getChannel(), message.getNoteNumber()) };
+    message.setTimeStamp(message.getTimeStamp() + .5);
+}
+
+void GenerativeMelodicSequencerAudioProcessor::addMessageToBuffer(const juce::MidiMessage& message)
+{
+    auto timeStamp{ message.getTimeStamp() };
+    auto sampleNr{ timeStamp * juce::AudioProcessor::getSampleRate() };
+
+    m_midiBuffer.addEvent(message, sampleNr);
+}
+
 
 #pragma endregion
