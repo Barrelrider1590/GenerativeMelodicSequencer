@@ -20,7 +20,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    m_level(.25), m_startTime(juce::Time::getMillisecondCounterHiRes())
+    m_startTime(juce::Time::getMillisecondCounterHiRes())
 #endif
 {
     
@@ -28,7 +28,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
 {
-    m_oscillatorsArr.clear(true);
+
 }
 
 //==============================================================================
@@ -96,24 +96,7 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    m_elapsedTime += juce::Time::getMillisecondCounterHiRes() - m_startTime;
-
-    int nrOfOscillators{ 200 };
-
-    for (int i{ 0 }; i < nrOfOscillators; ++i)
-    {
-        SineOscillator* osc = new SineOscillator();
-
-        double midiNote{ juce::Random::getSystemRandom().nextDouble() * 36.0 + 48.0 };
-        double semitoneDistance{ midiNote - 69 };                                           // calculate the distance in semitones between 440.hz and the generated midiNote
-        double frequency{ 440.0 * pow(2, semitoneDistance / 12.0) };                        // for clarification on this formula, go here:
-        // https://www.music.mcgill.ca/~gary/307/week1/node28.html
-        osc->setFrequency(static_cast<float>(frequency), static_cast<float>(sampleRate));
-        m_oscillatorsArr.add(osc);
-
-    }
-
-    m_level = .5f / static_cast<float>(nrOfOscillators);                                   // devide level by nr of oscillators to prevent clipping
+                                 // devide level by nr of oscillators to prevent clipping
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -150,19 +133,7 @@ bool GenerativeMelodicSequencerAudioProcessor::isBusesLayoutSupported (const Bus
 
 void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    float* leftBuffer = buffer.getWritePointer(0);
-    float* rightBuffer = buffer.getWritePointer(1);
 
-    for (int oscIndex{ 0 }; oscIndex < m_oscillatorsArr.size(); ++oscIndex)
-    {
-        for (int sample{ 0 }; sample < buffer.getNumSamples(); ++sample)
-        {
-            int levelSample = sample * m_level;
-
-            leftBuffer[sample] = levelSample;
-            rightBuffer[sample] = levelSample;
-        }
-    }
 }
 
 //==============================================================================
@@ -232,23 +203,5 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
-
-void GenerativeMelodicSequencerAudioProcessor::generateMidiEvents()
-{
-    auto message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
-    message.setTimeStamp((juce::Time::getMillisecondCounterHiRes() * .001) - m_startTime);
-
-    auto messageOff{ juce::MidiMessage::noteOff(message.getChannel(), message.getNoteNumber()) };
-    message.setTimeStamp(message.getTimeStamp() + .5);
-}
-
-void GenerativeMelodicSequencerAudioProcessor::addMessageToBuffer(const juce::MidiMessage& message)
-{
-    auto timeStamp{ message.getTimeStamp() };
-    auto sampleNr{ timeStamp * juce::AudioProcessor::getSampleRate() };
-
-    m_midiBuffer.addEvent(message, sampleNr);
-}
-
 
 #pragma endregion
