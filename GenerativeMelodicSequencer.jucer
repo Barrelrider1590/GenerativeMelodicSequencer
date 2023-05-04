@@ -6,6 +6,8 @@
               pluginCharacteristicsValue="pluginIsSynth">
   <MAINGROUP id="HqLPJY" name="GenerativeMelodicSequencer">
     <GROUP id="{F6DC3AC9-8FC0-1D05-1B17-C7C5A75C5BED}" name="Source">
+      <FILE id="odaDSx" name="CustomOscillator.h" compile="0" resource="0"
+            file="Source/CustomOscillator.h"/>
       <FILE id="t9pgVL" name="SineOscillator.cpp" compile="1" resource="0"
             file="Source/SineOscillator.cpp"/>
       <FILE id="N3hS91" name="SineOscillator.h" compile="0" resource="0"
@@ -39,6 +41,7 @@
         <MODULEPATH id="juce_graphics" path="E:/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="E:/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="E:/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="E:/JUCE/modules"/>
       </MODULEPATHS>
     </VS2022>
   </EXPORTFORMATS>
@@ -52,6 +55,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
