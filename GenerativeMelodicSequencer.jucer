@@ -6,12 +6,6 @@
               pluginCharacteristicsValue="pluginIsSynth">
   <MAINGROUP id="HqLPJY" name="GenerativeMelodicSequencer">
     <GROUP id="{F6DC3AC9-8FC0-1D05-1B17-C7C5A75C5BED}" name="Source">
-      <FILE id="odaDSx" name="CustomOscillator.h" compile="0" resource="0"
-            file="Source/CustomOscillator.h"/>
-      <FILE id="t9pgVL" name="SineOscillator.cpp" compile="1" resource="0"
-            file="Source/SineOscillator.cpp"/>
-      <FILE id="N3hS91" name="SineOscillator.h" compile="0" resource="0"
-            file="Source/SineOscillator.h"/>
       <FILE id="KsBTgC" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="TI8RU6" name="PluginProcessor.h" compile="0" resource="0"
@@ -19,6 +13,9 @@
       <FILE id="SGuNiM" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="eoEt5a" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="WKM0jP" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
+      <FILE id="TPST7e" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
+      <FILE id="vlTOnA" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
