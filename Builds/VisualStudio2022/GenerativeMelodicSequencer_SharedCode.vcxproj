@@ -132,7 +132,6 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\SineOscillator.cpp" />
     <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
     <ClCompile Include="..\..\Source\PluginEditor.cpp" />
     <ClCompile Include="E:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
@@ -2416,7 +2415,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\SineOscillator.h" />
     <ClInclude Include="..\..\Source\PluginProcessor.h" />
     <ClInclude Include="..\..\Source\PluginEditor.h" />
     <ClInclude Include="E:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h" />
