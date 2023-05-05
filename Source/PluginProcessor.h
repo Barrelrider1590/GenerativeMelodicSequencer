@@ -70,19 +70,19 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
-    void setRandomFrequency();
+    //void setRandomFrequency();
 
     //==============================================================================
-    double m_startTime, m_elapsedTime;
-    float m_frequency;
+    //double m_startTime, m_elapsedTime;
+    //float m_frequency;
 
-    juce::dsp::Oscillator<float> m_osc{ [](float x) { return std::sin(x); } };
-    // wave shape formula
-    // sine: return std::sin(x);
-    // saw: return x / juce::MathConstants<float>::pi;
-    // square: return x < 0.0f ? -1.0f : 1.0f;
+    //juce::dsp::Oscillator<float> m_osc{ [](float x) { return std::sin(x); } };
+    //// wave shape formula
+    //// sine: return std::sin(x);
+    //// saw: return x / juce::MathConstants<float>::pi;
+    //// square: return x < 0.0f ? -1.0f : 1.0f;
 
-    juce::dsp::Gain<float> m_gain;
+    //juce::dsp::Gain<float> m_gain;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
 };

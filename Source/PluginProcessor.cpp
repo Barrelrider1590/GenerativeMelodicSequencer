@@ -96,17 +96,17 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    juce::dsp::ProcessSpec spec{};
-    spec.maximumBlockSize = samplesPerBlock;
-    spec.sampleRate = sampleRate;
-    spec.numChannels = getTotalNumOutputChannels();
+    //juce::dsp::ProcessSpec spec{};
+    //spec.maximumBlockSize = samplesPerBlock;
+    //spec.sampleRate = sampleRate;
+    //spec.numChannels = getTotalNumOutputChannels();
 
-    m_osc.prepare(spec);
+    //m_osc.prepare(spec);
 
-    m_osc.setFrequency(m_frequency);
+    //m_osc.setFrequency(m_frequency);
 
-    m_gain.prepare(spec);
-    m_gain.setGainLinear(0.1f);
+    //m_gain.prepare(spec);
+    //m_gain.setGainLinear(0.1f);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -153,18 +153,18 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    juce::dsp::AudioBlock<float> audioBlock {buffer};
+    //juce::dsp::AudioBlock<float> audioBlock {buffer};
 
-    m_elapsedTime += juce::Time::getMillisecondCounterHiRes() - m_startTime;
-    if (m_elapsedTime > 1000000)
-    {
-        setRandomFrequency();
-        m_osc.setFrequency(m_frequency);
-        m_elapsedTime = 0;
-    }
+    //m_elapsedTime += juce::Time::getMillisecondCounterHiRes() - m_startTime;
+    //if (m_elapsedTime > 1000000)
+    //{
+    //    setRandomFrequency();
+    //    m_osc.setFrequency(m_frequency);
+    //    m_elapsedTime = 0;
+    //}
 
-    m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-    m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+    //m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+    //m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
 }
 
@@ -236,10 +236,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
     return layout;
 }
 
-void GenerativeMelodicSequencerAudioProcessor::setRandomFrequency()
-{
-    auto rand = juce::Random::Random();
-    m_frequency = (rand.nextFloat() * 25163 + 20453 % 46616) / 100 ;
-}
+//void GenerativeMelodicSequencerAudioProcessor::setRandomFrequency()
+//{
+//    auto rand = juce::Random::Random();
+//    m_frequency = (rand.nextFloat() * 25163 + 20453 % 46616) / 100 ;
+//}
 
 #pragma endregion
