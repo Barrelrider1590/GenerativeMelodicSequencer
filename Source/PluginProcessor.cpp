@@ -19,10 +19,11 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    m_startTime(juce::Time::getMillisecondCounterHiRes()), m_elapsedTime(0), m_frequency(440.f)
 #endif
 {
-    
+    m_osc.setFrequency(m_frequency);
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
@@ -101,7 +102,8 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
     spec.numChannels = getTotalNumOutputChannels();
 
     m_osc.prepare(spec);
-    m_osc.setFrequency(440.0f);
+
+    m_osc.setFrequency(m_frequency);
 
     m_gain.prepare(spec);
     m_gain.setGainLinear(0.1f);
@@ -153,6 +155,14 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     juce::dsp::AudioBlock<float> audioBlock {buffer};
 
+    m_elapsedTime += juce::Time::getMillisecondCounterHiRes() - m_startTime;
+    if (m_elapsedTime > 1000000)
+    {
+        setRandomFrequency();
+        m_osc.setFrequency(m_frequency);
+        m_elapsedTime = 0;
+    }
+
     m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
     m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
@@ -166,8 +176,8 @@ bool GenerativeMelodicSequencerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GenerativeMelodicSequencerAudioProcessor::createEditor()
 {
-    //return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -224,6 +234,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
     layout.add(std::make_unique < juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, .5f));
 
     return layout;
+}
+
+void GenerativeMelodicSequencerAudioProcessor::setRandomFrequency()
+{
+    auto rand = juce::Random::Random();
+    m_frequency = (rand.nextFloat() * 25163 + 20453 % 46616) / 100 ;
 }
 
 #pragma endregion
