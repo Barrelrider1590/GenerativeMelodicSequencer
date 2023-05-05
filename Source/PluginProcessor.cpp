@@ -23,6 +23,9 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
 #endif
 {
     //m_osc.setFrequency(m_frequency);
+
+    m_synth.addSound(new SynthSound());
+    m_synth.addVoice(new SynthVoice());
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
@@ -106,6 +109,10 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
 
     //m_gain.prepare(spec);
     //m_gain.setGainLinear(0.1f);
+
+    //============================================================
+
+    m_synth.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -164,6 +171,17 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     //m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
     //m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+
+    //=========================================================================
+    for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
+    {
+        if (dynamic_cast<juce::SynthesiserVoice*>(m_synth.getVoice(i)))
+        {
+            // here we will update parameters
+        }
+    }
+
+    m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 

@@ -9,6 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SynthSound.h"
+#include "SynthVoice.h"
 
 struct ChainSettings
 {
@@ -82,6 +84,9 @@ private:
     //// square: return x < 0.0f ? -1.0f : 1.0f;
 
     //juce::dsp::Gain<float> m_gain;
+
+    //============================================================================
+    juce::Synthesiser m_synth;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
 };
