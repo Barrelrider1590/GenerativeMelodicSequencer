@@ -70,9 +70,10 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
-    double m_startTime;
 
     //==============================================================================
+    juce::dsp::Oscillator<float> m_osc{ [](float x) { return std::sin(x); } };
+    juce::dsp::Gain<float> m_gain;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
 };

@@ -19,8 +19,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ),
-    m_startTime(juce::Time::getMillisecondCounterHiRes())
+                       )
 #endif
 {
     
@@ -96,7 +95,16 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-                                 // devide level by nr of oscillators to prevent clipping
+    juce::dsp::ProcessSpec spec{};
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getTotalNumOutputChannels();
+
+    m_osc.prepare(spec);
+    m_osc.setFrequency(440.0f);
+
+    m_gain.prepare(spec);
+    m_gain.setGainLinear(0.1f);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -133,6 +141,20 @@ bool GenerativeMelodicSequencerAudioProcessor::isBusesLayoutSupported (const Bus
 
 void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    juce::ScopedNoDenormals noDenormals{};
+
+    int totalNumInputChannels = getTotalNumInputChannels();
+    int totalNumOutputChannels = getTotalNumOutputChannels();
+
+    for (int i{ totalNumInputChannels }; i < totalNumOutputChannels; ++i)
+    {
+        buffer.clear(i, 0, buffer.getNumSamples());
+    }
+
+    juce::dsp::AudioBlock<float> audioBlock {buffer};
+
+    m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+    m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
 }
 
