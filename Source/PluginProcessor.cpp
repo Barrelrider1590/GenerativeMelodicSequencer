@@ -19,11 +19,10 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ),
-    m_startTime(juce::Time::getMillisecondCounterHiRes()), m_elapsedTime(0), m_frequency(440.f)
+                       ) //, m_startTime(juce::Time::getMillisecondCounterHiRes()), m_elapsedTime(0), m_frequency(440.f)
 #endif
 {
-    m_osc.setFrequency(m_frequency);
+    //m_osc.setFrequency(m_frequency);
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
