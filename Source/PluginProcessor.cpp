@@ -162,7 +162,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    // m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 

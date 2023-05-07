@@ -38,4 +38,5 @@ private:
     juce::dsp::Gain<float> m_gain;
 
     bool m_isPrepared = false;
+    
 };
