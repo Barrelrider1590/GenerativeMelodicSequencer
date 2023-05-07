@@ -71,6 +71,12 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
+    //void setRandomFrequency();
+
+    //==============================================================================
+    //double m_startTime, m_elapsedTime;
+    //float m_frequency;
+
 
     //============================================================================
     juce::Synthesiser m_synth;

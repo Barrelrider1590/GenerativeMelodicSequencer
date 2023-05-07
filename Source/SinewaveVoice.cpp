@@ -31,10 +31,10 @@ void SynthVoice::controllerMoved(int controllerNumber, int newControllerValue)
 }
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
-
+    jassert(m_isPrepared);
 }
 
 void SynthVoice::prepareToPlay(int sampleRate, int samplesPerBlock, int outputChannels)
 {
-
+    m_isPrepared = true;
 }
