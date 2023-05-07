@@ -31,13 +31,6 @@ public:
     void prepareToPlay(int sampleRate, int samplesPerBlock, int outputChannels);
 
 private:
-    juce::dsp::Oscillator<float> m_osc{ [](float x) { return std::sin(x); } };
-    juce::dsp::Gain<float> m_gain;
-
-    juce::ADSR m_adsr;
-    juce::ADSR::Parameters m_adsrParams;
-
-    bool m_isPrepared = false;
 
 };
 
