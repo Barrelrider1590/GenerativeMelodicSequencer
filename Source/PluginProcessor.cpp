@@ -97,16 +97,7 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    //============================================================
-    m_synth.setCurrentPlaybackSampleRate(sampleRate);
 
-    for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
-    {
-        if (SynthVoice* voice = dynamic_cast<SynthVoice*>(m_synth.getVoice(i)))
-        {
-            voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
-        }
-    }
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -152,17 +143,6 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
     {
         buffer.clear(i, 0, buffer.getNumSamples());
     }
-
-    //=========================================================================
-    for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
-    {
-        if (dynamic_cast<juce::SynthesiserVoice*>(m_synth.getVoice(i)))
-        {
-            // here we will update parameters
-        }
-    }
-
-    m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 
@@ -233,11 +213,5 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
-
-//void GenerativeMelodicSequencerAudioProcessor::setRandomFrequency()
-//{
-//    auto rand = juce::Random::Random();
-//    m_frequency = (rand.nextFloat() * 25163 + 20453 % 46616) / 100 ;
-//}
 
 #pragma endregion
