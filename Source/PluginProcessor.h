@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "SynthSound.h"
-#include "SynthVoice.h"
+#include "SinewaveVoice.h"
 
 struct ChainSettings
 {
