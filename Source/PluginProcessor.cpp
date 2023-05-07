@@ -19,10 +19,9 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ) //, m_startTime(juce::Time::getMillisecondCounterHiRes()), m_elapsedTime(0), m_frequency(440.f)
+                       )
 #endif
 {
-    //m_osc.setFrequency(m_frequency);
 
     m_synth.addSound(new SynthSound());
     m_synth.addVoice(new SynthVoice());
@@ -98,21 +97,16 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    //juce::dsp::ProcessSpec spec{};
-    //spec.maximumBlockSize = samplesPerBlock;
-    //spec.sampleRate = sampleRate;
-    //spec.numChannels = getTotalNumOutputChannels();
-
-    //m_osc.prepare(spec);
-
-    //m_osc.setFrequency(m_frequency);
-
-    //m_gain.prepare(spec);
-    //m_gain.setGainLinear(0.1f);
-
     //============================================================
-
     m_synth.setCurrentPlaybackSampleRate(sampleRate);
+
+    for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
+    {
+        if (SynthVoice* voice = dynamic_cast<SynthVoice*>(m_synth.getVoice(i)))
+        {
+            voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
+        }
+    }
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -159,19 +153,6 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    //juce::dsp::AudioBlock<float> audioBlock {buffer};
-
-    //m_elapsedTime += juce::Time::getMillisecondCounterHiRes() - m_startTime;
-    //if (m_elapsedTime > 1000000)
-    //{
-    //    setRandomFrequency();
-    //    m_osc.setFrequency(m_frequency);
-    //    m_elapsedTime = 0;
-    //}
-
-    //m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-    //m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-
     //=========================================================================
     for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
     {
@@ -181,7 +162,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    // m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 
@@ -193,8 +174,8 @@ bool GenerativeMelodicSequencerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GenerativeMelodicSequencerAudioProcessor::createEditor()
 {
-    return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
-    //return new juce::GenericAudioProcessorEditor(*this);
+    //return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================

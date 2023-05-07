@@ -27,7 +27,15 @@ public:
                          int startSample,
                          int numSamples)                                override;
     //===========================================================================
-
+    void prepareToPlay(int sampleRate, int samplesPerBlock, int outputChannels);
 
 private:
+    juce::dsp::Oscillator<float> m_osc{ [](float x) { return std::sin(x); } };
+    // wave shape formula
+    // sine: return std::sin(x);
+    // saw: return x / juce::MathConstants<float>::pi;
+    // square: return x < 0.0f ? -1.0f : 1.0f;
+    juce::dsp::Gain<float> m_gain;
+
+    bool m_isPrepared = false;
 };
