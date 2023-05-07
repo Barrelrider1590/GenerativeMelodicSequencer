@@ -3,7 +3,7 @@
 <JUCERPROJECT id="OmZO2x" name="GenerativeMelodicSequencer" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
               jucerFormatVersion="1" pluginFormats="buildStandalone,buildVST3"
-              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+              pluginCharacteristicsValue="pluginIsSynth">
   <MAINGROUP id="HqLPJY" name="GenerativeMelodicSequencer">
     <GROUP id="{F6DC3AC9-8FC0-1D05-1B17-C7C5A75C5BED}" name="Source">
       <FILE id="KsBTgC" name="PluginProcessor.cpp" compile="1" resource="0"
