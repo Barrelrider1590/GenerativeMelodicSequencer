@@ -7,7 +7,8 @@
 
   ==============================================================================
 */
-
+#pragma once
+#include <JuceHeader.h>
 #include "SynthVoice.h"
 
 bool SynthVoice::canPlaySound(juce::SynthesiserSound* sound)
