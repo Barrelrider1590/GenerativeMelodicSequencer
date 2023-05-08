@@ -610,9 +610,6 @@
     <ClCompile Include="..\..\Source\SynthVoice.cpp">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\SinewaveVoice.cpp">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
-    </ClCompile>
     <ClCompile Include="E:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
     </ClCompile>
@@ -3061,9 +3058,6 @@
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\SynthVoice.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\SinewaveVoice.h">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClInclude>
     <ClInclude Include="E:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">

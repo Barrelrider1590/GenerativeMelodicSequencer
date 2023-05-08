@@ -25,6 +25,11 @@ void SynthVoice::startNote(int midiNoteNumber, float velocity, juce::Synthesiser
 void SynthVoice::stopNote(float velocity, bool allowTailOff)
 {
     m_adsr.noteOff();
+
+    if (!allowTailOff || !m_adsr.isActive())
+    {
+        clearCurrentNote();
+    }
 }
 void SynthVoice::pitchWheelMoved(int newPitchWheelValue)
 {
@@ -38,12 +43,37 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 {
     jassert(m_isPrepared);
 
-    juce::dsp::AudioBlock<float> audioBlock{ outputBuffer };
+    if (!isVoiceActive())
+    {
+        return;
+    }
+    else 
+    {
+        m_buffer.setSize(outputBuffer.getNumChannels(),
+            outputBuffer.getNumSamples(),
+            false,
+            false,
+            true);
 
-    m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-    m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+        m_buffer.clear();
 
-    m_adsr.applyEnvelopeToBuffer(outputBuffer, startSample, numSamples);
+        juce::dsp::AudioBlock<float> audioBlock{ m_buffer };
+
+        m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+        m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+
+        m_adsr.applyEnvelopeToBuffer(m_buffer, 0, m_buffer.getNumSamples());
+
+        for (int channel{ 0 }; channel < outputBuffer.getNumChannels(); ++channel)
+        {
+            outputBuffer.addFrom(channel, startSample, m_buffer, channel, 0, numSamples);
+
+            if (!m_adsr.isActive())
+            {
+                clearCurrentNote();
+            }
+        }
+    }
 }
 
 void SynthVoice::prepareToPlay(int sampleRate, int samplesPerBlock, int outputChannels)
@@ -55,12 +85,15 @@ void SynthVoice::prepareToPlay(int sampleRate, int samplesPerBlock, int outputCh
 
     m_osc.prepare(spec);
 
-    //m_osc.setFrequency(220.f);
-
     m_gain.prepare(spec);
     m_gain.setGainLinear(0.1f);
 
     m_adsr.setSampleRate(sampleRate);
+    m_adsrParams.attack = 1.0f;
+    m_adsrParams.decay = 1.0f;
+    m_adsrParams.sustain = 1.0f;
+    m_adsrParams.release = 1.0f;
+    m_adsr.setParameters(m_adsrParams);
 
     m_isPrepared = true;
 }

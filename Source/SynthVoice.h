@@ -30,6 +30,8 @@ public:
     void prepareToPlay(int sampleRate, int samplesPerBlock, int outputChannels);
 
 private:
+    juce::AudioBuffer<float> m_buffer;
+
     juce::dsp::Oscillator<float> m_osc{ [](float x) { return std::sin(x); } };
     juce::dsp::Gain<float> m_gain;
 
