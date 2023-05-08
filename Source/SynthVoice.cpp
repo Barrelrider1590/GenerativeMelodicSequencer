@@ -48,32 +48,16 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
         return;
     }
 
-    //int outBuffer{ outputBuffer.getNumSamples() };
-    //jassert(outputBuffer.getNumSamples() == numSamples);
-
-    m_buffer.setSize(outputBuffer.getNumChannels(),
-        numSamples,
-        false,
-        false,
-        true);
-
-    m_buffer.clear();
-
-    juce::dsp::AudioBlock<float> audioBlock{ m_buffer };
+    auto audioBlock{ juce::dsp::AudioBlock<float>(outputBuffer).getSubBlock(startSample, numSamples) };
 
     m_osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
     m_gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 
-    m_adsr.applyEnvelopeToBuffer(m_buffer, 0, m_buffer.getNumSamples());
+    m_adsr.applyEnvelopeToBuffer(outputBuffer, startSample, numSamples);
 
-    for (int channel{ 0 }; channel < outputBuffer.getNumChannels(); ++channel)
+    if (!m_adsr.isActive())
     {
-        outputBuffer.addFrom(channel, startSample, m_buffer, channel, 0, numSamples);
-
-        if (!m_adsr.isActive())
-        {
-            clearCurrentNote();
-        }
+        clearCurrentNote();
     }
 }
 
