@@ -66,7 +66,7 @@ void SynthVoice::prepareToPlay(int sampleRate, int samplesPerBlock, int outputCh
     m_osc.prepare(spec);
 
     m_gain.prepare(spec);
-    m_gain.setGainLinear(0.0f);
+    m_gain.setGainLinear(0.1f);
 
     m_adsr.setSampleRate(sampleRate);
     m_adsrParams.attack = 1.0f;

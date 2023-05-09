@@ -163,20 +163,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    int noteOnInterval = getSampleRate() ;
-    int noteOffInterval = noteOnInterval + buffer.getNumSamples() * 2;
-
-    if (m_samplesProcessed >= noteOnInterval)
-    {
-        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
-        midiMessages.addEvent(message, 0);
-    }
-    if (m_samplesProcessed >= noteOffInterval + buffer.getNumSamples())
-    {
-        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, 69, static_cast<juce::uint8>(100)) };
-        midiMessages.addEvent(message, 0);
-        m_samplesProcessed %= noteOffInterval;
-    }
+    updateMidiBuffer(midiMessages, buffer.getNumSamples());
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
@@ -251,4 +238,22 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
     return layout;
 }
 
+
+void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples)
+{
+    int noteOnInterval = getSampleRate();
+    int noteOffInterval = noteOnInterval + numSamples * 2;
+
+    if (m_samplesProcessed >= noteOnInterval)
+    {
+        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
+        midiBuffer.addEvent(message, 0);
+    }
+    if (m_samplesProcessed >= noteOffInterval + numSamples)
+    {
+        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, 69, static_cast<juce::uint8>(100)) };
+        midiBuffer.addEvent(message, 0);
+        m_samplesProcessed %= noteOffInterval;
+    }
+}
 #pragma endregion

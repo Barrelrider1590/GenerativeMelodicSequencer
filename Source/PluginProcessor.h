@@ -71,6 +71,8 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
+    void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples);
+
     int m_samplesProcessed;
 
     //============================================================================
