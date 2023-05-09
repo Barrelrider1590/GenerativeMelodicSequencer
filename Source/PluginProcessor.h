@@ -72,7 +72,6 @@ public:
 
 private:
     int m_samplesProcessed;
-    int m_midiOffSamples;
 
     //============================================================================
     juce::Synthesiser m_synth;
