@@ -76,7 +76,8 @@ private:
     //==============================================================================
     //double m_startTime, m_elapsedTime;
     //float m_frequency;
-
+    int m_samplesProcessed;
+    int m_midiOffSamples;
 
     //============================================================================
     juce::Synthesiser m_synth;

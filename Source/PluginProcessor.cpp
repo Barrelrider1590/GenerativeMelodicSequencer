@@ -19,7 +19,8 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    m_samplesProcessed(0), m_midiOffSamples(0)
 #endif
 {
 
@@ -162,7 +163,29 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
+    int interval = getSampleRate() ;
+
+    if (m_samplesProcessed >= interval)
+    {
+        //jassertfalse;
+        //std::cout << "Time: " + juce::Time::getMillisecondCounter();
+        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
+        midiMessages.addEvent(message, 0);
+        m_samplesProcessed %= interval;
+    }
+    if (m_midiOffSamples >= interval + buffer.getNumSamples())
+    {
+        //jassertfalse;
+        //std::cout << "Time: " + juce::Time::getMillisecondCounter();
+        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, 69, static_cast<juce::uint8>(100)) };
+        midiMessages.addEvent(message, 0);
+        m_midiOffSamples %= interval + buffer.getNumSamples();
+    }
+
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+    m_samplesProcessed += buffer.getNumSamples();
+    m_midiOffSamples += buffer.getNumSamples();
 
 }
 
