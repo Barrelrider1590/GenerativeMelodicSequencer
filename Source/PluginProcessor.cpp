@@ -242,18 +242,23 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples)
 {
     int noteOnInterval = getSampleRate();
-    int noteOffInterval = noteOnInterval + numSamples * 2;
+    int noteOffInterval = noteOnInterval + numSamples * 10;
 
     if (m_samplesProcessed >= noteOnInterval)
     {
         juce::MidiMessage message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
         midiBuffer.addEvent(message, 0);
     }
-    if (m_samplesProcessed >= noteOffInterval + numSamples)
+    if (m_samplesProcessed >= noteOffInterval)
     {
         juce::MidiMessage message{ juce::MidiMessage::noteOff(1, 69, static_cast<juce::uint8>(100)) };
         midiBuffer.addEvent(message, 0);
         m_samplesProcessed %= noteOffInterval;
+    }
+    else
+    {
+        juce::MidiMessage message{ juce::MidiMessage::midiContinue() };
+        midiBuffer.addEvent(message, 0);
     }
 }
 #pragma endregion
