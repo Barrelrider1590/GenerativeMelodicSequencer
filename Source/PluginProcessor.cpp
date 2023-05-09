@@ -167,16 +167,12 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     if (m_samplesProcessed >= interval)
     {
-        //jassertfalse;
-        //std::cout << "Time: " + juce::Time::getMillisecondCounter();
         juce::MidiMessage message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
         midiMessages.addEvent(message, 0);
         m_samplesProcessed %= interval;
     }
     if (m_midiOffSamples >= interval + buffer.getNumSamples())
     {
-        //jassertfalse;
-        //std::cout << "Time: " + juce::Time::getMillisecondCounter();
         juce::MidiMessage message{ juce::MidiMessage::noteOff(1, 69, static_cast<juce::uint8>(100)) };
         midiMessages.addEvent(message, 0);
         m_midiOffSamples %= interval + buffer.getNumSamples();
@@ -256,11 +252,5 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
-
-//void GenerativeMelodicSequencerAudioProcessor::setRandomFrequency()
-//{
-//    auto rand = juce::Random::Random();
-//    m_frequency = (rand.nextFloat() * 25163 + 20453 % 46616) / 100 ;
-//}
 
 #pragma endregion
