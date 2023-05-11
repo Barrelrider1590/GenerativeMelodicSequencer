@@ -72,10 +72,15 @@ public:
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples);
-
-    int m_samplesProcessed;
+    void selectRandomMidiNote(const std::vector<int>& scale);
 
     //============================================================================
+    int m_samplesProcessed;
+    int m_currentNote;
+
+    std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
+    juce::Random m_randomNote;
+
     juce::Synthesiser m_synth;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)

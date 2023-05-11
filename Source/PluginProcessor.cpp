@@ -163,11 +163,26 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    updateMidiBuffer(midiMessages, buffer.getNumSamples());
+    //updateMidiBuffer(midiMessages, buffer.getNumSamples());
+    int noteOnInterval = getSampleRate();
+    int noteOffInterval = noteOnInterval * 2;
+
+    if (m_samplesProcessed == noteOnInterval)
+    {
+        selectRandomMidiNote(m_majorScale);
+        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_currentNote, static_cast<juce::uint8>(100)) };
+        midiMessages.addEvent(message, 0);
+    }
+    if (m_samplesProcessed >= noteOffInterval)
+    {
+        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_currentNote, static_cast<juce::uint8>(100)) };
+        midiMessages.addEvent(message, 0);
+        m_samplesProcessed %= noteOffInterval;
+    }
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
-    m_samplesProcessed += buffer.getNumSamples();
+    m_samplesProcessed += (getSampleRate() * .01);
 }
 
 //==============================================================================
@@ -242,7 +257,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples)
 {
     int noteOnInterval = getSampleRate();
-    int noteOffInterval = noteOnInterval + numSamples * 10;
+    int noteOffInterval = noteOnInterval + numSamples;
 
     if (m_samplesProcessed >= noteOnInterval)
     {
@@ -255,10 +270,16 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
         midiBuffer.addEvent(message, 0);
         m_samplesProcessed %= noteOffInterval;
     }
-    else
-    {
-        juce::MidiMessage message{ juce::MidiMessage::midiContinue() };
-        midiBuffer.addEvent(message, 0);
-    }
+    //else
+    //{
+    //    juce::MidiMessage message{ juce::MidiMessage::midiContinue() };
+    //    midiBuffer.addEvent(message, 0);
+    //}
 }
+
+void GenerativeMelodicSequencerAudioProcessor::selectRandomMidiNote(const std::vector<int>& scale)
+{
+    m_currentNote = m_randomNote.nextInt(scale.size()) + scale[0];
+}
+
 #pragma endregion
