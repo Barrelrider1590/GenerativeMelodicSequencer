@@ -163,7 +163,6 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    //updateMidiBuffer(midiMessages, buffer.getNumSamples());
     int noteOnInterval = getSampleRate();
     int noteOffInterval = noteOnInterval * 2;
 
@@ -270,11 +269,6 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
         midiBuffer.addEvent(message, 0);
         m_samplesProcessed %= noteOffInterval;
     }
-    //else
-    //{
-    //    juce::MidiMessage message{ juce::MidiMessage::midiContinue() };
-    //    midiBuffer.addEvent(message, 0);
-    //}
 }
 
 void GenerativeMelodicSequencerAudioProcessor::selectRandomMidiNote(const std::vector<int>& scale)
