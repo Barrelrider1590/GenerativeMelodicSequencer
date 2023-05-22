@@ -72,14 +72,13 @@ public:
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples);
-    void selectRandomMidiNote(const std::vector<int>& scale);
+    int GenerateRandomNote(const std::vector<int>& scale);
 
     //============================================================================
     int m_samplesProcessed;
     int m_currentNote;
 
     std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
-    juce::Random m_randomNote;
 
     juce::Synthesiser m_synth;
 

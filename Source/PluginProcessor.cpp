@@ -168,7 +168,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     if (m_samplesProcessed == noteOnInterval)
     {
-        selectRandomMidiNote(m_majorScale);
+        m_currentNote = GenerateRandomNote(m_majorScale);
         juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_currentNote, static_cast<juce::uint8>(100)) };
         midiMessages.addEvent(message, 0);
     }
@@ -271,9 +271,10 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
     }
 }
 
-void GenerativeMelodicSequencerAudioProcessor::selectRandomMidiNote(const std::vector<int>& scale)
+int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vector<int>& scale)
 {
-    m_currentNote = m_randomNote.nextInt(scale.size()) + scale[0];
+    juce::Random random;
+    return random.nextInt(scale.size()) + scale[0];
 }
 
 #pragma endregion
