@@ -72,13 +72,16 @@ public:
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples);
+    void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale);
     int GenerateRandomNote(const std::vector<int>& scale);
 
     //============================================================================
     int m_samplesProcessed;
     int m_currentNote;
+    int m_loopLength;
 
     std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
+    std::vector<int> m_melody;
 
     juce::Synthesiser m_synth;
 
