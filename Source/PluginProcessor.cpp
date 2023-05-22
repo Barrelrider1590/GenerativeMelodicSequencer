@@ -167,7 +167,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    updateMidiBuffer(midiMessages, getSampleRate());
+    updateMidiBuffer(midiMessages, getSampleRate(), getSequencerSettings(m_apvts));
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
@@ -214,16 +214,16 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 
 #pragma region UI
-ChainSettings getChainSettings(const juce::AudioProcessorValueTreeState& apvts)
+SequencerSettings getSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
 {
-    ChainSettings settings;
+    SequencerSettings settings;
 
-    settings.m_bpm = apvts.getRawParameterValue("bpm")->load();
-    settings.m_length = apvts.getRawParameterValue("length")->load();
-    settings.m_level = apvts.getRawParameterValue("level")->load();
-    settings.m_gate = apvts.getRawParameterValue("gate")->load();
-    settings.m_density = apvts.getRawParameterValue("density")->load();
-    settings.m_mutate = apvts.getRawParameterValue("mutate")->load();
+    settings.bpm = apvts.getRawParameterValue("bpm")->load();
+    settings.loopLength = apvts.getRawParameterValue("length")->load();
+    settings.level = apvts.getRawParameterValue("level")->load();
+    settings.gate = apvts.getRawParameterValue("gate")->load();
+    settings.density = apvts.getRawParameterValue("density")->load();
+    settings.mutate = apvts.getRawParameterValue("mutate")->load();
 
     return settings;
 }
@@ -244,9 +244,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 #pragma endregion
 
 #pragma region Generating Melody
-void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples)
+void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, 
+                                                                const SequencerSettings& sequencerSettings)
 {
-    int noteOnInterval = numSamples * .25;
+    int noteOnInterval = numSamples * 60/sequencerSettings.bpm;
     int noteOffInterval = noteOnInterval + (noteOnInterval * .5);
 
     if (m_samplesProcessed >= noteOffInterval)

@@ -12,13 +12,13 @@
 #include "SynthSound.h"
 #include "SynthVoice.h"
 
-struct ChainSettings
+struct SequencerSettings
 {
-    int m_bpm{ 0 }, m_length{ 0 };
-    float m_level{ 0 }, m_gate{ 0 }, m_density{ 0 }, m_mutate{ 0 };
+    int bpm{ 0 }, loopLength{ 0 };
+    float level{ 0 }, gate{ 0 }, density{ 0 }, mutate{ 0 };
 };
 
-ChainSettings getChainSettings(const juce::AudioProcessorValueTreeState& apvts);
+SequencerSettings getSequencerSettings(const juce::AudioProcessorValueTreeState& apvts);
 
 //==============================================================================
 /**
@@ -71,7 +71,7 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
-    void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples);
+    void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
     void addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer);
     void addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer);
     void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale);
