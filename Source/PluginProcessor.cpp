@@ -171,7 +171,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
-    m_samplesProcessed += (getSampleRate() * .01);
+    m_samplesProcessed += buffer.getNumSamples();
 }
 
 //==============================================================================
@@ -241,8 +241,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
+#pragma endregion
 
-
+#pragma region Generating Melody
 void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples)
 {
     int noteOnInterval = numSamples * .25;
@@ -276,5 +277,4 @@ int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vect
     juce::Random random;
     return random.nextInt(scale.size()) + scale[0];
 }
-
 #pragma endregion
