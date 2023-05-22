@@ -167,20 +167,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    int noteOnInterval = getSampleRate() * .25;
-    int noteOffInterval = noteOnInterval + (noteOnInterval * .5);
-    if (m_samplesProcessed >= noteOffInterval)
-    {
-        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
-        midiMessages.addEvent(message, 0);
-        m_samplesProcessed = 0;
-        ++m_currentNote;
-    }
-    if (m_samplesProcessed == noteOnInterval)
-    {
-        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100))};
-        midiMessages.addEvent(message, 0);
-    }
+    updateMidiBuffer(midiMessages, getSampleRate());
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
@@ -258,19 +245,20 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
 void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples)
 {
-    int noteOnInterval = getSampleRate();
-    int noteOffInterval = noteOnInterval + numSamples;
+    int noteOnInterval = numSamples * .25;
+    int noteOffInterval = noteOnInterval + (noteOnInterval * .5);
 
-    if (m_samplesProcessed >= noteOnInterval)
-    {
-        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, 69, static_cast<juce::uint8>(100)) };
-        midiBuffer.addEvent(message, 0);
-    }
     if (m_samplesProcessed >= noteOffInterval)
     {
-        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, 69, static_cast<juce::uint8>(100)) };
+        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
         midiBuffer.addEvent(message, 0);
-        m_samplesProcessed %= noteOffInterval;
+        m_samplesProcessed = 0;
+        ++m_currentNote;
+    }
+    if (m_samplesProcessed == noteOnInterval)
+    {
+        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
+        midiBuffer.addEvent(message, 0);
     }
 }
 
