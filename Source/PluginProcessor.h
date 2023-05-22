@@ -83,6 +83,8 @@ private:
     int m_currentNote;
     int m_loopLength;
 
+    bool m_isNoteOn;
+
     std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
     std::vector<int> m_melody;
 

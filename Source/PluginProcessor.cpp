@@ -20,7 +20,8 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    m_samplesProcessed(0), m_loopLength(8), m_currentNote(0)//, m_midiOffSamples(0)
+    m_samplesProcessed(0), m_loopLength(8), m_currentNote(0),
+    m_isNoteOn(false)//, m_midiOffSamples(0)
 #endif
 {
 
@@ -167,7 +168,9 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         }
     }
 
-    updateMidiBuffer(midiMessages, getSampleRate(), getSequencerSettings(m_apvts));
+    auto sequencerSettings{ getSequencerSettings(m_apvts) };
+
+    updateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
@@ -253,10 +256,15 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
     if (m_samplesProcessed >= noteOffInterval)
     {
         addNoteOffMessageToBuffer(midiBuffer);
+        m_isNoteOn = false;
     }
-    if (m_samplesProcessed == noteOnInterval)
+    if (m_samplesProcessed >= noteOnInterval && m_samplesProcessed < noteOffInterval)
     {
-        addNoteOnMessageToBuffer(midiBuffer);
+        if (!m_isNoteOn)
+        {
+            addNoteOnMessageToBuffer(midiBuffer);
+            m_isNoteOn = true;
+        }
     }
 }
 void GenerativeMelodicSequencerAudioProcessor::addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer)
