@@ -255,6 +255,10 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
         midiBuffer.addEvent(message, 0);
         m_samplesProcessed = 0;
         ++m_currentNote;
+        if (m_currentNote % m_loopLength == 0)
+        {
+            MutateMelody(m_melody, m_majorScale);
+        }
     }
     if (m_samplesProcessed == noteOnInterval)
     {
@@ -269,6 +273,20 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& 
     for (int i{ 0 }; i < m_loopLength; ++i)
     {
         melody[i] = GenerateRandomNote(scale);
+    }
+}
+
+void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melody, 
+                                                            const std::vector<int>& scale)
+{
+    juce::Random random;
+    
+    for (int i{ 0 }; i < m_loopLength; ++i)
+    {
+        if (random.nextFloat() > .5f)
+        {
+            melody[i] = GenerateRandomNote(scale);
+        }
     }
 }
 
