@@ -251,19 +251,28 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
 
     if (m_samplesProcessed >= noteOffInterval)
     {
-        juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
-        midiBuffer.addEvent(message, 0);
-        m_samplesProcessed = 0;
-        ++m_currentNote;
-        if (m_currentNote % m_loopLength == 0)
-        {
-            MutateMelody(m_melody, m_majorScale);
-        }
+        addNoteOffMessageToBuffer(midiBuffer);
     }
     if (m_samplesProcessed == noteOnInterval)
     {
-        juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
-        midiBuffer.addEvent(message, 0);
+        addNoteOnMessageToBuffer(midiBuffer);
+    }
+}
+void GenerativeMelodicSequencerAudioProcessor::addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer)
+{
+    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
+    midiBuffer.addEvent(message, 0);
+}
+void GenerativeMelodicSequencerAudioProcessor::addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer)
+{
+    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_melody[m_currentNote % m_loopLength], static_cast<juce::uint8>(100)) };
+    midiBuffer.addEvent(message, 0);
+    m_samplesProcessed = 0;
+    ++m_currentNote;
+
+    if (m_currentNote % m_loopLength == 0)
+    {
+        MutateMelody(m_melody, m_majorScale);
     }
 }
 
@@ -275,7 +284,6 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& 
         melody[i] = GenerateRandomNote(scale);
     }
 }
-
 void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melody, 
                                                             const std::vector<int>& scale)
 {
@@ -283,13 +291,12 @@ void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& me
     
     for (int i{ 0 }; i < m_loopLength; ++i)
     {
-        if (random.nextFloat() > .5f)
+        if (random.nextFloat() > .75f)
         {
             melody[i] = GenerateRandomNote(scale);
         }
     }
 }
-
 int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vector<int>& scale)
 {
     juce::Random random;
