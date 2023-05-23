@@ -11,7 +11,12 @@
 
 //==============================================================================
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p),
+    m_bpmKnobAttachment(p.m_apvts, "bpm", m_bpmKnob),
+    m_loopLengthKnobAttachment(p.m_apvts, "length", m_loopLengthKnob),
+    m_gateKnobAttachment(p.m_apvts, "gate", m_gateKnob),
+    m_densityKnobAttachment(p.m_apvts, "density", m_densityKnob),
+    m_mutateKnobAttachment(p.m_apvts, "mutate", m_mutateKnob)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.

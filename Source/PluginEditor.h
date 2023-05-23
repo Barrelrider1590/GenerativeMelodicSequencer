@@ -44,5 +44,11 @@ private:
 
     GenerativeMelodicSequencerAudioProcessor& audioProcessor;
 
+    using APVTS = juce::AudioProcessorValueTreeState;
+    using Attachment = APVTS::SliderAttachment;
+
+    Attachment m_bpmKnobAttachment, m_loopLengthKnobAttachment;
+    Attachment m_gateKnobAttachment, m_densityKnobAttachment, m_mutateKnobAttachment;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessorEditor)
 };
