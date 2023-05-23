@@ -72,10 +72,10 @@ public:
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
-    void addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer);
-    void addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer);
+    void addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, float velocity = .5f);
+    void addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
     void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale, int loopLength);
-    void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale);
+    void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, float mutate);
     int GenerateRandomNote(const std::vector<int>& scale);
 
     //============================================================================
