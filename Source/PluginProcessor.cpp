@@ -112,7 +112,7 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
         }
     }
 
-    GenerateMelody(m_melody, m_majorScale);
+    GenerateMelody(m_melody, m_majorScale, 32);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -286,7 +286,8 @@ void GenerativeMelodicSequencerAudioProcessor::addNoteOffMessageToBuffer(juce::M
 }
 
 void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& melody,
-                                                              const std::vector<int>& scale)
+                                                              const std::vector<int>& scale,
+                                                              int loopLength)
 {
     for (int i{ 0 }; i < m_loopLength; ++i)
     {
