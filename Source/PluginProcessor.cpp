@@ -185,8 +185,8 @@ bool GenerativeMelodicSequencerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GenerativeMelodicSequencerAudioProcessor::createEditor()
 {
-    //return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================

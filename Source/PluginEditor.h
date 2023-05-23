@@ -14,6 +14,16 @@
 //==============================================================================
 /**
 */
+
+struct RotaryKnob : public juce::Slider
+{
+    RotaryKnob() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                                juce::Slider::NoTextBox)
+    {
+
+    }
+};
+
 class GenerativeMelodicSequencerAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
@@ -27,6 +37,11 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
+    std::vector<juce::Component*> getComponents();
+
+    RotaryKnob m_bpmKnob, m_loopLengthKnob;
+    RotaryKnob m_gateKnob, m_densityKnob, m_mutateKnob;
+
     GenerativeMelodicSequencerAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessorEditor)
