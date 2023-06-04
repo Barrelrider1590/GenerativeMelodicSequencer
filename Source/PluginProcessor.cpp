@@ -285,32 +285,32 @@ void GenerativeMelodicSequencerAudioProcessor::addNoteOffMessageToBuffer(juce::M
     }
 }
 
-//void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& melody,
-//                                                              const std::vector<int>& scale,
-//                                                              int loopLength)
-//{
-//    for (int i{ 0 }; i < loopLength; ++i)
-//    {
-//        melody[i] = GenerateRandomNote(scale);
-//    }
-//}
-//void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melody, 
-//                                                            const std::vector<int>& scale,
-//                                                            float mutate)
-//{
-//    juce::Random random;
-//    
-//    for (int i{ 0 }; i < m_loopLength; ++i)
-//    {
-//        if (random.nextFloat() < mutate)
-//        {
-//            melody[i] = GenerateRandomNote(scale);
-//        }
-//    }
-//}
-//int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vector<int>& scale)
-//{
-//    juce::Random random;
-//    return random.nextInt(scale.size()) + scale[0];
-//}
+void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& melody,
+                                                              const std::vector<int>& scale,
+                                                              int loopLength)
+{
+    for (int i{ 0 }; i < loopLength; ++i)
+    {
+        melody[i] = GenerateRandomNote(scale);
+    }
+}
+void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melody, 
+                                                            const std::vector<int>& scale,
+                                                            float mutate)
+{
+    juce::Random random;
+    
+    for (int i{ 0 }; i < m_loopLength; ++i)
+    {
+        if (random.nextFloat() < mutate)
+        {
+            melody[i] = GenerateRandomNote(scale);
+        }
+    }
+}
+int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vector<int>& scale)
+{
+    juce::Random random;
+    return random.nextInt(scale.size()) + scale[0];
+}
 #pragma endregion
