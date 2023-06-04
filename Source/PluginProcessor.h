@@ -75,7 +75,7 @@ private:
     void addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
     void addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
     void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale, int loopLength);
-    void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, float mutate);
+    void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
     int GenerateRandomNote(const std::vector<int>& scale);
 
     //============================================================================

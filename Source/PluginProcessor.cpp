@@ -113,7 +113,7 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
     }
 
     auto sequencerSettings{ getSequencerSettings(m_apvts) };
-    m_melody = m_majorScale;
+    GenerateMelody(m_melody, m_majorScale, 32);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -282,6 +282,7 @@ void GenerativeMelodicSequencerAudioProcessor::addNoteOffMessageToBuffer(juce::M
     if (m_currentNote > sequencerSettings.loopLength - 1)
     {
         m_currentNote = 0;
+        MutateMelody(m_melody, m_majorScale, sequencerSettings);
     }
 }
 
@@ -296,13 +297,13 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& 
 }
 void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melody, 
                                                             const std::vector<int>& scale,
-                                                            float mutate)
+                                                            const SequencerSettings& sequencerSettings)
 {
     juce::Random random;
     
-    for (int i{ 0 }; i < m_loopLength; ++i)
+    for (int i{ 0 }; i < sequencerSettings.loopLength; ++i)
     {
-        if (random.nextFloat() < mutate)
+        if (random.nextFloat() < sequencerSettings.mutate)
         {
             melody[i] = GenerateRandomNote(scale);
         }
