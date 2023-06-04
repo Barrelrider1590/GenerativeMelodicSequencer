@@ -159,15 +159,6 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    //=========================================================================
-    for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
-    {
-        if (dynamic_cast<juce::SynthesiserVoice*>(m_synth.getVoice(i)))
-        {
-            // here we will update parameters
-        }
-    }
-
     auto sequencerSettings{ getSequencerSettings(m_apvts) };
 
     updateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
@@ -306,7 +297,7 @@ void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& me
     
     for (int i{ 0 }; i < m_loopLength; ++i)
     {
-        if (random.nextFloat() > mutate)
+        if (random.nextFloat() < mutate)
         {
             melody[i] = GenerateRandomNote(scale);
         }
