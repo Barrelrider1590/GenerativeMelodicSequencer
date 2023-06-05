@@ -72,6 +72,9 @@ public:
 
     //==============================================================================
     void addListenerToBroadcaster(juce::ChangeListener* listener);
+    void removeListenerFromBroadcaster(juce::ChangeListener* listener);
+
+    bool getIsNoteOn();
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);

@@ -33,6 +33,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
 {
+    audioProcessor.removeListenerFromBroadcaster(this);
 }
 
 //==============================================================================
@@ -86,7 +87,14 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::ge
 
 void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
-    RandomColour(m_colour);
+    if (audioProcessor.getIsNoteOn())
+    {
+        RandomColour(m_colour);
+    }
+    else
+    {
+        m_colour = juce::Colours::black;
+    }
     repaint();
 }
 

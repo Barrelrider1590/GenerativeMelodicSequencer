@@ -251,6 +251,7 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
         {
             addNoteOffMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = false;
+            m_broadcaster.sendChangeMessage();
         }
     }
     if (m_samplesProcessed >= noteOnInterval && m_samplesProcessed < noteOffInterval)
@@ -320,4 +321,13 @@ int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vect
 void GenerativeMelodicSequencerAudioProcessor::addListenerToBroadcaster(juce::ChangeListener* listener)
 {
     m_broadcaster.addChangeListener(listener);
+}
+void GenerativeMelodicSequencerAudioProcessor::removeListenerFromBroadcaster(juce::ChangeListener* listener)
+{
+    m_broadcaster.removeChangeListener(listener);
+}
+
+bool GenerativeMelodicSequencerAudioProcessor::getIsNoteOn()
+{
+    return m_isNoteOn;
 }
