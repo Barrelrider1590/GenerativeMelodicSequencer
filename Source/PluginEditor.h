@@ -24,7 +24,7 @@ struct RotaryKnob : public juce::Slider
     }
 };
 
-class GenerativeMelodicSequencerAudioProcessorEditor  : public juce::AudioProcessorEditor
+class GenerativeMelodicSequencerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
 {
 public:
     GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor&);
@@ -34,15 +34,17 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
+    GenerativeMelodicSequencerAudioProcessor& audioProcessor;
+
     std::vector<juce::Component*> getComponents();
 
     RotaryKnob m_bpmKnob, m_loopLengthKnob;
     RotaryKnob m_gateKnob, m_densityKnob, m_mutateKnob;
-
-    GenerativeMelodicSequencerAudioProcessor& audioProcessor;
 
     using APVTS = juce::AudioProcessorValueTreeState;
     using Attachment = APVTS::SliderAttachment;
