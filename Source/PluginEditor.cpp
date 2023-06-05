@@ -20,6 +20,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+    audioProcessor.addListenerToBroadcaster(this);
+
 
     for (auto knob : getComponents())
     {
@@ -45,7 +47,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
     auto bounds{ getLocalBounds() };
     auto midiEventBounds{ bounds.removeFromTop(bounds.getHeight() * .2) };
 
-    g.setColour(juce::Colours::coral);
+    g.setColour(m_colour);
     g.fillRect(midiEventBounds);
 }
 
@@ -80,4 +82,20 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::ge
         &m_densityKnob,
         &m_mutateKnob
     };
+}
+
+void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
+{
+    RandomColour(m_colour);
+    repaint();
+}
+
+void GenerativeMelodicSequencerAudioProcessorEditor::RandomColour(juce::Colour& colour)
+{
+    juce::Random rand;
+    juce::uint8 r{ static_cast<juce::uint8>(rand.nextInt()) };
+    juce::uint8 g{ static_cast<juce::uint8>(rand.nextInt()) };
+    juce::uint8 b{ static_cast<juce::uint8>(rand.nextInt()) };
+
+    colour = juce::Colour(r, g, b);
 }

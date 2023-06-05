@@ -34,6 +34,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    //==============================================================================
     void changeListenerCallback(juce::ChangeBroadcaster* source) override;
 
 private:
@@ -42,6 +43,7 @@ private:
     GenerativeMelodicSequencerAudioProcessor& audioProcessor;
 
     std::vector<juce::Component*> getComponents();
+    void RandomColour(juce::Colour& colour);
 
     RotaryKnob m_bpmKnob, m_loopLengthKnob;
     RotaryKnob m_gateKnob, m_densityKnob, m_mutateKnob;
@@ -51,6 +53,8 @@ private:
 
     Attachment m_bpmKnobAttachment, m_loopLengthKnobAttachment;
     Attachment m_gateKnobAttachment, m_densityKnobAttachment, m_mutateKnobAttachment;
+
+    juce::Colour m_colour;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessorEditor)
 };
