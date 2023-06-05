@@ -71,6 +71,7 @@ public:
     juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
     //==============================================================================
+    void addListenerToBroadcaster(juce::ChangeListener* listener);
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
@@ -91,6 +92,8 @@ private:
     std::vector<int> m_melody;
 
     juce::Synthesiser m_synth;
+
+    juce::ChangeBroadcaster m_broadcaster;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
 };

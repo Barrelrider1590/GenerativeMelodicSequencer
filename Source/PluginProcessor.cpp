@@ -259,6 +259,7 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
         {
             addNoteOnMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = true;
+            m_broadcaster.sendChangeMessage();
         }
     }
     if (m_samplesProcessed >= noteOnInterval * 2)
@@ -315,3 +316,8 @@ int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vect
     return random.nextInt(scale.size()) + scale[0];
 }
 #pragma endregion
+
+void GenerativeMelodicSequencerAudioProcessor::addListenerToBroadcaster(juce::ChangeListener* listener)
+{
+    m_broadcaster.addChangeListener(listener);
+}
