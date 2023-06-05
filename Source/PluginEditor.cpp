@@ -41,7 +41,12 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour(220, 220, 220));
     g.setFont (15.0f);
-    //g.drawFittedText ("Generative Melodic Squencer", getLocalBounds(), juce::Justification::centred, 1);
+    
+    auto bounds{ getLocalBounds() };
+    auto midiEventBounds{ bounds.removeFromTop(bounds.getHeight() * .2) };
+
+    g.setColour(GenerateRandomColour());
+    g.fillRect(midiEventBounds);
 }
 
 void GenerativeMelodicSequencerAudioProcessorEditor::resized()
