@@ -45,7 +45,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
     auto bounds{ getLocalBounds() };
     auto midiEventBounds{ bounds.removeFromTop(bounds.getHeight() * .2) };
 
-    g.setColour(GenerateRandomColour());
+    g.setColour(juce::Colours::coral);
     g.fillRect(midiEventBounds);
 }
 
