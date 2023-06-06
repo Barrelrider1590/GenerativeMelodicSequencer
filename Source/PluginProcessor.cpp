@@ -9,6 +9,19 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
+{
+    SequencerSettings settings;
+
+    settings.bpm = apvts.getRawParameterValue("bpm")->load();
+    settings.loopLength = apvts.getRawParameterValue("length")->load();
+    settings.gate = apvts.getRawParameterValue("gate")->load();
+    settings.density = apvts.getRawParameterValue("density")->load();
+    settings.mutate = apvts.getRawParameterValue("mutate")->load();
+
+    return settings;
+}
+
 //==============================================================================
 GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -161,7 +174,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     auto sequencerSettings{ GetSequencerSettings(m_apvts) };
 
-    updateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
+    UpdateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
 
     m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
@@ -201,21 +214,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new GenerativeMelodicSequencerAudioProcessor();
 }
 
-#pragma region UI
-SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
-{
-    SequencerSettings settings;
-
-    settings.bpm = apvts.getRawParameterValue("bpm")->load();
-    settings.loopLength = apvts.getRawParameterValue("length")->load();
-    settings.gate = apvts.getRawParameterValue("gate")->load();
-    settings.density = apvts.getRawParameterValue("density")->load();
-    settings.mutate = apvts.getRawParameterValue("mutate")->load();
-
-    return settings;
-}
-
-juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAudioProcessor::createParameterLayout()
+//==============================================================================
+juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAudioProcessor::CreateParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout{};
 
@@ -227,10 +227,30 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
-#pragma endregion
 
-#pragma region Generating Melody
-void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, 
+//==============================================================================
+void GenerativeMelodicSequencerAudioProcessor::AddListenerToBroadcaster(juce::ChangeListener* listener)
+{
+    m_broadcaster.addChangeListener(listener);
+}
+void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juce::ChangeListener* listener)
+{
+    m_broadcaster.removeChangeListener(listener);
+}
+
+//==============================================================================
+bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
+{
+    return m_isNoteOn;
+}
+juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::GetAPVTS()
+{
+    return &m_apvts;
+}
+
+//==============================================================================
+#pragma region Midi Handling
+void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, 
                                                                 const SequencerSettings& sequencerSettings)
 {
     int noteOnInterval = numSamples * 60/sequencerSettings.bpm;
@@ -240,7 +260,7 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
     {
         if (m_isNoteOn)
         {
-            addNoteOffMessageToBuffer(midiBuffer, sequencerSettings);
+            AddNoteOffMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = false;
             m_broadcaster.sendChangeMessage();
         }
@@ -249,7 +269,7 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
     {
         if (!m_isNoteOn)
         {
-            addNoteOnMessageToBuffer(midiBuffer, sequencerSettings);
+            AddNoteOnMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = true;
             m_broadcaster.sendChangeMessage();
         }
@@ -259,17 +279,18 @@ void GenerativeMelodicSequencerAudioProcessor::updateMidiBuffer(juce::MidiBuffer
         m_samplesProcessed = 0;
     }
 }
-void GenerativeMelodicSequencerAudioProcessor::addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, 
+void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, 
                                                                         const SequencerSettings& sequencerSettings)
 {
     juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_melody[m_currentNote], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 }
-void GenerativeMelodicSequencerAudioProcessor::addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, 
+void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, 
                                                                          const SequencerSettings& sequencerSettings)
 {
     juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_melody[m_currentNote], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
+
     ++m_currentNote;
 
     if (m_currentNote > sequencerSettings.loopLength - 1)
@@ -278,7 +299,9 @@ void GenerativeMelodicSequencerAudioProcessor::addNoteOffMessageToBuffer(juce::M
         MutateMelody(m_melody, m_majorScale, sequencerSettings);
     }
 }
-
+#pragma endregion
+//==============================================================================
+#pragma region Melody
 void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& melody,
                                                               const std::vector<int>& scale,
                                                               int loopLength)
@@ -308,21 +331,3 @@ int GenerativeMelodicSequencerAudioProcessor::GenerateRandomNote(const std::vect
     return random.nextInt(scale.size()) + scale[0];
 }
 #pragma endregion
-
-void GenerativeMelodicSequencerAudioProcessor::addListenerToBroadcaster(juce::ChangeListener* listener)
-{
-    m_broadcaster.addChangeListener(listener);
-}
-void GenerativeMelodicSequencerAudioProcessor::removeListenerFromBroadcaster(juce::ChangeListener* listener)
-{
-    m_broadcaster.removeChangeListener(listener);
-}
-
-bool GenerativeMelodicSequencerAudioProcessor::getIsNoteOn()
-{
-    return m_isNoteOn;
-}
-juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::getAPVTS()
-{
-    return &m_apvts;
-}

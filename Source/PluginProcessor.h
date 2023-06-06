@@ -17,7 +17,6 @@ struct SequencerSettings
     int bpm{ 0 }, loopLength{ 0 };
     float gate{ 0 }, density{ 0 }, mutate{ 0 };
 };
-
 SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts);
 
 //==============================================================================
@@ -67,24 +66,27 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    static juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout();
 
     //==============================================================================
-    void addListenerToBroadcaster(juce::ChangeListener* listener);
-    void removeListenerFromBroadcaster(juce::ChangeListener* listener);
+    void AddListenerToBroadcaster(juce::ChangeListener* listener);
+    void RemoveListenerFromBroadcaster(juce::ChangeListener* listener);
 
-    bool getIsNoteOn();
-    juce::AudioProcessorValueTreeState* getAPVTS();
+    //==============================================================================
+    bool GetIsNoteOn();
+    juce::AudioProcessorValueTreeState* GetAPVTS();
 
 private:
-    void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
-    void addNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
-    void addNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
+    void UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
+    void AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
+    void AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
+    
+    //==============================================================================
     void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale, int loopLength);
     void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
     int GenerateRandomNote(const std::vector<int>& scale);
 
-    //============================================================================
+    //==============================================================================
     int m_samplesProcessed;
     int m_currentNote;
     int m_loopLength;
@@ -94,7 +96,7 @@ private:
     std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
     std::vector<int> m_melody;
 
-    juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", createParameterLayout() };
+    juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", CreateParameterLayout() };
 
     juce::Synthesiser m_synth;
 

@@ -12,15 +12,15 @@
 //==============================================================================
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
-    m_bpmKnobAttachment(*p.getAPVTS(), "bpm", m_bpmKnob),
-    m_loopLengthKnobAttachment(*p.getAPVTS(), "length", m_loopLengthKnob),
-    m_gateKnobAttachment(*p.getAPVTS(), "gate", m_gateKnob),
-    m_densityKnobAttachment(*p.getAPVTS(), "density", m_densityKnob),
-    m_mutateKnobAttachment(*p.getAPVTS(), "mutate", m_mutateKnob)
+    m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
+    m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
+    m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
+    m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
+    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    audioProcessor.addListenerToBroadcaster(this);
+    audioProcessor.AddListenerToBroadcaster(this);
 
 
     for (auto knob : getComponents())
@@ -33,7 +33,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
 {
-    audioProcessor.removeListenerFromBroadcaster(this);
+    audioProcessor.RemoveListenerFromBroadcaster(this);
 }
 
 //==============================================================================
@@ -87,7 +87,7 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::ge
 
 void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
-    if (audioProcessor.getIsNoteOn())
+    if (audioProcessor.GetIsNoteOn())
     {
         RandomColour(m_colour);
     }
