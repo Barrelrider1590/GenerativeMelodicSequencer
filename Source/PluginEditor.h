@@ -50,14 +50,20 @@ private:
 
     juce::Colour m_colour;
 
-    RotaryKnob m_bpmKnob, m_loopLengthKnob;
-    RotaryKnob m_gateKnob, m_densityKnob, m_mutateKnob;
+    RotaryKnob m_bpmKnob;
+    RotaryKnob m_loopLengthKnob;
+    RotaryKnob m_gateKnob;
+    RotaryKnob m_densityKnob;
+    RotaryKnob m_mutateKnob;
 
     using APVTS = juce::AudioProcessorValueTreeState;
     using Attachment = APVTS::SliderAttachment;
 
-    Attachment m_bpmKnobAttachment, m_loopLengthKnobAttachment;
-    Attachment m_gateKnobAttachment, m_densityKnobAttachment, m_mutateKnobAttachment;
+    Attachment m_bpmKnobAttachment;
+    Attachment m_loopLengthKnobAttachment;
+    Attachment m_gateKnobAttachment;
+    Attachment m_densityKnobAttachment;
+    Attachment m_mutateKnobAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessorEditor)
 };
