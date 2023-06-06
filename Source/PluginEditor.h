@@ -13,10 +13,11 @@
 
 struct NoteVisual 
 {
-    NoteVisual(int idx, juce::Rectangle<int> bounds)
-        : index(idx), rect(bounds) {}
+    NoteVisual(int idx, juce::Colour clr, juce::Rectangle<int> bounds)
+        : index(idx), colour(clr), rect(bounds) {}
     
     int index;
+    juce::Colour colour;
     juce::Rectangle<int> rect;
 };
 
@@ -46,14 +47,14 @@ private:
 
     std::vector<juce::Component*> GetComponents();
 
-    void RandomColour(juce::Colour& colour);
+    juce::Colour RandomColour();
 
     //==============================================================================
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
-    juce::Colour m_colour;
+    juce::Colour m_backgroundClr;
 
     std::vector<NoteVisual> m_notes;
 

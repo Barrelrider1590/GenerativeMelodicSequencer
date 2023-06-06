@@ -73,6 +73,7 @@ public:
     void RemoveListenerFromBroadcaster(juce::ChangeListener* listener);
 
     //==============================================================================
+    int GetCurrentNote();
     bool GetIsNoteOn();
     juce::AudioProcessorValueTreeState* GetAPVTS();
 

@@ -243,6 +243,10 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 }
 
 //==============================================================================
+int GenerativeMelodicSequencerAudioProcessor::GetCurrentNote()
+{
+    return m_currentNote;
+}
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 {
     return m_isNoteOn;

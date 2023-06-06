@@ -16,7 +16,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
-    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob)
+    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
+    m_backgroundClr(juce::Colour(20, 20, 20))
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -37,7 +38,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     for (int i{}; i < 7; ++i)
     {
         midiEventArea.setX(midiEventArea.getWidth() * i);
-        NoteVisual note{ i, midiEventArea };
+        NoteVisual note{ i, m_backgroundClr, midiEventArea };
         m_notes.push_back(note);
     }
 }
@@ -51,15 +52,14 @@ GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudio
 void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colour (20,20,20));
+    g.fillAll (m_backgroundClr);
 
-    g.setColour (juce::Colour(220, 220, 220));
-    g.setFont (15.0f);
+    //g.setColour (juce::Colour(220, 220, 220));
+    //g.setFont (15.0f);
 
-    for (auto note : m_notes)
+    for (const NoteVisual& note : m_notes)
     {
-        //RandomColour(m_colour);
-        g.setColour(m_colour);
+        g.setColour(note.colour);
         g.fillRect(note.rect);
     }
 }
@@ -90,11 +90,14 @@ void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce
 {
     if (m_audioProcessor.GetIsNoteOn())
     {
-        RandomColour(m_colour);
+        m_notes[m_audioProcessor.GetCurrentNote() % 7].colour = RandomColour();
     }
     else
     {
-        m_colour = juce::Colours::black;
+        for (auto& note : m_notes)
+        {
+            note.colour = m_backgroundClr;
+        }
     }
     repaint();
 }
@@ -112,12 +115,12 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::Ge
     };
 }
 
-void GenerativeMelodicSequencerAudioProcessorEditor::RandomColour(juce::Colour& colour)
+juce::Colour GenerativeMelodicSequencerAudioProcessorEditor::RandomColour()
 {
     juce::Random rand;
     juce::uint8 r{ static_cast<juce::uint8>(rand.nextInt()) };
     juce::uint8 g{ static_cast<juce::uint8>(rand.nextInt()) };
     juce::uint8 b{ static_cast<juce::uint8>(rand.nextInt()) };
 
-    colour = juce::Colour(r, g, b);
+    return juce::Colour(r, g, b);
 }
