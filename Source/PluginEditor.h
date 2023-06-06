@@ -50,6 +50,8 @@ private:
 
     juce::Colour m_colour;
 
+    std::vector<juce::Rectangle<int>> m_notes;
+
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;
     RotaryKnob m_gateKnob;

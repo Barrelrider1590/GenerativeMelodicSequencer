@@ -29,6 +29,16 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     }
 
     setSize (350, 600);
+
+    auto bounds = getLocalBounds();
+    auto midiEventArea = bounds.removeFromTop(bounds.getHeight() * .2f);
+    midiEventArea.setWidth(midiEventArea.getWidth() / 7);
+
+    for (int i{}; i < 7; ++i)
+    {
+        midiEventArea.setX(midiEventArea.getWidth() * i);
+        m_notes.push_back(midiEventArea);
+    }
 }
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
@@ -44,12 +54,13 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colour(220, 220, 220));
     g.setFont (15.0f);
-    
-    auto bounds{ getLocalBounds() };
-    auto midiEventBounds{ bounds.removeFromTop(bounds.getHeight() * .2) };
 
-    g.setColour(m_colour);
-    g.fillRect(midiEventBounds);
+    for (auto note : m_notes)
+    {
+        RandomColour(m_colour);
+        g.setColour(m_colour);
+        g.fillRect(note);
+    }
 }
 
 void GenerativeMelodicSequencerAudioProcessorEditor::resized()
