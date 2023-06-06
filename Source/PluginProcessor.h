@@ -89,7 +89,7 @@ private:
 
     //==============================================================================
     int m_samplesProcessed;
-    int m_currentNote;
+    int m_noteCounter;
     int m_loopLength;
     static const int m_maxLoopLength;
 

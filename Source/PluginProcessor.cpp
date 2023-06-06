@@ -37,7 +37,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    m_samplesProcessed(0), m_loopLength(8), m_currentNote(0),
+    m_samplesProcessed(0), m_loopLength(8), m_noteCounter(0),
     m_isNoteOn(false)
 #endif
 {
@@ -248,7 +248,7 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 //==============================================================================
 int GenerativeMelodicSequencerAudioProcessor::GetCurrentNote()
 {
-    return m_currentNote;
+    return m_melody[m_noteCounter];
 }
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 {
@@ -293,20 +293,20 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
 void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, 
                                                                         const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_melody[m_currentNote], sequencerSettings.density) };
+    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_majorScale[m_melody[m_noteCounter]], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 }
 void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, 
                                                                          const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_melody[m_currentNote], sequencerSettings.density) };
+    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_majorScale[m_melody[m_noteCounter]], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 
-    ++m_currentNote;
+    ++m_noteCounter;
 
-    if (m_currentNote > sequencerSettings.loopLength - 1)
+    if (m_noteCounter > sequencerSettings.loopLength - 1)
     {
-        m_currentNote = 0;
+        m_noteCounter = 0;
         MutateMelody(m_melody, m_majorScale, sequencerSettings);
     }
 }
@@ -317,9 +317,10 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(std::vector<int>& 
                                                               const std::vector<int>& scale,
                                                               int loopLength)
 {
+    juce::Random rand;
     for (int i{ 0 }; i < loopLength; ++i)
     {
-        melody[i] = GenerateRandomNote(scale);
+        melody[i] = rand.nextInt(scale.size());
     }
 }
 void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melody, 
@@ -332,7 +333,7 @@ void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& me
     {
         if (random.nextFloat() < sequencerSettings.mutate)
         {
-            melody[i] = GenerateRandomNote(scale);
+            melody[i] = random.nextInt(scale.size());
         }
     }
 }
