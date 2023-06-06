@@ -15,10 +15,10 @@
 struct SequencerSettings
 {
     int bpm{ 0 }, loopLength{ 0 };
-    float level{ 0 }, gate{ 0 }, density{ 0 }, mutate{ 0 };
+    float gate{ 0 }, density{ 0 }, mutate{ 0 };
 };
 
-SequencerSettings getSequencerSettings(const juce::AudioProcessorValueTreeState& apvts);
+SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts);
 
 //==============================================================================
 /**

@@ -112,7 +112,7 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
         }
     }
 
-    auto sequencerSettings{ getSequencerSettings(m_apvts) };
+    auto sequencerSettings{ GetSequencerSettings(m_apvts) };
     GenerateMelody(m_melody, m_majorScale, 32);
 }
 
@@ -160,7 +160,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
         buffer.clear(i, 0, buffer.getNumSamples());
     }
 
-    auto sequencerSettings{ getSequencerSettings(m_apvts) };
+    auto sequencerSettings{ GetSequencerSettings(m_apvts) };
 
     updateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
 
@@ -202,20 +202,13 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new GenerativeMelodicSequencerAudioProcessor();
 }
 
-#pragma region AudioSynthesis
-
-
-#pragma endregion
-
-
 #pragma region UI
-SequencerSettings getSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
+SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
 {
     SequencerSettings settings;
 
     settings.bpm = apvts.getRawParameterValue("bpm")->load();
     settings.loopLength = apvts.getRawParameterValue("length")->load();
-    settings.level = apvts.getRawParameterValue("level")->load();
     settings.gate = apvts.getRawParameterValue("gate")->load();
     settings.density = apvts.getRawParameterValue("density")->load();
     settings.mutate = apvts.getRawParameterValue("mutate")->load();
@@ -229,7 +222,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 30, 300, 120));
     layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, 16, 7));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("level", "Level", 0.f, 1.f, .0f));
     layout.add(std::make_unique < juce::AudioParameterFloat>("gate", "Gate", .01f, 1.f, .5f));
     layout.add(std::make_unique < juce::AudioParameterFloat>("density", "Density", .1f, 1.f, .5f));
     layout.add(std::make_unique < juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, .5f));
