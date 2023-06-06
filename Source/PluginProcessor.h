@@ -73,8 +73,9 @@ public:
     void RemoveListenerFromBroadcaster(juce::ChangeListener* listener);
 
     //==============================================================================
-    int GetCurrentNote();
+    int GetCurrentMidiNote();
     bool GetIsNoteOn();
+    std::vector<int> GetScale();
     juce::AudioProcessorValueTreeState* GetAPVTS();
 
 private:

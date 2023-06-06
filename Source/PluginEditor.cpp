@@ -10,6 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
+const int GenerativeMelodicSequencerAudioProcessorEditor::m_maxNrOfNotes{ 12 };
+
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
     : AudioProcessorEditor (&p), m_audioProcessor (p),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
@@ -33,9 +35,9 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 
     auto bounds = getLocalBounds();
     auto midiEventArea = bounds.removeFromTop(bounds.getHeight() * .2f);
-    midiEventArea.setWidth(midiEventArea.getWidth() / 7);
+    midiEventArea.setWidth(midiEventArea.getWidth() / m_maxNrOfNotes);
 
-    for (int i{}; i < 7; ++i)
+    for (int i{}; i < m_maxNrOfNotes; ++i)
     {
         midiEventArea.setX(midiEventArea.getWidth() * i);
         NoteVisual note{ i, m_backgroundClr, midiEventArea };
@@ -57,9 +59,11 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
     //g.setColour (juce::Colour(220, 220, 220));
     //g.setFont (15.0f);
 
+    int counter;
     for (const NoteVisual& note : m_notes)
     {
-        g.setColour(note.colour);
+        ++counter;
+        g.setColour(note.colour.brighter(counter * .04));
         g.fillRect(note.rect);
     }
 }
@@ -90,7 +94,8 @@ void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce
 {
     if (m_audioProcessor.GetIsNoteOn())
     {
-        m_notes[m_audioProcessor.GetCurrentNote() % 7].colour = RandomColour();
+        int note{ m_audioProcessor.GetCurrentMidiNote() - m_audioProcessor.GetScale()[0]};
+        m_notes[note].colour = RandomColour();
     }
     else
     {

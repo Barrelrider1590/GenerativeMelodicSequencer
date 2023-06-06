@@ -246,13 +246,17 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 }
 
 //==============================================================================
-int GenerativeMelodicSequencerAudioProcessor::GetCurrentNote()
+int GenerativeMelodicSequencerAudioProcessor::GetCurrentMidiNote()
 {
-    return m_melody[m_noteCounter];
+    return m_majorScale[m_melody[m_noteCounter]];
 }
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 {
     return m_isNoteOn;
+}
+std::vector<int> GenerativeMelodicSequencerAudioProcessor::GetScale()
+{
+    return m_majorScale;
 }
 juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::GetAPVTS()
 {

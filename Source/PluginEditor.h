@@ -50,8 +50,8 @@ private:
     juce::Colour RandomColour();
 
     //==============================================================================
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    static const int m_maxNrOfNotes;
+
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
     juce::Colour m_backgroundClr;
