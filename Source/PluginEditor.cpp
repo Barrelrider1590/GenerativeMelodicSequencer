@@ -11,7 +11,7 @@
 
 //==============================================================================
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p),
+    : AudioProcessorEditor (&p), m_audioProcessor (p),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
@@ -20,10 +20,10 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    audioProcessor.AddListenerToBroadcaster(this);
+    m_audioProcessor.AddListenerToBroadcaster(this);
 
 
-    for (auto knob : getComponents())
+    for (auto knob : GetComponents())
     {
         addAndMakeVisible(knob);
     }
@@ -33,7 +33,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
 {
-    audioProcessor.RemoveListenerFromBroadcaster(this);
+    m_audioProcessor.RemoveListenerFromBroadcaster(this);
 }
 
 //==============================================================================
@@ -73,7 +73,22 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     m_mutateKnob.setBounds(melodyParamBounds);
 }
 
-std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::getComponents()
+//==============================================================================
+void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
+{
+    if (m_audioProcessor.GetIsNoteOn())
+    {
+        RandomColour(m_colour);
+    }
+    else
+    {
+        m_colour = juce::Colours::black;
+    }
+    repaint();
+}
+
+//==============================================================================
+std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::GetComponents()
 {
     return
     {
@@ -83,19 +98,6 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::ge
         &m_densityKnob,
         &m_mutateKnob
     };
-}
-
-void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
-{
-    if (audioProcessor.GetIsNoteOn())
-    {
-        RandomColour(m_colour);
-    }
-    else
-    {
-        m_colour = juce::Colours::black;
-    }
-    repaint();
 }
 
 void GenerativeMelodicSequencerAudioProcessorEditor::RandomColour(juce::Colour& colour)
