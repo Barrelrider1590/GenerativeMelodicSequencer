@@ -11,19 +11,24 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
-//==============================================================================
-/**
-*/
+struct NoteVisual 
+{
+    NoteVisual(int idx, juce::Rectangle<int> bounds)
+        : index(idx), rect(bounds) {}
+    
+    int index;
+    juce::Rectangle<int> rect;
+};
 
 struct RotaryKnob : public juce::Slider
 {
     RotaryKnob() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
-                                juce::Slider::NoTextBox)
-    {
-
-    }
+        juce::Slider::NoTextBox) {}
 };
 
+//==============================================================================
+/**
+*/
 class GenerativeMelodicSequencerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
 {
 public:
@@ -50,7 +55,7 @@ private:
 
     juce::Colour m_colour;
 
-    std::vector<juce::Rectangle<int>> m_notes;
+    std::vector<NoteVisual> m_notes;
 
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;

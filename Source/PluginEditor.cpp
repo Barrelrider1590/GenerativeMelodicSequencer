@@ -37,7 +37,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     for (int i{}; i < 7; ++i)
     {
         midiEventArea.setX(midiEventArea.getWidth() * i);
-        m_notes.push_back(midiEventArea);
+        NoteVisual note{ i, midiEventArea };
+        m_notes.push_back(note);
     }
 }
 
@@ -57,9 +58,9 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
 
     for (auto note : m_notes)
     {
-        RandomColour(m_colour);
+        //RandomColour(m_colour);
         g.setColour(m_colour);
-        g.fillRect(note);
+        g.fillRect(note.rect);
     }
 }
 
