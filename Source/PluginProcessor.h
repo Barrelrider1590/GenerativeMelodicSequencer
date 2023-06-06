@@ -91,10 +91,11 @@ private:
     int m_samplesProcessed;
     int m_currentNote;
     int m_loopLength;
+    static const int m_maxLoopLength;
 
     bool m_isNoteOn;
 
-    std::vector<int> m_majorScale;
+    static const std::vector<int> m_majorScale;
     std::vector<int> m_melody;
 
     std::unique_ptr<juce::ChangeBroadcaster> m_broadcaster;
