@@ -98,7 +98,7 @@ private:
 
     std::unique_ptr<juce::ChangeBroadcaster> m_broadcaster;
 
-    juce::Synthesiser* m_synth;
+    juce::Synthesiser* m_synth; // creating unique pointer caused memory leak issue
 
     juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", CreateParameterLayout() };
 
