@@ -34,18 +34,22 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                      #endif
                        ),
     m_samplesProcessed(0), m_loopLength(8), m_currentNote(0),
-    m_isNoteOn(false)//, m_midiOffSamples(0)
+    m_isNoteOn(false),
+    m_majorScale({ 60, 62, 64, 65, 67, 69, 71 })//, m_midiOffSamples(0)
 #endif
 {
-    m_synth.addSound(new SynthSound());
-    m_synth.addVoice(new SynthVoice());
-
     m_melody.resize(32);
+
+    m_broadcaster = std::make_unique <juce::ChangeBroadcaster>();
+
+    m_synth = new juce::Synthesiser;
+    m_synth->addSound(new SynthSound());
+    m_synth->addVoice(new SynthVoice());
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
 {
-
+    delete m_synth;
 }
 
 //==============================================================================
@@ -114,11 +118,11 @@ void GenerativeMelodicSequencerAudioProcessor::changeProgramName (int index, con
 void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     //============================================================
-    m_synth.setCurrentPlaybackSampleRate(sampleRate);
+    m_synth->setCurrentPlaybackSampleRate(sampleRate);
 
-    for (int i{ 0 }; i < m_synth.getNumVoices(); ++i)
+    for (int i{ 0 }; i < m_synth->getNumVoices(); ++i)
     {
-        if (SynthVoice* voice = dynamic_cast<SynthVoice*>(m_synth.getVoice(i)))
+        if (SynthVoice* voice = dynamic_cast<SynthVoice*>(m_synth->getVoice(i)))
         {
             voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
         }
@@ -176,7 +180,7 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 
     UpdateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
 
-    m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    m_synth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
     m_samplesProcessed += buffer.getNumSamples();
 }
@@ -231,11 +235,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessor::AddListenerToBroadcaster(juce::ChangeListener* listener)
 {
-    m_broadcaster.addChangeListener(listener);
+    m_broadcaster->addChangeListener(listener);
 }
 void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juce::ChangeListener* listener)
 {
-    m_broadcaster.removeChangeListener(listener);
+    m_broadcaster->removeChangeListener(listener);
 }
 
 //==============================================================================
@@ -262,7 +266,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
         {
             AddNoteOffMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = false;
-            m_broadcaster.sendChangeMessage();
+            m_broadcaster->sendChangeMessage();
         }
     }
     if (m_samplesProcessed >= noteOnInterval && m_samplesProcessed < noteOffInterval)
@@ -271,7 +275,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
         {
             AddNoteOnMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = true;
-            m_broadcaster.sendChangeMessage();
+            m_broadcaster->sendChangeMessage();
         }
     }
     if (m_samplesProcessed >= noteOnInterval * 2)

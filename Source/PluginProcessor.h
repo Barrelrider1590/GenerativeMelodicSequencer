@@ -93,14 +93,15 @@ private:
 
     bool m_isNoteOn;
 
-    std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
+    std::vector<int> m_majorScale;
     std::vector<int> m_melody;
+
+    std::unique_ptr<juce::ChangeBroadcaster> m_broadcaster;
+
+    juce::Synthesiser* m_synth;
 
     juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", CreateParameterLayout() };
 
-    juce::Synthesiser m_synth;
-
-    juce::ChangeBroadcaster m_broadcaster;
-
+    //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
 };
