@@ -24,7 +24,6 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_isNoteOn(false)//, m_midiOffSamples(0)
 #endif
 {
-
     m_synth.addSound(new SynthSound());
     m_synth.addVoice(new SynthVoice());
 
@@ -322,4 +321,8 @@ void GenerativeMelodicSequencerAudioProcessor::removeListenerFromBroadcaster(juc
 bool GenerativeMelodicSequencerAudioProcessor::getIsNoteOn()
 {
     return m_isNoteOn;
+}
+juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::getAPVTS()
+{
+    return &m_apvts;
 }

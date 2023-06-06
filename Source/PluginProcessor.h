@@ -68,13 +68,13 @@ public:
 
     //==============================================================================
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    juce::AudioProcessorValueTreeState m_apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
     //==============================================================================
     void addListenerToBroadcaster(juce::ChangeListener* listener);
     void removeListenerFromBroadcaster(juce::ChangeListener* listener);
 
     bool getIsNoteOn();
+    juce::AudioProcessorValueTreeState* getAPVTS();
 
 private:
     void updateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
@@ -93,6 +93,8 @@ private:
 
     std::vector<int> m_majorScale{ 60, 62, 64, 65, 67, 69, 71 };
     std::vector<int> m_melody;
+
+    juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", createParameterLayout() };
 
     juce::Synthesiser m_synth;
 
