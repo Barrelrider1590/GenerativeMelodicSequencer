@@ -11,6 +11,8 @@
 
 //==============================================================================
 const int GenerativeMelodicSequencerAudioProcessorEditor::m_maxNrOfNotes{ 12 };
+const juce::Colour GenerativeMelodicSequencerAudioProcessorEditor::m_backgroundClr{ juce::Colour(20, 20, 20) };
+CustomLookAndFeel GenerativeMelodicSequencerAudioProcessorEditor::m_lookAndFeel{};
 
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
     : AudioProcessorEditor (&p), m_audioProcessor (p),
@@ -18,16 +20,15 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
-    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
-    m_backgroundClr(juce::Colour(20, 20, 20))
+    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob)    
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     m_audioProcessor.AddListenerToBroadcaster(this);
 
-
     for (auto knob : GetComponents())
     {
+        knob->setLookAndFeel(&m_lookAndFeel);
         addAndMakeVisible(knob);
     }
 
@@ -59,7 +60,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
     //g.setColour (juce::Colour(220, 220, 220));
     //g.setFont (15.0f);
 
-    int counter;
+    int counter{};
     for (const NoteVisual& note : m_notes)
     {
         ++counter;
