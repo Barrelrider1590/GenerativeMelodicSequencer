@@ -13,6 +13,8 @@
       <FILE id="SGuNiM" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="eoEt5a" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="I0ulK7" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
       <FILE id="WKM0jP" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
       <FILE id="TPST7e" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
       <FILE id="vlTOnA" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
