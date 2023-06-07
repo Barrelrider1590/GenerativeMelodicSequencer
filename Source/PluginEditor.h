@@ -86,8 +86,12 @@ public:
                                                               juce::PathStrokeType::JointStyle::curved,
                                                               juce::PathStrokeType::EndCapStyle::rounded) };
 
+        
+        juce::Path pDashed{};
+        const float dashLengths[2] = { 10.f, 15.f };
+        strokeType.createDashedStroke(pDashed, p2, dashLengths, 2);
         g.setColour(myBeautifulGradient.getColourAtPosition((angle - rotaryStartAngle) / (rotaryEndAngle - rotaryStartAngle)));
-        g.strokePath(p2, strokeType);
+        g.strokePath(pDashed, strokeType);
     }
 };
 //==============================================================================
