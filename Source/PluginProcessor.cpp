@@ -227,10 +227,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
     juce::AudioProcessorValueTreeState::ParameterLayout layout{};
 
     layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 30, 300, 120));
-    layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, m_maxLoopLength, 7));
-    layout.add(std::make_unique < juce::AudioParameterFloat>("gate", "Gate", .01f, 1.f, .5f));
-    layout.add(std::make_unique < juce::AudioParameterFloat>("density", "Density", .1f, 1.f, .5f));
-    layout.add(std::make_unique < juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, .5f));
+    layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, m_maxLoopLength, 4));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("gate", "Gate", .1f, 1.f, .5f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("density", "Density", .1f, 1.f, .75f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, 1.f));
 
     return layout;
 }
