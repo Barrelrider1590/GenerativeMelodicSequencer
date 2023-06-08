@@ -39,11 +39,13 @@ public:
         float radius{ static_cast<float>(juce::jmin(width, height) * .5f) };
         Vector2f containerCentre{ x + width * .5f, y + height * .5f };
         Vector2f ellipseCentre{ containerCentre.x - radius * .5f, containerCentre.y - radius * .5f };
-
         float angle{ rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle) };
 
         juce::Colour knobBaseClr{ juce::Colour::Colour(100, 100, 100) };
         juce::Colour knobAccentClr{ m_gradient.getColourAtPosition((angle - rotaryStartAngle) / (rotaryEndAngle - rotaryStartAngle)) };
+        juce::PathStrokeType strokeType{ juce::PathStrokeType::PathStrokeType(1.0f,
+                                         juce::PathStrokeType::JointStyle::curved,
+                                         juce::PathStrokeType::EndCapStyle::rounded) };
 
         // drawing knob
         g.setColour(knobBaseClr);
@@ -53,10 +55,6 @@ public:
         g.drawEllipse(ellipseCentre.x, ellipseCentre.y, radius, radius, 5.f);
 
         // drawing pointer
-        juce::PathStrokeType strokeType{ juce::PathStrokeType::PathStrokeType(radius * .05f,
-                                              juce::PathStrokeType::JointStyle::curved,
-                                              juce::PathStrokeType::EndCapStyle::rounded) };
-
         juce::Path pointer{};
         float pointerLength{ radius * .25f };
         float pointerThickness{ 10.f };
@@ -70,19 +68,19 @@ public:
         g.strokePath(pointer, strokeType);
 
         // drawing arc around knob
-        juce::Path pArc{};
-        juce::Path pDashed{};
+        juce::Path arc{};
+        juce::Path arcDashed{};
         const float dashLengths[2] = { 10.f, 15.f };
 
-        pArc.addCentredArc(containerCentre.x, containerCentre.y,
-            radius * .75f, radius * .75f,
-            0.f,
-            rotaryStartAngle, rotaryEndAngle,
-            true);
-        strokeType.createDashedStroke(pDashed, pArc, dashLengths, 2);
+        arc.addCentredArc(containerCentre.x, containerCentre.y,
+                          radius * .75f, radius * .75f,
+                          0.f,
+                          rotaryStartAngle, rotaryEndAngle,
+                          true);
+        strokeType.createDashedStroke(arcDashed, arc, dashLengths, 2);
 
         g.setColour(knobAccentClr);
-        g.strokePath(pDashed, strokeType);
+        g.strokePath(arcDashed, strokeType);
     }
 
 private:
