@@ -15,10 +15,11 @@ const juce::Colour GenerativeMelodicSequencerAudioProcessorEditor::m_backgroundC
 CustomLookAndFeel GenerativeMelodicSequencerAudioProcessorEditor::m_lookAndFeel{};
 
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
-    : AudioProcessorEditor (&p), m_audioProcessor (p),
+    : AudioProcessorEditor (&p), 
+    m_audioProcessor (p),
     m_timerFreq(60),
     m_midiUpdated(false),
-    m_noteVisualiser(m_backgroundClr),
+    m_noteVisualiser(m_lookAndFeel.GetGradient(), m_backgroundClr),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),

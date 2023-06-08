@@ -83,6 +83,11 @@ public:
         g.strokePath(arcDashed, strokeType);
     }
 
+    juce::ColourGradient& GetGradient()
+    {
+        return m_gradient;
+    }
+
 private:
     juce::ColourGradient m_gradient;
 };
