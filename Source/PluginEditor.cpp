@@ -32,18 +32,9 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
         addAndMakeVisible(knob);
     }
 
-    setSize (350, 600);
+    addAndMakeVisible(m_noteComp);
 
-    auto bounds = getLocalBounds();
-    auto midiEventArea = bounds.removeFromTop(bounds.getHeight() * .2f);
-    midiEventArea.setWidth(midiEventArea.getWidth() / m_maxNrOfNotes);
-
-    for (int i{}; i < m_maxNrOfNotes; ++i)
-    {
-        midiEventArea.setX(midiEventArea.getWidth() * i);
-        NoteVisual note{ i, m_backgroundClr, midiEventArea };
-        m_notes.push_back(note);
-    }
+    setSize (360, 600);
 }
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
@@ -57,16 +48,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (m_backgroundClr);
 
-    //g.setColour (juce::Colour(220, 220, 220));
-    //g.setFont (15.0f);
-
-    int counter{};
-    for (const NoteVisual& note : m_notes)
-    {
-        ++counter;
-        g.setColour(note.colour.brighter(counter * .04));
-        g.fillRect(note.rect);
-    }
+    m_noteComp.paint(g);
 }
 
 void GenerativeMelodicSequencerAudioProcessorEditor::resized()
@@ -81,6 +63,8 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5) };
     auto melodyParamBounds{ bounds };
 
+    m_noteComp.setBounds(midiEventBounds);
+
     m_bpmKnob.setBounds(loopParamBounds.removeFromLeft(bounds.getWidth() * .5));
     m_loopLengthKnob.setBounds(loopParamBounds.removeFromRight(bounds.getWidth() * .5));
     
@@ -93,19 +77,19 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
-    if (m_audioProcessor.GetIsNoteOn())
-    {
-        int note{ m_audioProcessor.GetCurrentMidiNote() - m_audioProcessor.GetScale()[0]};
-        m_notes[note].colour = RandomColour();
-    }
-    else
-    {
-        for (auto& note : m_notes)
-        {
-            note.colour = m_backgroundClr;
-        }
-    }
-    repaint();
+    //if (m_audioProcessor.GetIsNoteOn())
+    //{
+    //    int note{ m_audioProcessor.GetCurrentMidiNote() - m_audioProcessor.GetScale()[0]};
+    //    m_notes[note].colour = RandomColour();
+    //}
+    //else
+    //{
+    //    for (auto& note : m_notes)
+    //    {
+    //        note.colour = m_backgroundClr;
+    //    }
+    //}
+    //repaint();
 }
 
 //==============================================================================

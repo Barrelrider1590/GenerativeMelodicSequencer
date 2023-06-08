@@ -14,12 +14,52 @@
 
 struct NoteVisual 
 {
-    NoteVisual(int idx, juce::Colour clr, juce::Rectangle<int> bounds)
-        : index(idx), colour(clr), rect(bounds) {}
+    NoteVisual(juce::Colour clr, juce::Rectangle<int> bounds)
+        : colour(clr), rect(bounds) {}
     
-    int index;
     juce::Colour colour;
     juce::Rectangle<int> rect;
+};
+
+class NoteVisualComp : public juce::Component
+{
+public:
+    NoteVisualComp()
+    {
+        for (int i{}; i < 12; ++i)
+        {
+            NoteVisual note{ juce::Colours::black, getLocalBounds()};
+            m_notes.push_back(note);
+        }
+    }
+    void setBounds(juce::Rectangle<int> newBounds)
+    {
+        m_rect = newBounds;
+        auto noteBounds = m_rect;
+        noteBounds.setWidth(m_rect.getWidth() / 12);
+        int counter{};
+        for (auto& note : m_notes)
+        {
+            noteBounds.setX(noteBounds.getWidth() * counter);
+            note.rect = noteBounds;
+            ++counter;
+        }
+    }
+    void paint(juce::Graphics& g)
+    {
+        g.setColour(juce::Colour(juce::Colours::white));
+        g.fillRect(m_rect);
+        int counter{};
+        for (const auto& note : m_notes)
+        {
+            g.setColour(note.colour);
+            g.fillRect(note.rect);
+            ++counter;
+        }
+    }
+private:
+    juce::Rectangle<int> m_rect;
+    std::vector<NoteVisual> m_notes;
 };
 
 struct RotaryKnob : public juce::Slider
@@ -56,7 +96,7 @@ private:
     
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
-    std::vector<NoteVisual> m_notes;
+    NoteVisualComp m_noteComp;
 
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;
