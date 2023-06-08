@@ -17,6 +17,7 @@ CustomLookAndFeel GenerativeMelodicSequencerAudioProcessorEditor::m_lookAndFeel{
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
     : AudioProcessorEditor (&p), m_audioProcessor (p),
     m_midiEventThrown(false),
+    m_noteVisualiser(m_backgroundClr),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
@@ -26,16 +27,16 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     m_audioProcessor.AddListenerToBroadcaster(this);
+    
     startTimerHz(60);
 
+    addAndMakeVisible(m_noteVisualiser);
     for (auto knob : GetComponents())
     {
         knob->setLookAndFeel(&m_lookAndFeel);
         addAndMakeVisible(knob);
     }
-
-    addAndMakeVisible(m_noteVisualiser);
-
+    
     setSize (360, 720);
 }
 
@@ -61,8 +62,6 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     auto bounds{ getLocalBounds() };
 
     auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2) };
-    midiEventBounds.removeFromBottom(10);
-    midiEventBounds.removeFromLeft(10);
     auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .33) };
     auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5) };
     auto melodyParamBounds{ bounds };
@@ -91,7 +90,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::timerCallback()
     if (m_midiEventThrown.compareAndSetBool(false, true))
     {
         m_noteVisualiser.UpdateNoteVisuals(m_audioProcessor, RandomColour());
-        repaint();
+        repaint(getLocalBounds().removeFromTop(getLocalBounds().getHeight() * .2));
     }
 }
 
