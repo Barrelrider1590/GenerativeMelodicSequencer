@@ -16,7 +16,8 @@ CustomLookAndFeel GenerativeMelodicSequencerAudioProcessorEditor::m_lookAndFeel{
 
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
     : AudioProcessorEditor (&p), m_audioProcessor (p),
-    m_midiEventThrown(false),
+    m_timerFreq(60),
+    m_midiUpdated(false),
     m_noteVisualiser(m_backgroundClr),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
@@ -28,9 +29,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     // editor's size to whatever you need it to be.
     m_audioProcessor.AddListenerToBroadcaster(this);
     
-    startTimerHz(60);
+    startTimerHz(m_timerFreq);
 
-    m_noteVisualiser.setFramesPerSecond(1);
     addAndMakeVisible(m_noteVisualiser);
 
     for (auto knob : GetComponents())
@@ -38,7 +38,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
         knob->setLookAndFeel(&m_lookAndFeel);
         addAndMakeVisible(knob);
     }
-    
+
     setSize (360, 720);
 }
 
@@ -82,18 +82,20 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
-    DBG("Midi event thrown");
-    m_midiEventThrown = true;
+    m_midiUpdated = true;
 }
 
 void GenerativeMelodicSequencerAudioProcessorEditor::timerCallback()
 {
-    DBG("Timer Callback");
-    if (m_midiEventThrown.compareAndSetBool(false, true))
+    if (m_midiUpdated.compareAndSetBool(false, true))
     {
-        m_noteVisualiser.UpdateNoteVisuals(m_audioProcessor, RandomColour());
-        repaint(getLocalBounds().removeFromTop(getLocalBounds().getHeight() * .2));
+        m_noteVisualiser.UpdateNoteVisibility(m_audioProcessor, RandomColour());
     }
+
+    m_noteVisualiser.UpdateNotePosition(m_timerFreq);
+
+    //repaint(getLocalBounds().removeFromTop(getLocalBounds().getHeight() * .2));
+    repaint();
 }
 
 //==============================================================================

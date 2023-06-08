@@ -13,14 +13,16 @@
 
 struct NoteVisual
 {
-    NoteVisual() : isActive(false), colour(juce::Colours::black) {}
+    NoteVisual() : isActive(false), offsetTotal(0), colour(juce::Colours::black) {}
     //==============================================================================
     bool isActive;
+    float offsetTotal;
     juce::Colour colour;
     juce::Rectangle<int> rect;
 };
 
-class NoteVisualiser : public juce::AnimatedAppComponent
+
+class NoteVisualiser : public juce::Component
 {
 public:
     NoteVisualiser(juce::Colour bgClr) : m_backgroundClr(bgClr)
@@ -31,22 +33,6 @@ public:
             m_notes.push_back(note);
         }
     }
-
-    void update() override 
-    {
-        for (auto& note : m_notes)
-        {
-            if (note.isActive)
-            {
-                note.rect.setY(note.rect.getY() - note.rect.getHeight());
-                if (note.rect.getY() < 0)
-                {
-                    note.rect.setY(m_bounds.getHeight() - note.rect.getHeight());
-                }
-            }
-        }
-    }
-
     //==============================================================================
     void setBounds(juce::Rectangle<int> newBounds)
     {
@@ -60,6 +46,7 @@ public:
             noteBounds.setX(noteBounds.getWidth() * counter);
             noteBounds.setY(m_bounds.getHeight() - noteBounds.getHeight());
             note.rect = noteBounds;
+            note.offsetTotal = m_bounds.getHeight();
             ++counter;
         }
     }
@@ -76,11 +63,30 @@ public:
     }
 
     //==============================================================================
-    void UpdateNoteVisuals(GenerativeMelodicSequencerAudioProcessor& p, juce::Colour random)
+    void UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcessor& p, juce::Colour random)
     {
         int noteChanged{ p.GetCurrentMidiNote() - p.GetScale()[0] };
         m_notes[noteChanged].colour = random;
         m_notes[noteChanged].isActive = true;
+    }
+    void UpdateNotePosition(int timerFreqHz)
+    {
+        float delta = 150.f / timerFreqHz;
+        for (auto& note : m_notes)
+        {
+            if (note.isActive)
+            {
+                note.offsetTotal -= delta;
+                note.rect.setY(note.offsetTotal);
+                if (note.offsetTotal <= 0 - note.rect.getHeight())
+                {
+                    note.rect.setY(m_bounds.getHeight());
+                    note.isActive = false;
+                    note.offsetTotal = m_bounds.getHeight();
+                    note.colour = juce::Colour(.0f, .0f, .0f, .0f);
+                }
+            }
+        }
     }
 
 private:

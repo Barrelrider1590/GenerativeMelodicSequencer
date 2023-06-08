@@ -50,7 +50,9 @@ private:
     
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
-    juce::Atomic<bool> m_midiEventThrown;
+    int const m_timerFreq;
+
+    juce::Atomic<bool> m_midiUpdated;
 
     NoteVisualiser m_noteVisualiser;
 
