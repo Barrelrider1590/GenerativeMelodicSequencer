@@ -37,13 +37,17 @@ public:
     void setBounds(juce::Rectangle<int> newBounds)
     {
         m_bounds = newBounds;
+        m_bounds.removeFromBottom(10);
+        m_bounds.removeFromLeft(10);
+        m_bounds.removeFromRight(10);
+        m_bounds.removeFromTop(10);
         auto noteBounds = m_bounds;
         noteBounds.setWidth(m_bounds.getWidth() / 12);
         noteBounds.setHeight(m_bounds.getHeight() / 12);
         int counter{};
         for (auto& note : m_notes)
         {
-            noteBounds.setX(noteBounds.getWidth() * counter);
+            noteBounds.setX(noteBounds.getWidth() * counter + 10);
             noteBounds.setY(m_bounds.getHeight() - noteBounds.getHeight());
             note.rect = noteBounds;
             note.offsetTotal = m_bounds.getHeight();
