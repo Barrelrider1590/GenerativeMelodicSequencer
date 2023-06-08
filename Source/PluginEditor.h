@@ -14,21 +14,23 @@
 
 struct NoteVisual 
 {
+    NoteVisual(){}
     NoteVisual(juce::Colour clr, juce::Rectangle<int> bounds)
         : colour(clr), rect(bounds) {}
-    
-    juce::Colour colour;
+
+    //==============================================================================
+    juce::Colour colour{ juce::Colours::red };
     juce::Rectangle<int> rect;
 };
 
-class NoteVisualComp : public juce::Component
+class NoteVisualiser : public juce::Component
 {
 public:
-    NoteVisualComp()
+    NoteVisualiser()
     {
         for (int i{}; i < 12; ++i)
         {
-            NoteVisual note{ juce::Colours::black, getLocalBounds()};
+            NoteVisual note{};
             m_notes.push_back(note);
         }
     }
@@ -37,17 +39,19 @@ public:
         m_rect = newBounds;
         auto noteBounds = m_rect;
         noteBounds.setWidth(m_rect.getWidth() / 12);
+        noteBounds.setHeight(m_rect.getHeight() / 12);
         int counter{};
         for (auto& note : m_notes)
         {
             noteBounds.setX(noteBounds.getWidth() * counter);
+            noteBounds.setY((m_rect.getHeight() - noteBounds.getHeight()) - (noteBounds.getHeight() * counter));
             note.rect = noteBounds;
             ++counter;
         }
     }
-    void paint(juce::Graphics& g)
+    void paint(juce::Graphics& g) override
     {
-        g.setColour(juce::Colour(juce::Colours::white));
+        g.setColour(juce::Colour(juce::Colours::black));
         g.fillRect(m_rect);
         int counter{};
         for (const auto& note : m_notes)
@@ -57,6 +61,13 @@ public:
             ++counter;
         }
     }
+
+    void UpdateNoteVisuals(GenerativeMelodicSequencerAudioProcessor& p, juce::Colour random)
+    {
+        int noteChanged{ p.GetCurrentMidiNote() - p.GetScale()[0]};
+        m_notes[noteChanged].colour = random;
+    }
+
 private:
     juce::Rectangle<int> m_rect;
     std::vector<NoteVisual> m_notes;
@@ -70,7 +81,9 @@ struct RotaryKnob : public juce::Slider
 //==============================================================================
 /**
 */
-class GenerativeMelodicSequencerAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::ChangeListener
+class GenerativeMelodicSequencerAudioProcessorEditor  : public juce::AudioProcessorEditor, 
+                                                        public juce::ChangeListener, 
+                                                        public juce::Timer
 {
 public:
     GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor&);
@@ -82,6 +95,7 @@ public:
 
     //==============================================================================
     void changeListenerCallback(juce::ChangeBroadcaster* source) override;
+    void timerCallback() override;
 
 private:
 
@@ -96,7 +110,9 @@ private:
     
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
-    NoteVisualComp m_noteComp;
+    juce::Atomic<bool> m_midiEventThrown;
+
+    NoteVisualiser m_noteVisualiser;
 
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;

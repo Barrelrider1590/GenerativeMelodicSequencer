@@ -16,6 +16,7 @@ CustomLookAndFeel GenerativeMelodicSequencerAudioProcessorEditor::m_lookAndFeel{
 
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
     : AudioProcessorEditor (&p), m_audioProcessor (p),
+    m_midiEventThrown(false),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
@@ -25,6 +26,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     m_audioProcessor.AddListenerToBroadcaster(this);
+    startTimerHz(60);
 
     for (auto knob : GetComponents())
     {
@@ -32,9 +34,9 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
         addAndMakeVisible(knob);
     }
 
-    addAndMakeVisible(m_noteComp);
+    addAndMakeVisible(m_noteVisualiser);
 
-    setSize (360, 600);
+    setSize (360, 720);
 }
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
@@ -48,7 +50,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (m_backgroundClr);
 
-    m_noteComp.paint(g);
+    m_noteVisualiser.paint(g);
 }
 
 void GenerativeMelodicSequencerAudioProcessorEditor::resized()
@@ -59,11 +61,13 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     auto bounds{ getLocalBounds() };
 
     auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2) };
+    midiEventBounds.removeFromBottom(10);
+    midiEventBounds.removeFromLeft(10);
     auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .33) };
     auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5) };
     auto melodyParamBounds{ bounds };
 
-    m_noteComp.setBounds(midiEventBounds);
+    m_noteVisualiser.setBounds(midiEventBounds);
 
     m_bpmKnob.setBounds(loopParamBounds.removeFromLeft(bounds.getWidth() * .5));
     m_loopLengthKnob.setBounds(loopParamBounds.removeFromRight(bounds.getWidth() * .5));
@@ -77,19 +81,18 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 //==============================================================================
 void GenerativeMelodicSequencerAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* source)
 {
-    //if (m_audioProcessor.GetIsNoteOn())
-    //{
-    //    int note{ m_audioProcessor.GetCurrentMidiNote() - m_audioProcessor.GetScale()[0]};
-    //    m_notes[note].colour = RandomColour();
-    //}
-    //else
-    //{
-    //    for (auto& note : m_notes)
-    //    {
-    //        note.colour = m_backgroundClr;
-    //    }
-    //}
-    //repaint();
+    DBG("Midi event thrown");
+    m_midiEventThrown = true;
+}
+
+void GenerativeMelodicSequencerAudioProcessorEditor::timerCallback()
+{
+    DBG("Timer Callback");
+    if (m_midiEventThrown.compareAndSetBool(false, true))
+    {
+        m_noteVisualiser.UpdateNoteVisuals(m_audioProcessor, RandomColour());
+        repaint();
+    }
 }
 
 //==============================================================================

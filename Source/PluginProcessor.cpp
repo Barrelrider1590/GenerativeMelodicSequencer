@@ -254,7 +254,7 @@ bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 {
     return m_isNoteOn;
 }
-std::vector<int> GenerativeMelodicSequencerAudioProcessor::GetScale()
+const std::vector<int>& GenerativeMelodicSequencerAudioProcessor::GetScale()
 {
     return m_majorScale;
 }
@@ -277,7 +277,6 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
         {
             AddNoteOffMessageToBuffer(midiBuffer, sequencerSettings);
             m_isNoteOn = false;
-            m_broadcaster->sendChangeMessage();
         }
     }
     if (m_samplesProcessed >= noteOnInterval && m_samplesProcessed < noteOffInterval)
