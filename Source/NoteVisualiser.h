@@ -13,13 +13,14 @@
 
 struct NoteVisual
 {
-    NoteVisual() : colour(juce::Colours::black) {}
+    NoteVisual() : isActive(false), colour(juce::Colours::black) {}
     //==============================================================================
+    bool isActive;
     juce::Colour colour;
     juce::Rectangle<int> rect;
 };
 
-class NoteVisualiser : public juce::Component
+class NoteVisualiser : public juce::AnimatedAppComponent
 {
 public:
     NoteVisualiser(juce::Colour bgClr) : m_backgroundClr(bgClr)
@@ -28,6 +29,21 @@ public:
         {
             NoteVisual note{};
             m_notes.push_back(note);
+        }
+    }
+
+    void update() override 
+    {
+        for (auto& note : m_notes)
+        {
+            if (note.isActive)
+            {
+                note.rect.setY(note.rect.getY() - note.rect.getHeight());
+                if (note.rect.getY() < 0)
+                {
+                    note.rect.setY(m_bounds.getHeight() - note.rect.getHeight());
+                }
+            }
         }
     }
 
@@ -42,7 +58,7 @@ public:
         for (auto& note : m_notes)
         {
             noteBounds.setX(noteBounds.getWidth() * counter);
-            noteBounds.setY((m_bounds.getHeight() - noteBounds.getHeight()) - (noteBounds.getHeight() * counter));
+            noteBounds.setY(m_bounds.getHeight() - noteBounds.getHeight());
             note.rect = noteBounds;
             ++counter;
         }
@@ -64,6 +80,7 @@ public:
     {
         int noteChanged{ p.GetCurrentMidiNote() - p.GetScale()[0] };
         m_notes[noteChanged].colour = random;
+        m_notes[noteChanged].isActive = true;
     }
 
 private:

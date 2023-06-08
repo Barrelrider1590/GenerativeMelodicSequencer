@@ -30,7 +30,9 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     
     startTimerHz(60);
 
+    m_noteVisualiser.setFramesPerSecond(1);
     addAndMakeVisible(m_noteVisualiser);
+
     for (auto knob : GetComponents())
     {
         knob->setLookAndFeel(&m_lookAndFeel);
