@@ -3057,6 +3057,9 @@
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\NoteVisualiser.h">
+      <Filter>GenerativeMelodicSequencer\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\SynthSound.h">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClInclude>
