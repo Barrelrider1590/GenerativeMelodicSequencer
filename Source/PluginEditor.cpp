@@ -15,7 +15,7 @@ const int GenerativeMelodicSequencerAudioProcessorEditor::m_maxNrOfNotes{ 12 };
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p) : 
     AudioProcessorEditor (&p), 
     m_audioProcessor (p),
-    m_timerFreq(60),
+    m_timerFreq(30),
     m_midiUpdated(false),
     m_lookAndFeel(),
     m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
