@@ -11,15 +11,14 @@
 
 //==============================================================================
 const int GenerativeMelodicSequencerAudioProcessorEditor::m_maxNrOfNotes{ 12 };
-const juce::Colour GenerativeMelodicSequencerAudioProcessorEditor::m_backgroundClr{ juce::Colour(20, 20, 20) };
-CustomLookAndFeel GenerativeMelodicSequencerAudioProcessorEditor::m_lookAndFeel{};
 
-GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p)
-    : AudioProcessorEditor (&p), 
+GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p) : 
+    AudioProcessorEditor (&p), 
     m_audioProcessor (p),
     m_timerFreq(60),
     m_midiUpdated(false),
-    m_noteVisualiser(m_lookAndFeel.GetGradient(), m_backgroundClr),
+    m_lookAndFeel(),
+    m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
@@ -52,7 +51,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudio
 void GenerativeMelodicSequencerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (m_backgroundClr);
+    g.fillAll (m_lookAndFeel.GetBackgroundColour());
 
     m_noteVisualiser.paint(g);
 }
@@ -90,13 +89,13 @@ void GenerativeMelodicSequencerAudioProcessorEditor::timerCallback()
 {
     if (m_midiUpdated.compareAndSetBool(false, true))
     {
-        m_noteVisualiser.UpdateNoteVisibility(m_audioProcessor, RandomColour());
+        m_noteVisualiser.UpdateNoteVisibility(m_audioProcessor);
     }
 
     m_noteVisualiser.UpdateNotePosition(m_timerFreq);
 
-    //repaint(getLocalBounds().removeFromTop(getLocalBounds().getHeight() * .2));
-    repaint();
+    repaint(getLocalBounds().removeFromTop(getLocalBounds().getHeight() * .2));
+    //repaint();
 }
 
 //==============================================================================

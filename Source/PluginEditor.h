@@ -45,14 +45,14 @@ private:
 
     //==============================================================================
     static int const m_maxNrOfNotes;
-    static juce::Colour const m_backgroundClr;
-    static CustomLookAndFeel m_lookAndFeel;
-    
+
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
     int const m_timerFreq;
 
     juce::Atomic<bool> m_midiUpdated;
+
+    CustomLookAndFeel m_lookAndFeel;
 
     NoteVisualiser m_noteVisualiser;
 
