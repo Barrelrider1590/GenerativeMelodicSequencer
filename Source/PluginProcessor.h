@@ -17,7 +17,6 @@ struct SequencerSettings
     int bpm{ 0 }, loopLength{ 0 };
     float gate{ 0 }, density{ 0 }, mutate{ 0 };
 };
-SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts);
 
 //==============================================================================
 /**
@@ -86,22 +85,22 @@ private:
     //==============================================================================
     void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale, int loopLength);
     void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
-    int GenerateRandomNote(const std::vector<int>& scale);
 
     //==============================================================================
+    static const int m_maxLoopLength;
+    static const std::vector<int> m_majorScaleVect;
+
     int m_samplesProcessed;
     int m_noteCounter;
     int m_loopLength;
-    static const int m_maxLoopLength;
 
     bool m_isNoteOn;
 
-    static const std::vector<int> m_majorScale;
-    std::vector<int> m_melody;
+    juce::ChangeBroadcaster m_broadcaster;
 
-    std::unique_ptr<juce::ChangeBroadcaster> m_broadcaster;
+    juce::Synthesiser m_synth;
 
-    juce::Synthesiser* m_synth; // creating unique pointer caused memory leak issue
+    std::vector<int> m_melodyVect;
 
     juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", CreateParameterLayout() };
 
