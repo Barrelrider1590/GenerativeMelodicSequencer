@@ -84,6 +84,17 @@ public:
         g.strokePath(arcDashed, m_strokeType);
     }
 
+    void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
+                              bool isMouseOverButton, bool isButtonDown) override
+
+    {
+        auto buttonArea = button.getLocalBounds();
+        float buttonRadius{ buttonArea.getHeight() * .5f };
+        g.setColour(juce::Colours::crimson);
+        g.fillEllipse(buttonArea.getCentreX() - (buttonRadius *.5f), buttonArea.getCentreY() - (buttonRadius * .5f),
+            buttonRadius, buttonRadius);
+    }
+
     //==============================================================================
     const juce::Colour& GetBackgroundColour()
     {

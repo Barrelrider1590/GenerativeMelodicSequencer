@@ -23,7 +23,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
-    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob)    
+    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
+    m_button("Randomise")
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -32,6 +33,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     startTimerHz(m_timerFreq);
 
     addAndMakeVisible(m_noteVisualiser);
+    addAndMakeVisible(m_button);
+    m_button.setLookAndFeel(&m_lookAndFeel);
 
     for (auto knob : GetComponents())
     {
@@ -64,11 +67,14 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     auto bounds{ getLocalBounds() };
 
     auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2) };
+    auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .2) };
     auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .33) };
     auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5) };
     auto melodyParamBounds{ bounds };
 
     m_noteVisualiser.setBounds(midiEventBounds);
+
+    m_button.setBounds(buttonBounds);
 
     m_bpmKnob.setBounds(loopParamBounds.removeFromLeft(bounds.getWidth() * .5));
     m_loopLengthKnob.setBounds(loopParamBounds.removeFromRight(bounds.getWidth() * .5));
