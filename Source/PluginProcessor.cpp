@@ -24,7 +24,6 @@ SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&
 
 //==============================================================================
 const int GenerativeMelodicSequencerAudioProcessor::m_maxLoopLength{ 16 };
-const std::vector<int> GenerativeMelodicSequencerAudioProcessor::m_majorScaleVect{ 60, 62, 64, 65, 67, 69, 71 };
 
 GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcessor() :
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -36,6 +35,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
+    m_majorScaleVect({ 60, 62, 64, 65, 67, 69, 71 }),
     m_samplesProcessed(0), 
     m_noteCounter(0),
     m_loopLength(8), 
@@ -47,8 +47,8 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
 {
     m_melodyVect.resize(m_maxLoopLength);
 
-    m_synth.addSound(new SynthSound());
-    m_synth.addVoice(new SynthVoice());
+    m_synth.addSound( new SynthSound());
+    m_synth.addVoice( new SynthVoice());
 }
 
 GenerativeMelodicSequencerAudioProcessor::~GenerativeMelodicSequencerAudioProcessor()
@@ -228,7 +228,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout{};
 
-    layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 30, 600, 600));
+    layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 60, 600, 120));
     layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, m_maxLoopLength, 4));
     layout.add(std::make_unique<juce::AudioParameterFloat>("gate", "Gate", .1f, 1.f, .5f));
     layout.add(std::make_unique<juce::AudioParameterFloat>("density", "Density", .1f, 1.f, .75f));

@@ -88,7 +88,8 @@ private:
 
     //==============================================================================
     static const int m_maxLoopLength;
-    static const std::vector<int> m_majorScaleVect;
+    
+    const std::vector<int> m_majorScaleVect;
 
     int m_samplesProcessed;
     int m_noteCounter;
