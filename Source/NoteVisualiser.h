@@ -14,6 +14,7 @@
 struct NoteVisual
 {
     NoteVisual() : isActive(false), offsetTotal(0), colour(juce::Colours::black) {}
+
     //==============================================================================
     bool isActive;
     float offsetTotal;
@@ -25,36 +26,42 @@ struct NoteVisual
 class NoteVisualiser : public juce::Component
 {
 public:
-    NoteVisualiser(juce::ColourGradient gradient, juce::Colour bgClr) 
-        : m_gradient(gradient), m_backgroundClr(bgClr), m_noteStartPos(0)
+    NoteVisualiser(int nrOfNotes, const juce::ColourGradient& gradient, const juce::Colour& bgClr) :
+        m_noteStartPos(0),
+        m_notesVect(),
+        m_border(),
+        m_bounds(),
+        m_gradient(gradient), 
+        m_backgroundClr(bgClr)
     {
-        int nrOfNotes{ 12 };
+        m_notesVect.resize(nrOfNotes);
+
         for (int i{}; i < nrOfNotes; ++i)
         {
             NoteVisual note{};
             note.colour = m_gradient.getColourAtPosition(static_cast<float>(i) / nrOfNotes);
-            m_notes.push_back(note);
+            m_notesVect.push_back(note);
         }
     }
-    //==============================================================================
-    void setBounds(juce::Rectangle<int> newBounds)
-    {
-        int margin{ 12 };
 
+    //==============================================================================
+    void setBounds(const juce::Rectangle<int>& newBounds)
+    {
         m_border = newBounds;
 
+        int margin{ 12 };
         m_bounds = newBounds;
         m_bounds.removeFromLeft(margin);
         m_bounds.removeFromRight(margin);
         m_bounds.removeFromTop(margin);
         m_bounds.removeFromBottom(margin);
 
-        auto noteBounds = m_bounds;
+        juce::Rectangle<int> noteBounds = m_bounds;
         noteBounds.setWidth(m_bounds.getWidth() / 12);
         noteBounds.setHeight(m_bounds.getHeight() / 12);
 
         int counter{};
-        for (auto& note : m_notes)
+        for (NoteVisual& note : m_notesVect)
         {
             noteBounds.setX(noteBounds.getWidth()  * counter + margin);
             m_noteStartPos = m_border.getHeight() - noteBounds.getHeight();
@@ -69,7 +76,7 @@ public:
         g.setColour(juce::Colour(juce::Colours::black));
         g.fillRect(m_bounds);
 
-        for (const auto& note : m_notes)
+        for (const NoteVisual& note : m_notesVect)
         {
             g.setColour(note.colour);
             g.fillRect(note.rect);
@@ -80,16 +87,16 @@ public:
     }
 
     //==============================================================================
-    void UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcessor& p, juce::Colour random)
+    void UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcessor& p)
     {
         int noteChanged{ p.GetCurrentMidiNote() - p.GetScale()[0] };
-        m_notes[noteChanged].colour = m_gradient.getColourAtPosition( static_cast<float>(noteChanged) / m_notes.size());
-        m_notes[noteChanged].isActive = true;
+        m_notesVect[noteChanged].colour = m_gradient.getColourAtPosition( static_cast<float>(noteChanged) / m_notesVect.size());
+        m_notesVect[noteChanged].isActive = true;
     }
     void UpdateNotePosition(int timerFreqHz)
     {
         float delta = 150.f / timerFreqHz;
-        for (auto& note : m_notes)
+        for (NoteVisual& note : m_notesVect)
         {
             if (note.isActive)
             {
@@ -108,10 +115,9 @@ public:
 
 private:
     int m_noteStartPos;
-    juce::Rectangle<int> m_bounds;
+    std::vector<NoteVisual> m_notesVect;
     juce::Rectangle<int> m_border;
-    std::vector<NoteVisual> m_notes;
+    juce::Rectangle<int> m_bounds;
     juce::ColourGradient m_gradient;
     juce::Colour m_backgroundClr;
-    
 };
