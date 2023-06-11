@@ -33,8 +33,12 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     startTimerHz(m_timerFreq);
 
     addAndMakeVisible(m_noteVisualiser);
+
     addAndMakeVisible(m_button);
     m_button.setLookAndFeel(&m_lookAndFeel);
+
+    auto generateMelody{ [this]() { m_audioProcessor.GenerateMelody(m_audioProcessor.GetScale());  } };
+    m_button.onClick = generateMelody;
 
     for (auto knob : GetComponents())
     {

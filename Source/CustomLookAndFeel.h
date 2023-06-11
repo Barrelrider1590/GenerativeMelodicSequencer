@@ -88,10 +88,24 @@ public:
                               bool isMouseOverButton, bool isButtonDown) override
 
     {
-        auto buttonArea = button.getLocalBounds();
+        
+        g.fillAll(juce::Colours::green);
+        juce::Colour btnBorderClr(isButtonDown ? 
+                                  juce::Colours::darkred : juce::Colours::crimson);
+
+        juce::Colour btnCenterClr(isMouseOverButton ? 
+                                  isButtonDown ? 
+                                  juce::Colours::darkgoldenrod : juce::Colours::palegoldenrod :
+                                  juce::Colours::goldenrod);
+
+        juce::Rectangle<int> buttonArea = button.getLocalBounds();
         float buttonRadius{ buttonArea.getHeight() * .5f };
-        g.setColour(juce::Colours::crimson);
+        g.setColour(btnBorderClr);
         g.fillEllipse(buttonArea.getCentreX() - (buttonRadius *.5f), buttonArea.getCentreY() - (buttonRadius * .5f),
+            buttonRadius, buttonRadius);
+        g.setColour(btnCenterClr);
+            buttonRadius -= buttonRadius * .1;
+        g.fillEllipse(buttonArea.getCentreX() - (buttonRadius * .5f), buttonArea.getCentreY() - (buttonRadius * .5f),
             buttonRadius, buttonRadius);
     }
 

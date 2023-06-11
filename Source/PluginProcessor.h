@@ -77,13 +77,14 @@ public:
     const std::vector<int>& GetScale();
     juce::AudioProcessorValueTreeState* GetAPVTS();
 
+    void GenerateMelody(const std::vector<int>& scale);
+
 private:
     void UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
     void AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
     void AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
     
     //==============================================================================
-    void GenerateMelody(std::vector<int>& melody, const std::vector<int>& scale, int loopLength);
     void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
 
     //==============================================================================
