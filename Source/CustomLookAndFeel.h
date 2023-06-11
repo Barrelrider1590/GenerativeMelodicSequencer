@@ -20,12 +20,12 @@ struct Vector2f
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    CustomLookAndFeel() : 
+    CustomLookAndFeel() :
         m_backgroundClr(juce::Colour(20, 20, 20)),
         m_gradient(),
-        m_strokeType( juce::PathStrokeType::PathStrokeType(1.0f, 
-                                                           juce::PathStrokeType::JointStyle::curved, 
-                                                           juce::PathStrokeType::EndCapStyle::rounded))
+        m_strokeType(juce::PathStrokeType::PathStrokeType(1.0f,
+            juce::PathStrokeType::JointStyle::curved,
+            juce::PathStrokeType::EndCapStyle::rounded))
     {
         m_gradient.addColour(0, juce::Colours::rebeccapurple);
         m_gradient.addColour(.25, juce::Colours::blueviolet);
@@ -34,12 +34,12 @@ public:
         m_gradient.addColour(1, juce::Colours::goldenrod);
     }
     //==============================================================================
-    void drawRotarySlider( juce::Graphics& g,
-                           int x, int y,
-                           int width, int height,
-                           float sliderPos,
-                           float rotaryStartAngle, float rotaryEndAngle,
-                           juce::Slider&) override
+    void drawRotarySlider(juce::Graphics& g,
+        int x, int y,
+        int width, int height,
+        float sliderPos,
+        float rotaryStartAngle, float rotaryEndAngle,
+        juce::Slider&) override
     {
         float radius{ static_cast<float>(juce::jmin(width, height) * .5f) };
         float angle{ rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle) };
@@ -74,10 +74,10 @@ public:
         const float dashLengths[2] = { 10.f, 15.f };
 
         arc.addCentredArc(containerCentre.x, containerCentre.y,
-                          radius * .75f, radius * .75f,
-                          0.f,
-                          rotaryStartAngle, rotaryEndAngle,
-                          true);
+            radius * .75f, radius * .75f,
+            0.f,
+            rotaryStartAngle, rotaryEndAngle,
+            true);
         m_strokeType.createDashedStroke(arcDashed, arc, dashLengths, 2);
 
         g.setColour(knobAccentClr);
@@ -85,28 +85,28 @@ public:
     }
 
     void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
-                              bool isMouseOverButton, bool isButtonDown) override
+        bool isMouseOverButton, bool isButtonDown) override
 
     {
+
+        //g.fillAll(juce::Colours::green);
+        juce::Colour colourA{ juce::Colours::crimson };
+        juce::Colour btnBorderClr(isButtonDown ? colourA.brighter(0.1f) : colourA);
         
-        g.fillAll(juce::Colours::green);
-        juce::Colour btnBorderClr(isButtonDown ? 
-                                  juce::Colours::darkred : juce::Colours::crimson);
+        juce::Colour colourB{ juce::Colours::goldenrod };
+        juce::Colour btnCenterClr(isMouseOverButton ? (isButtonDown ? colourB.darker(.2f) : colourB.brighter(.2f)) : colourB);
 
-        juce::Colour btnCenterClr(isMouseOverButton ? 
-                                  isButtonDown ? 
-                                  juce::Colours::darkgoldenrod : juce::Colours::palegoldenrod :
-                                  juce::Colours::goldenrod);
-
-        juce::Rectangle<int> buttonArea = button.getLocalBounds();
-        float buttonRadius{ buttonArea.getHeight() * .5f };
+        juce::Rectangle<int> bounds = button.getLocalBounds();
+        juce::Rectangle<float> buttonBnds{ static_cast<float>(bounds.getTopLeft().getX()),
+                                           static_cast<float>(bounds.getTopLeft().getY()),
+                                           static_cast<float>(bounds.getWidth()),
+                                           static_cast<float>(bounds.getHeight()) };
         g.setColour(btnBorderClr);
-        g.fillEllipse(buttonArea.getCentreX() - (buttonRadius *.5f), buttonArea.getCentreY() - (buttonRadius * .5f),
-            buttonRadius, buttonRadius);
+        buttonBnds.reduce(buttonBnds.getWidth() * .05f, buttonBnds.getHeight() * .05f);
+        g.fillRoundedRectangle(buttonBnds, 5.f);
         g.setColour(btnCenterClr);
-            buttonRadius -= buttonRadius * .1;
-        g.fillEllipse(buttonArea.getCentreX() - (buttonRadius * .5f), buttonArea.getCentreY() - (buttonRadius * .5f),
-            buttonRadius, buttonRadius);
+        buttonBnds.reduce(buttonBnds.getWidth() * .05f, buttonBnds.getHeight() * .05f);
+        g.fillRoundedRectangle(buttonBnds, 5.f);
     }
 
     //==============================================================================
