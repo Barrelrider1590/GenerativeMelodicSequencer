@@ -19,13 +19,13 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_midiUpdated(false),
     m_lookAndFeel(),
     m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
-    m_lockToggle(),
-    m_randomiseBtn(),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
-    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob)
+    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
+    m_lockToggle("Lock"),
+    m_randomiseBtn("Randomise")
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -40,8 +40,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     }
 
     auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
-    
-    m_randomiseBtn.onClick(generateMelody);
+    m_randomiseBtn.onClick = generateMelody;
 
     setSize (360, 720);
 }
