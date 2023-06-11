@@ -38,7 +38,6 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_majorScaleVect({ 60, 62, 64, 65, 67, 69, 71 }),
     m_samplesProcessed(0), 
     m_noteCounter(0),
-    m_loopLength(8), 
     m_isNoteOn(false),
     m_resetMelody(false),
     m_broadcaster(),
@@ -284,7 +283,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
     {
         if (m_isNoteOn)
         {
-            AddNoteOffMessageToBuffer(midiBuffer, sequencerSettings);
+            AddNoteOffMessageToBuffer(midiBuffer, m_majorScaleVect, sequencerSettings);
             m_isNoteOn = false;
         }
     }
@@ -292,7 +291,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
     {
         if (!m_isNoteOn)
         {
-            AddNoteOnMessageToBuffer(midiBuffer, sequencerSettings);
+            AddNoteOnMessageToBuffer(midiBuffer, m_majorScaleVect, sequencerSettings);
             m_isNoteOn = true;
             m_broadcaster.sendChangeMessage();
         }
@@ -302,31 +301,28 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
         m_samplesProcessed = 0;
     }
 }
-void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, 
+void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer,
+                                                                        const std::vector<int>& scaleVect,
                                                                         const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_majorScaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
+    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, scaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 }
 void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, 
+                                                                         const std::vector<int>& scaleVect,
                                                                          const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_majorScaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
+    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, scaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 
-    if (m_noteCounter >= m_loopLength)
+    ++m_noteCounter;
+    if (m_noteCounter >= sequencerSettings.loopLength)
     {
-        DBG("m_noteCounter exceeds m_loopLength");
-        jassertfalse;
+        m_noteCounter = 0;
     }
-    else
-    {
-        ++m_noteCounter;
-        if (m_noteCounter > sequencerSettings.loopLength - 1)
-        {
-            m_noteCounter = 0;
-        }
-    }
+
+    // m_noteCounter exceeds loopLength =>  will result in invalid subscript in vector!
+    jassert(m_noteCounter <= sequencerSettings.loopLength);
 
     if (m_resetMelody.compareAndSetBool(false, true))
     {

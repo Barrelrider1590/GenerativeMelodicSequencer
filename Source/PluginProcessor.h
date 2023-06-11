@@ -82,8 +82,8 @@ public:
 
 private:
     void UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
-    void AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
-    void AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const SequencerSettings& sequencerSettings);
+    void AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const std::vector<int>& scaleVect, const SequencerSettings& sequencerSettings);
+    void AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const std::vector<int>& scaleVect, const SequencerSettings& sequencerSettings);
     
     //==============================================================================
     void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
@@ -95,7 +95,6 @@ private:
 
     int m_samplesProcessed;
     int m_noteCounter;
-    int m_loopLength;
 
     bool m_isNoteOn;
     juce::Atomic<bool> m_resetMelody;
