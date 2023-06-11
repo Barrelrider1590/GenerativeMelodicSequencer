@@ -41,7 +41,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
 
     auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
     
-    m_randomiseBtn.onClick(generateMelody);
+    m_randomiseBtn.onClick = generateMelody;
 
     setSize (360, 720);
 }
