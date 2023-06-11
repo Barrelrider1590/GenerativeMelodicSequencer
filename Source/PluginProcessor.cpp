@@ -35,14 +35,15 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-    m_majorScaleVect({ 60, 62, 64, 65, 67, 69, 71 }),
     m_samplesProcessed(0), 
     m_noteCounter(0),
     m_isNoteOn(false),
     m_resetMelody(false),
+    m_majorScaleVect({ 60, 62, 64, 65, 67, 69, 71 }),
+    m_melodyVect(),
     m_broadcaster(),
     m_synth(),
-    m_melodyVect()
+    m_apvts(*this, nullptr, "Parameters", CreateParameterLayout())
 #endif
 {
     m_melodyVect.resize(m_maxLoopLength);

@@ -91,21 +91,20 @@ private:
     //==============================================================================
     static const int m_maxLoopLength;
     
-    const std::vector<int> m_majorScaleVect;
-
     int m_samplesProcessed;
     int m_noteCounter;
 
     bool m_isNoteOn;
     juce::Atomic<bool> m_resetMelody;
 
+    const std::vector<int> m_majorScaleVect;
+    std::vector<int> m_melodyVect;
+
     juce::ChangeBroadcaster m_broadcaster;
 
     juce::Synthesiser m_synth;
 
-    std::vector<int> m_melodyVect;
-
-    juce::AudioProcessorValueTreeState m_apvts{ *this, nullptr, "Parameters", CreateParameterLayout() };
+    juce::AudioProcessorValueTreeState m_apvts;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GenerativeMelodicSequencerAudioProcessor)
