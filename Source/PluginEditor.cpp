@@ -24,7 +24,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
     m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
-    m_button("Randomise")
+    m_lockToggle("Lock"),
+    m_randomiseBtn("Randomise")
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -32,19 +33,14 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     
     startTimerHz(m_timerFreq);
 
-    addAndMakeVisible(m_noteVisualiser);
-
-    addAndMakeVisible(m_button);
-    m_button.setLookAndFeel(&m_lookAndFeel);
+    for (juce::Component* component : GetComponents())
+    {
+        component->setLookAndFeel(&m_lookAndFeel);
+        addAndMakeVisible(component);
+    }
 
     auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
-    m_button.onClick = generateMelody;
-
-    for (auto knob : GetComponents())
-    {
-        knob->setLookAndFeel(&m_lookAndFeel);
-        addAndMakeVisible(knob);
-    }
+    m_randomiseBtn.onClick = generateMelody;
 
     setSize (360, 720);
 }
@@ -78,7 +74,9 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     m_noteVisualiser.setBounds(midiEventBounds);
 
-    m_button.setBounds(buttonBounds);
+    buttonBounds = buttonBounds.withSizeKeepingCentre(buttonBounds.getHeight() * .5f, buttonBounds.getHeight());
+    m_lockToggle.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .5f));
+    m_randomiseBtn.setBounds(buttonBounds);
 
     m_bpmKnob.setBounds(loopParamBounds.removeFromLeft(bounds.getWidth() * .5));
     m_loopLengthKnob.setBounds(loopParamBounds.removeFromRight(bounds.getWidth() * .5));
@@ -113,6 +111,9 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::Ge
 {
     return
     {
+        &m_noteVisualiser,
+        &m_lockToggle,
+        &m_randomiseBtn,
         &m_bpmKnob,
         &m_loopLengthKnob,
         &m_gateKnob,
