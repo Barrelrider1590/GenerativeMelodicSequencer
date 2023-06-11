@@ -37,7 +37,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     addAndMakeVisible(m_button);
     m_button.setLookAndFeel(&m_lookAndFeel);
 
-    auto generateMelody{ [this]() { m_audioProcessor.GenerateMelody(m_audioProcessor.GetScale());  } };
+    auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
     m_button.onClick = generateMelody;
 
     for (auto knob : GetComponents())

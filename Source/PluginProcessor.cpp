@@ -40,6 +40,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_noteCounter(0),
     m_loopLength(8), 
     m_isNoteOn(false),
+    m_resetMelody(false),
     m_broadcaster(),
     m_synth(),
     m_melodyVect()
@@ -265,6 +266,11 @@ juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::Ge
     return &m_apvts;
 }
 
+void GenerativeMelodicSequencerAudioProcessor::ResetMelody()
+{
+    m_resetMelody = true;
+}
+
 //==============================================================================
 #pragma region Midi Handling
 void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, 
@@ -308,13 +314,25 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::M
     juce::MidiMessage message{ juce::MidiMessage::noteOff(1, m_majorScaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 
-    ++m_noteCounter;
-
-    if (m_noteCounter > sequencerSettings.loopLength - 1)
+    if (m_noteCounter >= m_loopLength)
     {
-        m_noteCounter = 0;
-        MutateMelody(m_melodyVect, m_majorScaleVect, sequencerSettings);
+        DBG("m_noteCounter exceeds m_loopLength");
+        jassertfalse;
     }
+    else
+    {
+        ++m_noteCounter;
+        if (m_noteCounter > sequencerSettings.loopLength - 1)
+        {
+            m_noteCounter = 0;
+        }
+    }
+
+    if (m_resetMelody.compareAndSetBool(false, true))
+    {
+        GenerateMelody(m_majorScaleVect);
+    }
+
 }
 #pragma endregion
 //==============================================================================

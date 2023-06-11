@@ -77,7 +77,8 @@ public:
     const std::vector<int>& GetScale();
     juce::AudioProcessorValueTreeState* GetAPVTS();
 
-    void GenerateMelody(const std::vector<int>& scale);
+    void ResetMelody();
+    
 
 private:
     void UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
@@ -86,7 +87,7 @@ private:
     
     //==============================================================================
     void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
-
+    void GenerateMelody(const std::vector<int>& scale);
     //==============================================================================
     static const int m_maxLoopLength;
     
@@ -97,6 +98,7 @@ private:
     int m_loopLength;
 
     bool m_isNoteOn;
+    juce::Atomic<bool> m_resetMelody;
 
     juce::ChangeBroadcaster m_broadcaster;
 

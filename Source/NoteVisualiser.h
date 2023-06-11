@@ -35,7 +35,7 @@ class NoteVisualiser : public juce::Component
 public:
     NoteVisualiser(int nrOfNotes, const juce::ColourGradient& gradient, const juce::Colour& bgClr) :
         m_noteStartPos(0),
-        m_nrOfDuplicates(4),
+        m_nrOfDuplicates(5),
         m_notesVect(),
         m_border(),
         m_bounds(),
