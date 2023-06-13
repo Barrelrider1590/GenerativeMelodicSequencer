@@ -52,9 +52,8 @@ private:
 
     NoteVisualiser m_noteVisualiser;
 
-    juce::TextButton m_lockToggle;
-    juce::TextButton m_randomiseBtn;
-    juce::Label m_randLbl;
+    juce::ToggleButton m_lockToggle;
+    CustomButton m_randomiseBtn;
 
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;

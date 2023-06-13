@@ -20,8 +20,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_lookAndFeel(),
     m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
     m_lockToggle(),
-    m_randomiseBtn(),
-    m_randLbl("randomiseLabel", "Randomise"),
+    m_randomiseBtn("Randomise"),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
@@ -43,8 +42,6 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
     
     m_randomiseBtn.onClick = generateMelody;
-    m_randLbl.attachToComponent(static_cast<juce::Component*> (&m_randomiseBtn), false);
-    m_randLbl.setJustificationType(juce::Justification::centred);
 
     setSize (360, 720);
 }
@@ -70,10 +67,10 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     auto bounds{ getLocalBounds() };
 
-    auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2) };
-    auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .2) };
-    auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .33) };
-    auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5) };
+    auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2f) };
+    auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .2f) };
+    auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .33f) };
+    auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5f) };
     auto melodyParamBounds{ bounds };
 
     m_noteVisualiser.setBounds(midiEventBounds);
@@ -87,15 +84,27 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     m_randomiseBtn.setBounds(randBnds.removeFromTop(randBnds.getHeight() * .5f));
     m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(randBnds.getHeight(), randBnds.getHeight()));
-    m_randLbl.setBounds(randBnds);
+    m_randomiseBtn.SetLabelBounds(randBnds);
 
-    m_bpmKnob.setBounds(loopParamBounds.removeFromLeft(bounds.getWidth() * .5));
-    m_loopLengthKnob.setBounds(loopParamBounds.removeFromRight(bounds.getWidth() * .5));
+    loopParamBounds = loopParamBounds.reduced(10);
+    auto bpmBnds{ loopParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
+    m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .9f));
+    m_bpmKnob.SetLabelBounds(bpmBnds);
+    auto loopLengthBnds{ loopParamBounds };
+    m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .9f));
+    m_loopLengthKnob.SetLabelBounds(loopLengthBnds);
     
-    m_gateKnob.setBounds(noteParamBounds.removeFromLeft(bounds.getWidth() * .5));
-    m_densityKnob.setBounds(noteParamBounds.removeFromRight(bounds.getWidth() * .5));
+    noteParamBounds = noteParamBounds.reduced(10);
+    auto gateBnds{ noteParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
+    m_gateKnob.setBounds(gateBnds.removeFromTop(gateBnds.getHeight() * .9f));
+    m_gateKnob.SetLabelBounds(gateBnds);
+    auto densityBnds{ noteParamBounds.removeFromRight(bounds.getWidth() * .5f) };
+    m_densityKnob.setBounds(densityBnds.removeFromTop(densityBnds.getHeight() * .9f));
+    m_densityKnob.SetLabelBounds(densityBnds);
 
-    m_mutateKnob.setBounds(melodyParamBounds);
+    auto mutateBnds{ melodyParamBounds.reduced(10) };
+    m_mutateKnob.setBounds(mutateBnds.removeFromTop(mutateBnds.getHeight() * .9f));
+    m_mutateKnob.SetLabelBounds(mutateBnds);
 }
 
 //==============================================================================

@@ -19,8 +19,40 @@ struct Vector2f
 
 struct RotaryKnob : public juce::Slider
 {
-    RotaryKnob() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
-        juce::Slider::NoTextBox) {}
+    RotaryKnob(const juce::String& label = "Label") : 
+        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::NoTextBox),
+        m_label(label + "Lbl", label)
+    {
+        m_label.setLookAndFeel(&getLookAndFeel());
+        m_label.setJustificationType(juce::Justification::centredTop);
+        m_label.attachToComponent(this, false);
+    }
+
+    void SetLabelBounds(const juce::Rectangle<int>& newBounds)
+    {
+        m_label.setBounds(newBounds);
+    }
+private:
+    juce::Label m_label;
+};
+
+class CustomButton : public juce::TextButton
+{
+public:
+    CustomButton(const juce::String& label = "Label") : 
+        juce::TextButton::TextButton(), m_label(label + "Lbl", label) 
+    {
+        m_label.setLookAndFeel(&getLookAndFeel());
+        m_label.setJustificationType(juce::Justification::centredTop);
+        m_label.attachToComponent(this, false);
+    }
+
+    void SetLabelBounds(const juce::Rectangle<int>& newBounds)
+    {
+        m_label.setBounds(newBounds);
+    }
+private:
+    juce::Label m_label;
 };
 
 class CustomLookAndFeel : public juce::LookAndFeel_V4
@@ -47,7 +79,7 @@ public:
         float rotaryStartAngle, float rotaryEndAngle,
         juce::Slider&) override
     {
-        float radius{ static_cast<float>(juce::jmin(width, height) * .5f) };
+        float radius{ static_cast<float>(juce::jmin(width, height) * .6f) };
         float angle{ rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle) };
         Vector2f containerCentre{ x + width * .5f, y + height * .5f };
         Vector2f ellipseCentre{ containerCentre.x - radius * .5f, containerCentre.y - radius * .5f };
@@ -115,6 +147,7 @@ public:
         g.fillRoundedRectangle(buttonBnds, 5.f);
 
     }
+    void drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) {    }
     //==============================================================================
     const juce::Colour& GetBackgroundColour()
     {
