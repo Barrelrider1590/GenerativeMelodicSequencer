@@ -20,39 +20,27 @@ struct Vector2f
 struct RotaryKnob : public juce::Slider
 {
     RotaryKnob(const juce::String& label = "Label") : 
-        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::NoTextBox),
-        m_label(label + "Lbl", label)
-    {
-        m_label.setLookAndFeel(&getLookAndFeel());
-        m_label.setJustificationType(juce::Justification::centredTop);
-        m_label.attachToComponent(this, false);
-    }
-
-    void SetLabelBounds(const juce::Rectangle<int>& newBounds)
-    {
-        m_label.setBounds(newBounds);
-    }
-private:
-    juce::Label m_label;
+        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::NoTextBox) {}
 };
 
-class CustomButton : public juce::TextButton
+class ComponentLabel : public juce::Label
 {
 public:
-    CustomButton(const juce::String& label = "Label") : 
-        juce::TextButton::TextButton(), m_label(label + "Lbl", label) 
+    ComponentLabel( juce::Component& comp, const juce::String& labelText = "Name") :
+        m_comp( comp ),
+        juce::Label::Label(labelText+"Label", labelText)
     {
-        m_label.setLookAndFeel(&getLookAndFeel());
-        m_label.setJustificationType(juce::Justification::centredTop);
-        m_label.attachToComponent(this, false);
-    }
 
-    void SetLabelBounds(const juce::Rectangle<int>& newBounds)
+    }
+    void InitialiseLabel()
     {
-        m_label.setBounds(newBounds);
+        auto lookAndFeel{ &m_comp.getLookAndFeel() };
+        setLookAndFeel(lookAndFeel);
+        setJustificationType(juce::Justification::centredTop);
+        attachToComponent(&m_comp, false);
     }
 private:
-    juce::Label m_label;
+    juce::Component& m_comp;
 };
 
 class CustomLookAndFeel : public juce::LookAndFeel_V4
@@ -63,13 +51,20 @@ public:
         m_gradient(),
         m_strokeType(juce::PathStrokeType::PathStrokeType(1.0f,
             juce::PathStrokeType::JointStyle::curved,
-            juce::PathStrokeType::EndCapStyle::rounded))
+            juce::PathStrokeType::EndCapStyle::rounded)),
+        m_font(15, juce::Font::bold)
     {
         m_gradient.addColour(0, juce::Colours::rebeccapurple);
         m_gradient.addColour(.25, juce::Colours::blueviolet);
         m_gradient.addColour(.5, juce::Colours::deeppink);
         m_gradient.addColour(.75, juce::Colours::darkorange);
         m_gradient.addColour(1, juce::Colours::goldenrod);
+
+        juce::Array<juce::Font> results;
+        juce::Font::findFonts(results);
+
+        m_font.setTypefaceName("Candara");
+        m_font.setTypefaceStyle("bold");
     }
     //==============================================================================
     void drawRotarySlider(juce::Graphics& g,
@@ -148,6 +143,12 @@ public:
 
     }
     void drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) {    }
+    void drawLabel(juce::Graphics& g, juce::Label& l)
+    {
+        g.setColour(juce::Colour::Colour(150, 150, 150));
+        g.setFont(m_font);
+        g.drawFittedText(l.getText(), 0, 0, l.getWidth(), l.getHeight(), l.getJustificationType(), 1);
+    }
     //==============================================================================
     const juce::Colour& GetBackgroundColour()
     {
@@ -163,4 +164,6 @@ private:
     juce::Colour const m_backgroundClr;
     juce::ColourGradient m_gradient;
     juce::PathStrokeType const m_strokeType;
+    juce::Font m_font;
 };
+

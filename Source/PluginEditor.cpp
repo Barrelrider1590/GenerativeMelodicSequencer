@@ -20,12 +20,18 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_lookAndFeel(),
     m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
     m_lockToggle(),
-    m_randomiseBtn("Randomise"),
+    m_randomiseBtn(),
+    m_randomiseLbl(m_randomiseBtn, "Randomise"),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
+    m_bpmLbl(m_bpmKnob, "BPM"),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
+    m_loopLengthLbl(m_loopLengthKnob, "Length"),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
+    m_gateLbl(m_gateKnob),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
-    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob)
+    m_densityLbl(m_densityKnob),
+    m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
+    m_mutateLbl(m_mutateKnob)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -37,6 +43,10 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     {
         component->setLookAndFeel(&m_lookAndFeel);
         addAndMakeVisible(component);
+    }
+    for (ComponentLabel* l : GetLabels())
+    {
+        l->InitialiseLabel();
     }
 
     auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
@@ -84,27 +94,27 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     m_randomiseBtn.setBounds(randBnds.removeFromTop(randBnds.getHeight() * .5f));
     m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(randBnds.getHeight(), randBnds.getHeight()));
-    m_randomiseBtn.SetLabelBounds(randBnds);
+    m_randomiseLbl.setBounds(randBnds);
 
     loopParamBounds = loopParamBounds.reduced(10);
     auto bpmBnds{ loopParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
     m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .9f));
-    m_bpmKnob.SetLabelBounds(bpmBnds);
+    m_bpmLbl.setBounds(bpmBnds);
     auto loopLengthBnds{ loopParamBounds };
     m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .9f));
-    m_loopLengthKnob.SetLabelBounds(loopLengthBnds);
+    m_loopLengthLbl.setBounds(loopLengthBnds);
     
     noteParamBounds = noteParamBounds.reduced(10);
     auto gateBnds{ noteParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
     m_gateKnob.setBounds(gateBnds.removeFromTop(gateBnds.getHeight() * .9f));
-    m_gateKnob.SetLabelBounds(gateBnds);
+    m_gateLbl.setBounds(gateBnds);
     auto densityBnds{ noteParamBounds.removeFromRight(bounds.getWidth() * .5f) };
     m_densityKnob.setBounds(densityBnds.removeFromTop(densityBnds.getHeight() * .9f));
-    m_densityKnob.SetLabelBounds(densityBnds);
+    m_densityLbl.setBounds(densityBnds);
 
     auto mutateBnds{ melodyParamBounds.reduced(10) };
     m_mutateKnob.setBounds(mutateBnds.removeFromTop(mutateBnds.getHeight() * .9f));
-    m_mutateKnob.SetLabelBounds(mutateBnds);
+    m_mutateLbl.setBounds(mutateBnds);
 }
 
 //==============================================================================
@@ -139,6 +149,18 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::Ge
         &m_gateKnob,
         &m_densityKnob,
         &m_mutateKnob
+    };
+}
+std::vector<ComponentLabel*> GenerativeMelodicSequencerAudioProcessorEditor::GetLabels()
+{
+    return
+    {
+        &m_randomiseLbl,
+        &m_bpmLbl,
+        &m_loopLengthLbl,
+        &m_gateLbl,
+        &m_densityLbl,
+        &m_mutateLbl
     };
 }
 

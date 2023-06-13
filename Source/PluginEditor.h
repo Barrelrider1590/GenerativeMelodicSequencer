@@ -36,6 +36,7 @@ public:
 private:
 
     std::vector<juce::Component*> GetComponents();
+    std::vector<ComponentLabel*> GetLabels();
 
     juce::Colour RandomColour();
 
@@ -53,13 +54,19 @@ private:
     NoteVisualiser m_noteVisualiser;
 
     juce::ToggleButton m_lockToggle;
-    CustomButton m_randomiseBtn;
+    juce::TextButton m_randomiseBtn;
+    ComponentLabel m_randomiseLbl;
 
     RotaryKnob m_bpmKnob;
+    ComponentLabel m_bpmLbl;
     RotaryKnob m_loopLengthKnob;
+    ComponentLabel m_loopLengthLbl;
     RotaryKnob m_gateKnob;
+    ComponentLabel m_gateLbl;
     RotaryKnob m_densityKnob;
+    ComponentLabel m_densityLbl;
     RotaryKnob m_mutateKnob;
+    ComponentLabel m_mutateLbl;
 
     using APVTS = juce::AudioProcessorValueTreeState;
     using Attachment = APVTS::SliderAttachment;
