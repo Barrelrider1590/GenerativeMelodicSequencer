@@ -23,16 +23,6 @@ struct RotaryKnob : public juce::Slider
         juce::Slider::NoTextBox) {}
 };
 
-class CustomButton : public juce::TextButton
-{
-public:
-    CustomButton() : juce::TextButton::TextButton("") {}
-
-private:
-    juce::Label m_label;
-
-};
-
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
@@ -123,8 +113,8 @@ public:
         g.setColour(btnCenterClr);
         buttonBnds.reduce(buttonBnds.getWidth() * .05f, buttonBnds.getHeight() * .05f);
         g.fillRoundedRectangle(buttonBnds, 5.f);
-    }
 
+    }
     //==============================================================================
     const juce::Colour& GetBackgroundColour()
     {

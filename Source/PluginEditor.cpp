@@ -21,6 +21,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
     m_lockToggle(),
     m_randomiseBtn(),
+    m_randLbl("randomiseLabel", "Randomise"),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
@@ -42,6 +43,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
     
     m_randomiseBtn.onClick = generateMelody;
+    m_randLbl.attachToComponent(static_cast<juce::Component*> (&m_randomiseBtn), false);
+    m_randLbl.setJustificationType(juce::Justification::centred);
 
     setSize (360, 720);
 }
@@ -75,9 +78,16 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     m_noteVisualiser.setBounds(midiEventBounds);
 
-    buttonBounds = buttonBounds.withSizeKeepingCentre(buttonBounds.getHeight() * .5f, buttonBounds.getHeight());
-    m_lockToggle.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .5f));
-    m_randomiseBtn.setBounds(buttonBounds);
+    //buttonBounds = buttonBounds.withSizeKeepingCentre(buttonBounds.getHeight() * .5f, buttonBounds.getHeight());
+    auto lockBnds{ buttonBounds.removeFromTop(buttonBounds.getHeight() * .33f) };
+    auto randBnds{ buttonBounds };
+
+    lockBnds = lockBnds.reduced(5);
+    m_lockToggle.setBounds(lockBnds.withSizeKeepingCentre(lockBnds.getHeight(), lockBnds.getHeight()));
+
+    m_randomiseBtn.setBounds(randBnds.removeFromTop(randBnds.getHeight() * .5f));
+    m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(randBnds.getHeight(), randBnds.getHeight()));
+    m_randLbl.setBounds(randBnds);
 
     m_bpmKnob.setBounds(loopParamBounds.removeFromLeft(bounds.getWidth() * .5));
     m_loopLengthKnob.setBounds(loopParamBounds.removeFromRight(bounds.getWidth() * .5));

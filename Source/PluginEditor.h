@@ -54,6 +54,7 @@ private:
 
     juce::TextButton m_lockToggle;
     juce::TextButton m_randomiseBtn;
+    juce::Label m_randLbl;
 
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;
