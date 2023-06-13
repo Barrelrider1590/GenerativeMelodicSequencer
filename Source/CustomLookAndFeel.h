@@ -17,6 +17,22 @@ struct Vector2f
     float y;
 };
 
+struct RotaryKnob : public juce::Slider
+{
+    RotaryKnob() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+        juce::Slider::NoTextBox) {}
+};
+
+class CustomButton : public juce::TextButton
+{
+public:
+    CustomButton() : juce::TextButton::TextButton("") {}
+
+private:
+    juce::Label m_label;
+
+};
+
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:

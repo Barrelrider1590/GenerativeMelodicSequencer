@@ -13,11 +13,7 @@
 #include "CustomLookAndFeel.h"
 #include "NoteVisualiser.h"
 
-struct RotaryKnob : public juce::Slider
-{
-    RotaryKnob() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
-        juce::Slider::NoTextBox) {}
-};
+
 //==============================================================================
 /**
 */
@@ -56,8 +52,8 @@ private:
 
     NoteVisualiser m_noteVisualiser;
 
-    juce::TextButton m_lockToggle;
-    juce::TextButton m_randomiseBtn;
+    CustomButton m_lockToggle;
+    CustomButton m_randomiseBtn;
 
     RotaryKnob m_bpmKnob;
     RotaryKnob m_loopLengthKnob;
