@@ -316,24 +316,32 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::M
     juce::MidiMessage message{ juce::MidiMessage::noteOff(1, scaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 
+    UpdateMelody(scaleVect, sequencerSettings);
+}
+#pragma endregion
+//==============================================================================
+#pragma region Melody
+void GenerativeMelodicSequencerAudioProcessor::UpdateMelody( const std::vector<int>& scaleVect,
+                                                             const SequencerSettings& sequencerSettings)
+{
+    if (m_resetMelody.compareAndSetBool(false, true))
+    {
+        GenerateMelody(scaleVect);
+    }
+    else
+    {
+        MutateNote(m_melodyVect[m_noteCounter], scaleVect, sequencerSettings);
+
+    }
+
     ++m_noteCounter;
     if (m_noteCounter >= sequencerSettings.loopLength)
     {
         m_noteCounter = 0;
     }
-
     // m_noteCounter exceeds loopLength =>  will result in invalid subscript in vector!
     jassert(m_noteCounter <= sequencerSettings.loopLength);
-
-    if (m_resetMelody.compareAndSetBool(false, true))
-    {
-        GenerateMelody(m_majorScaleVect);
-    }
-
 }
-#pragma endregion
-//==============================================================================
-#pragma region Melody
 void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(const std::vector<int>& scaleVect)
 {
     juce::Random rand;
@@ -342,18 +350,14 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(const std::vector<
         m_melodyVect[i] = rand.nextInt(scaleVect.size());
     }
 }
-void GenerativeMelodicSequencerAudioProcessor::MutateMelody(std::vector<int>& melodyVect, 
-                                                            const std::vector<int>& scaleVect,
-                                                            const SequencerSettings& sequencerSettings)
+void GenerativeMelodicSequencerAudioProcessor::MutateNote(int noteIndex,
+                                                          const std::vector<int>& scaleVect,
+                                                          const SequencerSettings& sequencerSettings)
 {
     juce::Random random;
-    
-    for (int i{ 0 }; i < sequencerSettings.loopLength; ++i)
+    if (random.nextFloat() < sequencerSettings.mutate)
     {
-        if (random.nextFloat() < sequencerSettings.mutate)
-        {
-            melodyVect[i] = random.nextInt(scaleVect.size());
-        }
+        m_melodyVect[noteIndex] = random.nextInt(scaleVect.size());
     }
 }
 #pragma endregion

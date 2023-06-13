@@ -86,7 +86,8 @@ private:
     void AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, const std::vector<int>& scaleVect, const SequencerSettings& sequencerSettings);
     
     //==============================================================================
-    void MutateMelody(std::vector<int>& melody, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
+    void UpdateMelody(const std::vector<int>& scaleVect, const SequencerSettings& sequencerSettings);
+    void MutateNote(int noteIndex, const std::vector<int>& scale, const SequencerSettings& sequencerSettings);
     void GenerateMelody(const std::vector<int>& scale);
     //==============================================================================
     static const int m_maxLoopLength;
