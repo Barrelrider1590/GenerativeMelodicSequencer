@@ -98,22 +98,22 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     loopParamBounds = loopParamBounds.reduced(10);
     auto bpmBnds{ loopParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
-    m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .9f));
+    m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .85f));
     m_bpmLbl.setBounds(bpmBnds);
     auto loopLengthBnds{ loopParamBounds };
-    m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .9f));
+    m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .85f));
     m_loopLengthLbl.setBounds(loopLengthBnds);
     
     noteParamBounds = noteParamBounds.reduced(10);
     auto gateBnds{ noteParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
-    m_gateKnob.setBounds(gateBnds.removeFromTop(gateBnds.getHeight() * .9f));
+    m_gateKnob.setBounds(gateBnds.removeFromTop(gateBnds.getHeight() * .85f));
     m_gateLbl.setBounds(gateBnds);
     auto densityBnds{ noteParamBounds.removeFromRight(bounds.getWidth() * .5f) };
-    m_densityKnob.setBounds(densityBnds.removeFromTop(densityBnds.getHeight() * .9f));
+    m_densityKnob.setBounds(densityBnds.removeFromTop(densityBnds.getHeight() * .85f));
     m_densityLbl.setBounds(densityBnds);
 
     auto mutateBnds{ melodyParamBounds.reduced(10) };
-    m_mutateKnob.setBounds(mutateBnds.removeFromTop(mutateBnds.getHeight() * .9f));
+    m_mutateKnob.setBounds(mutateBnds.removeFromTop(mutateBnds.getHeight() * .85f));
     m_mutateLbl.setBounds(mutateBnds);
 }
 

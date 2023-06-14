@@ -52,7 +52,7 @@ public:
         m_strokeType(juce::PathStrokeType::PathStrokeType(1.0f,
             juce::PathStrokeType::JointStyle::curved,
             juce::PathStrokeType::EndCapStyle::rounded)),
-        m_font(15, juce::Font::bold)
+        m_font(20)
     {
         m_gradient.addColour(0, juce::Colours::rebeccapurple);
         m_gradient.addColour(.25, juce::Colours::blueviolet);
@@ -63,8 +63,9 @@ public:
         juce::Array<juce::Font> results;
         juce::Font::findFonts(results);
 
-        m_font.setTypefaceName("Candara");
-        m_font.setTypefaceStyle("bold");
+        m_font.setTypefaceName("Nunito");
+        m_font.setTypefaceStyle("Light");
+        m_font.setFallbackFontName("Arial");
     }
     //==============================================================================
     void drawRotarySlider(juce::Graphics& g,
@@ -145,7 +146,7 @@ public:
     void drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) {    }
     void drawLabel(juce::Graphics& g, juce::Label& l)
     {
-        g.setColour(juce::Colour::Colour(150, 150, 150));
+        g.setColour(m_gradient.getColourAtPosition((l.getY() % 360) / 360.0));
         g.setFont(m_font);
         g.drawFittedText(l.getText(), 0, 0, l.getWidth(), l.getHeight(), l.getJustificationType(), 1);
     }
