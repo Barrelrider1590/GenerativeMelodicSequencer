@@ -14,19 +14,20 @@
 struct NoteVisual
 {
     NoteVisual() : 
-        noteNr(0), 
-        index(0),
-        isActive(false), 
-        offsetTotal(0), 
-        colour(juce::Colours::black) {}
+        m_noteNr(0),
+        m_index(0),
+        m_isActive(false),
+        m_offsetTotal(0),
+        m_colour(juce::Colours::black),
+        m_rect() {}
 
     //==============================================================================
-    int noteNr;
-    int index;
-    bool isActive;
-    float offsetTotal;
-    juce::Colour colour;
-    juce::Rectangle<int> rect;
+    int m_noteNr;
+    int m_index;
+    bool m_isActive;
+    float m_offsetTotal;
+    juce::Colour m_colour;
+    juce::Rectangle<int> m_rect;
 };
 
 
@@ -35,7 +36,7 @@ class NoteVisualiser : public juce::Component
 public:
     NoteVisualiser(int nrOfNotes, const juce::ColourGradient& gradient, const juce::Colour& bgClr) :
         m_noteStartPos(0),
-        m_nrOfDuplicates(5),
+        m_nrOfDuplicates(8),
         m_notesVect(),
         m_border(),
         m_bounds(),
@@ -46,14 +47,12 @@ public:
 
         for (int i{}; i < m_notesVect.size(); ++i)
         {
-            NoteVisual note{};
-            note.noteNr = i / m_nrOfDuplicates;
-            note.index = i % m_nrOfDuplicates;
-            note.colour = m_gradient.getColourAtPosition(static_cast<float>(note.noteNr) / nrOfNotes);
-            m_notesVect[i] = note;
+            m_notesVect[i] = std::make_unique<NoteVisual>();
+            m_notesVect[i]->m_noteNr = i / m_nrOfDuplicates;
+            m_notesVect[i]->m_index = i % m_nrOfDuplicates;
+            m_notesVect[i]->m_colour = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
         }
     }
-
     //==============================================================================
     void setBounds(const juce::Rectangle<int>& newBounds)
     {
@@ -70,13 +69,13 @@ public:
         noteBounds.setWidth(m_bounds.getWidth() / 12);
         noteBounds.setHeight(m_bounds.getHeight() / 12);
 
-        for (NoteVisual& note : m_notesVect)
+        for (auto& note : m_notesVect)
         {
-            noteBounds.setX(noteBounds.getWidth()  * note.noteNr + margin);
+            noteBounds.setX(noteBounds.getWidth()  * note->m_noteNr + margin);
             m_noteStartPos = m_border.getHeight() - noteBounds.getHeight();
             noteBounds.setY(m_noteStartPos);
-            note.rect = noteBounds;
-            note.offsetTotal = m_noteStartPos;
+            note->m_rect = noteBounds;
+            note->m_offsetTotal = m_noteStartPos;
         }
     }
     void paint(juce::Graphics& g) override
@@ -84,10 +83,10 @@ public:
         g.setColour(juce::Colour(juce::Colours::black));
         g.fillRect(m_bounds);
 
-        for (const NoteVisual& note : m_notesVect)
+        for (const auto& note : m_notesVect)
         {
-            g.setColour(note.colour);
-            g.fillRect(note.rect);
+            g.setColour(note->m_colour);
+            g.fillRect(note->m_rect);
         }
 
         g.setColour(juce::Colours::rebeccapurple.darker(.5f));
@@ -99,19 +98,19 @@ public:
     {
         int noteChanged{ p.GetCurrentMidiNote() - p.GetScale()[0] };
         int noteIndex = noteChanged * m_nrOfDuplicates;
-        m_notesVect[noteIndex].colour = m_gradient.getColourAtPosition( static_cast<float>(noteChanged) / (m_notesVect.size() / m_nrOfDuplicates));
-        if (!m_notesVect[noteIndex].isActive)
+        m_notesVect[noteIndex]->m_colour = m_gradient.getColourAtPosition( static_cast<float>(noteChanged) / (m_notesVect.size() / m_nrOfDuplicates));
+        if (!m_notesVect[noteIndex]->m_isActive)
         {
-            m_notesVect[noteIndex].isActive = true;
+            m_notesVect[noteIndex]->m_isActive = true;
         }
         else
         {
             bool activatedDuplicate{ false };
             for (int i{1}; i < m_nrOfDuplicates; ++i)
             {
-                if (!m_notesVect[noteIndex + i].isActive)
+                if (!m_notesVect[noteIndex + i]->m_isActive)
                 {
-                    m_notesVect[noteIndex + i].isActive = true;
+                    m_notesVect[noteIndex + i]->m_isActive = true;
                     activatedDuplicate = true;
                     break;
                 }
@@ -125,17 +124,17 @@ public:
     void UpdateNotePosition(int timerFreqHz)
     {
         float delta = 150.f / timerFreqHz;
-        for (NoteVisual& note : m_notesVect)
+        for (auto& note : m_notesVect)
         {
-            if (note.isActive)
+            if (note->m_isActive)
             {
-                note.offsetTotal -= delta;
-                note.rect.setY(note.offsetTotal);
-                if (note.offsetTotal <= 0 - note.rect.getHeight())
+                note->m_offsetTotal -= delta;
+                note->m_rect.setY(note->m_offsetTotal);
+                if (note->m_offsetTotal <= 0 - note->m_rect.getHeight())
                 {
-                    note.rect.setY(m_noteStartPos);
-                    note.isActive = false;
-                    note.offsetTotal = m_noteStartPos;
+                    note->m_rect.setY(m_noteStartPos);
+                    note->m_isActive = false;
+                    note->m_offsetTotal = m_noteStartPos;
                 }
             }
         }
@@ -144,7 +143,7 @@ public:
 private:
     int m_noteStartPos;
     int m_nrOfDuplicates;
-    std::vector<NoteVisual> m_notesVect;
+    std::vector<std::unique_ptr<NoteVisual>> m_notesVect;
     juce::Rectangle<int> m_border;
     juce::Rectangle<int> m_bounds;
     juce::ColourGradient m_gradient;
