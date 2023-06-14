@@ -3048,6 +3048,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\CustomComponents.h">
+      <Filter>GenerativeMelodicSequencer\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>GenerativeMelodicSequencer\Source</Filter>
     </ClInclude>

@@ -11,8 +11,8 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "CustomLookAndFeel.h"
+#include "CustomComponents.h"
 #include "NoteVisualiser.h"
-
 
 //==============================================================================
 /**
