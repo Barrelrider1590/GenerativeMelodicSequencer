@@ -60,10 +60,7 @@ public:
 
         int margin{ 12 };
         m_bounds = newBounds;
-        m_bounds.removeFromLeft(margin);
-        m_bounds.removeFromRight(margin);
-        m_bounds.removeFromTop(margin);
-        m_bounds.removeFromBottom(margin);
+        m_bounds.reduced(margin);
 
         juce::Rectangle<int> noteBounds = m_bounds;
         noteBounds.setWidth(m_bounds.getWidth() / 12);
@@ -80,7 +77,7 @@ public:
     }
     void paint(juce::Graphics& g) override
     {
-        g.setColour(juce::Colour(juce::Colours::black));
+        g.setColour(m_backgroundClr.darker(.2f));
         g.fillRect(m_bounds);
 
         for (const auto& note : m_notesVect)
@@ -89,8 +86,8 @@ public:
             g.fillRect(note->m_rect);
         }
 
-        g.setColour(juce::Colours::rebeccapurple.darker(.5f));
-        g.drawRect(m_border, 10.f);
+        g.setColour(m_backgroundClr);
+        g.drawRect(m_border, juce::jmin(m_border.getWidth(), m_border.getHeight()) * .1f);
     }
 
     //==============================================================================
