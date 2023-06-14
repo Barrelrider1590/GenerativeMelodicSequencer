@@ -209,12 +209,20 @@ void GenerativeMelodicSequencerAudioProcessor::getStateInformation (juce::Memory
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
+    juce::MemoryOutputStream mos{destData, true};
+    m_apvts.state.writeToStream(mos);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    auto tree{ juce::ValueTree::readFromData(data, sizeInBytes) };
+    if (tree.isValid())
+    {
+        m_apvts.replaceState(tree);
+    }
 }
 
 //==============================================================================
