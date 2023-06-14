@@ -28,10 +28,9 @@ class ComponentLabel : public juce::Label
 public:
     ComponentLabel( juce::Component& comp, const juce::String& labelText = "Name") :
         m_comp( comp ),
-        juce::Label::Label(labelText+"Label", labelText)
-    {
+        juce::Label::Label(labelText+"Label", labelText) { }
 
-    }
+    //==============================================================================
     void InitialiseLabel()
     {
         auto lookAndFeel{ &m_comp.getLookAndFeel() };
@@ -52,7 +51,7 @@ public:
         m_strokeType(juce::PathStrokeType::PathStrokeType(1.0f,
             juce::PathStrokeType::JointStyle::curved,
             juce::PathStrokeType::EndCapStyle::rounded)),
-        m_font(20)
+        m_font(25)
     {
         m_gradient.addColour(0, juce::Colours::rebeccapurple);
         m_gradient.addColour(.25, juce::Colours::blueviolet);
@@ -63,10 +62,11 @@ public:
         juce::Array<juce::Font> results;
         juce::Font::findFonts(results);
 
-        m_font.setTypefaceName("Nunito");
+        m_font.setTypefaceName("NovaMono");
         m_font.setTypefaceStyle("Light");
         m_font.setFallbackFontName("Arial");
     }
+
     //==============================================================================
     void drawRotarySlider(juce::Graphics& g,
         int x, int y,
@@ -146,10 +146,11 @@ public:
     void drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) {    }
     void drawLabel(juce::Graphics& g, juce::Label& l)
     {
-        g.setColour(m_gradient.getColourAtPosition((l.getY() % 360) / 360.0));
+        g.setColour(m_gradient.getColourAtPosition((l.getY() % 450) / 450.0).brighter(.1f));
         g.setFont(m_font);
         g.drawFittedText(l.getText(), 0, 0, l.getWidth(), l.getHeight(), l.getJustificationType(), 1);
     }
+
     //==============================================================================
     const juce::Colour& GetBackgroundColour()
     {

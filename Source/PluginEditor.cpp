@@ -27,11 +27,11 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
     m_loopLengthLbl(m_loopLengthKnob, "Length"),
     m_gateKnobAttachment(*p.GetAPVTS(), "gate", m_gateKnob),
-    m_gateLbl(m_gateKnob),
+    m_gateLbl(m_gateKnob, "Gate"),
     m_densityKnobAttachment(*p.GetAPVTS(), "density", m_densityKnob),
-    m_densityLbl(m_densityKnob),
+    m_densityLbl(m_densityKnob, "Density"),
     m_mutateKnobAttachment(*p.GetAPVTS(), "mutate", m_mutateKnob),
-    m_mutateLbl(m_mutateKnob)
+    m_mutateLbl(m_mutateKnob, "Mutate")
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -53,7 +53,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     
     m_randomiseBtn.onClick = generateMelody;
 
-    setSize (360, 720);
+    setSize (360, 900);
 }
 
 GenerativeMelodicSequencerAudioProcessorEditor::~GenerativeMelodicSequencerAudioProcessorEditor()
