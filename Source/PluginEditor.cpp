@@ -86,12 +86,12 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     m_noteVisualiser.setBounds(midiEventBounds);
 
     //buttonBounds = buttonBounds.withSizeKeepingCentre(buttonBounds.getHeight() * .5f, buttonBounds.getHeight());
-    auto lockBnds{ buttonBounds.removeFromTop(buttonBounds.getHeight() * .33f) };
+    
+    //auto lockBnds{ buttonBounds.removeFromTop(buttonBounds.getHeight() * .33f) };
+    //lockBnds = lockBnds.reduced(5);
+    //m_lockToggle.setBounds(lockBnds.withSizeKeepingCentre(lockBnds.getHeight(), lockBnds.getHeight()));
+
     auto randBnds{ buttonBounds };
-
-    lockBnds = lockBnds.reduced(5);
-    m_lockToggle.setBounds(lockBnds.withSizeKeepingCentre(lockBnds.getHeight(), lockBnds.getHeight()));
-
     m_randomiseBtn.setBounds(randBnds.removeFromTop(randBnds.getHeight() * .5f));
     m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(randBnds.getHeight(), randBnds.getHeight()));
     m_randomiseLbl.setBounds(randBnds);
