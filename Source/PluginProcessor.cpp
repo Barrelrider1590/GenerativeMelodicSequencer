@@ -29,6 +29,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_rootNote(60),
     m_scales(),
     m_scalesVect({ m_scales.major, m_scales.pentatonic }),
+    m_prevScale(0),
     m_melodyVect(),
     m_broadcaster(),
     m_synth(),
@@ -188,8 +189,8 @@ bool GenerativeMelodicSequencerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* GenerativeMelodicSequencerAudioProcessor::createEditor()
 {
-    return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
-    //return new juce::GenericAudioProcessorEditor(*this);
+    //return new GenerativeMelodicSequencerAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -226,6 +227,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout{};
 
+    juce::StringArray choices{"major", "pentatonic"};
+    layout.add(std::make_unique < juce::AudioParameterChoice>("scale", "Scale", choices, 0));
     layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 60, 600, 120));
     layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, m_maxLoopLength, 4));
     layout.add(std::make_unique<juce::AudioParameterFloat>("gate", "Gate", .1f, 1.f, .5f));
@@ -238,6 +241,7 @@ SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&
 {
     SequencerSettings settings;
 
+    settings.scale = apvts.getRawParameterValue("scale")->load();
     settings.bpm = apvts.getRawParameterValue("bpm")->load();
     settings.loopLength = apvts.getRawParameterValue("length")->load();
     settings.gate = apvts.getRawParameterValue("gate")->load();

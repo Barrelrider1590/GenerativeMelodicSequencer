@@ -14,7 +14,7 @@
 
 struct SequencerSettings
 {
-    int bpm{ 0 }, loopLength{ 0 };
+    int scale{ 0 }, bpm{ 0 }, loopLength{ 0 };
     float gate{ 0 }, density{ 0 }, mutate{ 0 };
 };
 
@@ -109,6 +109,7 @@ private:
     const int m_rootNote;
     const Scales m_scales;
     const std::vector<std::vector<int>> m_scalesVect;
+    int m_prevScale;
     std::vector<int> m_melodyVect;
 
     juce::ChangeBroadcaster m_broadcaster;
