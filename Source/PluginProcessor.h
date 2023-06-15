@@ -82,7 +82,6 @@ public:
     //==============================================================================
     int GetCurrentMidiNote();
     bool GetIsNoteOn();
-    const std::vector<int>& GetScale();
     juce::AudioProcessorValueTreeState* GetAPVTS();
 
     void ResetMelody();

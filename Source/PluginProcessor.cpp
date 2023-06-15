@@ -125,7 +125,7 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
 
     SequencerSettings sequencerSettings{ GetSequencerSettings(m_apvts) };
 
-    GenerateMelody(m_scalesVect[1]);
+    GenerateMelody(m_scalesVect[sequencerSettings.scale]);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
