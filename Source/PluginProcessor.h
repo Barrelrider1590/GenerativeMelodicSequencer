@@ -18,6 +18,8 @@ struct SequencerSettings
     float gate{ 0 }, density{ 0 }, mutate{ 0 };
 };
 
+SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&);
+
 //==============================================================================
 /**
 */

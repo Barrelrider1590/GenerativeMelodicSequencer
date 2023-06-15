@@ -142,7 +142,7 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::Ge
     return
     {
         &m_noteVisualiser,
-        &m_lockToggle,
+        //&m_lockToggle,
         &m_randomiseBtn,
         &m_bpmKnob,
         &m_loopLengthKnob,
