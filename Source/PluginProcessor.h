@@ -22,8 +22,7 @@ SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&
 
 struct Scales
 {
-    std::vector<int> major{ 0, 2, 4, 5, 7, 9, 11 };
-    std::vector<int> pentatonic{ 1, 3, 6, 8, 10 };
+
 };
 
 //==============================================================================
@@ -106,7 +105,8 @@ private:
     juce::Atomic<bool> m_resetMelody;
 
     const int m_rootNote;
-    const Scales m_scales;
+    const std::vector<int> m_majorScaleVect;
+    const std::vector<int> m_pentatonicScaleVect;
     const std::vector<std::vector<int>> m_scalesVect;
     int m_prevScaleIndex;
     std::vector<int> m_melodyVect;
