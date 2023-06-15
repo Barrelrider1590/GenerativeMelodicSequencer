@@ -106,6 +106,7 @@ private:
 
     const int m_rootNote;
     const std::vector<int> m_majorScaleVect;
+    const std::vector<int> m_minorScaleVect;
     const std::vector<int> m_pentatonicScaleVect;
     const std::vector<std::vector<int>> m_scalesVect;
     int m_prevScaleIndex;

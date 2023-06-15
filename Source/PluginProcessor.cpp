@@ -28,8 +28,9 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_resetMelody(false),
     m_rootNote(60),
     m_majorScaleVect({ 0, 2, 4, 5, 7, 9, 11 }),
+    m_minorScaleVect({ 0, 2, 3, 5, 6, 7, 8 }),
     m_pentatonicScaleVect({ 1, 3, 6, 8, 10 }),
-    m_scalesVect({ m_majorScaleVect, m_pentatonicScaleVect }),
+    m_scalesVect({ m_majorScaleVect, m_minorScaleVect, m_pentatonicScaleVect }),
     m_prevScaleIndex(0),
     m_melodyVect(),
     m_broadcaster(),
@@ -228,7 +229,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout{};
 
-    juce::StringArray choices{"major", "pentatonic"};
+    juce::StringArray choices{"major", "minor", "pentatonic"};
     layout.add(std::make_unique < juce::AudioParameterChoice>("scale", "Scale", choices, 1));
     layout.add(std::make_unique<juce::AudioParameterInt>("bpm", "BPM", 60, 600, 120));
     layout.add(std::make_unique<juce::AudioParameterInt>("length", "Length", 4, m_maxLoopLength, 4));
