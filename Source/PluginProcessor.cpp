@@ -29,7 +29,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_rootNote(60),
     m_scales(),
     m_scalesVect({ m_scales.major, m_scales.pentatonic }),
-    m_prevScale(1),
+    m_prevScaleIndex(0),
     m_melodyVect(),
     m_broadcaster(),
     m_synth(),
@@ -264,16 +264,12 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 //==============================================================================
 int GenerativeMelodicSequencerAudioProcessor::GetCurrentMidiNote()
 {
-    int currentNote{ m_scalesVect[0][m_melodyVect[m_noteCounter]] };
+    int currentNote{ m_scalesVect[m_prevScaleIndex][m_melodyVect[m_noteCounter]] };
     return currentNote;
 }
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 {
     return m_isNoteOn;
-}
-const std::vector<int>& GenerativeMelodicSequencerAudioProcessor::GetScale()
-{
-    return m_scalesVect[0];
 }
 juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::GetAPVTS()
 {
@@ -293,7 +289,8 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
 {
     int noteOnInterval = numSamples * 60/sequencerSettings.bpm;
     int noteOffInterval = noteOnInterval + (noteOnInterval * sequencerSettings.gate);
-    int scale{ m_prevScale != sequencerSettings.scale ? m_prevScale : sequencerSettings.scale };
+
+    int scale{ m_prevScaleIndex != sequencerSettings.scale ? m_prevScaleIndex : sequencerSettings.scale };
 
     if (m_samplesProcessed >= noteOffInterval)
     {
@@ -339,10 +336,10 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::M
 void GenerativeMelodicSequencerAudioProcessor::UpdateMelody( const std::vector<int>& scaleVect,
                                                              const SequencerSettings& sequencerSettings)
 {
-    if (m_prevScale != sequencerSettings.scale)
+    if (m_prevScaleIndex != sequencerSettings.scale)
     {
         GenerateMelody(m_scalesVect[sequencerSettings.scale]);
-        m_prevScale = sequencerSettings.scale;
+        m_prevScaleIndex = sequencerSettings.scale;
     }
 
     if (m_resetMelody.compareAndSetBool(false, true))

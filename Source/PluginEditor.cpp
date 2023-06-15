@@ -12,9 +12,9 @@
 //==============================================================================
 const int GenerativeMelodicSequencerAudioProcessorEditor::m_maxNrOfNotes{ 12 };
 
-GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor (GenerativeMelodicSequencerAudioProcessor& p) : 
-    AudioProcessorEditor (&p), 
-    m_audioProcessor (p),
+GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor(GenerativeMelodicSequencerAudioProcessor& p) :
+    AudioProcessorEditor(&p),
+    m_audioProcessor(p),
     m_timerFreq(30),
     m_midiUpdated(false),
     m_lookAndFeel(),
@@ -22,6 +22,8 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_lockToggle(),
     m_randomiseBtn(),
     m_randomiseLbl(m_randomiseBtn, "Randomise"),
+    m_scaleKnobAttachment(*p.GetAPVTS(), "scale", m_scaleKnob),
+    m_scaleLbl(m_scaleKnob, "Scale"),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_bpmLbl(m_bpmKnob, "BPM"),
     m_loopLengthKnobAttachment(*p.GetAPVTS(), "length", m_loopLengthKnob),
@@ -79,7 +81,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2f) };
     auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .2f) };
-    auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .33f) };
+    auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5f) };
     auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5f) };
     auto melodyParamBounds{ bounds };
 
@@ -98,13 +100,27 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
                                                                               m_randomiseBtn.getBounds().getHeight()));
     m_randomiseLbl.setBounds(buttonBounds);
 
-    loopParamBounds = loopParamBounds.reduced(10);
-    auto bpmBnds{ loopParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
+    //loopParamBounds = loopParamBounds.reduced(10);
+    //auto loopParamTop{ loopParamBounds.removeFromBottom(loopParamBounds.getHeight() * .5f) };
+    //auto bpmBnds{ loopParamBounds.removeFromLeft(loopParamBounds.getWidth() * .5f) };
+    //m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .85f));
+    //m_bpmLbl.setBounds(bpmBnds);
+    //auto loopLengthBnds{ loopParamBounds };
+    //m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .85f));
+    //m_loopLengthLbl.setBounds(loopLengthBnds);
+
+    loopParamBounds.reduce(10, 10);
+    auto LoopTopBnds{ loopParamBounds.removeFromTop(loopParamBounds.getHeight() * .5f) };
+    auto bpmBnds{ LoopTopBnds.removeFromLeft(LoopTopBnds.getWidth() * .5f) };
     m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .85f));
     m_bpmLbl.setBounds(bpmBnds);
-    auto loopLengthBnds{ loopParamBounds };
+
+    auto loopLengthBnds{ LoopTopBnds };
     m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .85f));
     m_loopLengthLbl.setBounds(loopLengthBnds);
+
+    m_scaleKnob.setBounds(loopParamBounds.removeFromTop(loopParamBounds.getHeight() * .85f));
+    m_scaleLbl.setBounds(loopParamBounds);
     
     noteParamBounds = noteParamBounds.reduced(10);
     auto gateBnds{ noteParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
@@ -135,7 +151,6 @@ void GenerativeMelodicSequencerAudioProcessorEditor::timerCallback()
     m_noteVisualiser.UpdateNotePosition(m_timerFreq);
 
     repaint(getLocalBounds().removeFromTop(getLocalBounds().getHeight() * .2));
-    //repaint();
 }
 
 //==============================================================================
@@ -146,6 +161,7 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::Ge
         &m_noteVisualiser,
         //&m_lockToggle,
         &m_randomiseBtn,
+        &m_scaleKnob,
         &m_bpmKnob,
         &m_loopLengthKnob,
         &m_gateKnob,
@@ -158,6 +174,7 @@ std::vector<ComponentLabel*> GenerativeMelodicSequencerAudioProcessorEditor::Get
     return
     {
         &m_randomiseLbl,
+        &m_scaleLbl,
         &m_bpmLbl,
         &m_loopLengthLbl,
         &m_gateLbl,

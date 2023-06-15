@@ -61,6 +61,8 @@ private:
     ComponentLabel m_bpmLbl;
     RotaryKnob m_loopLengthKnob;
     ComponentLabel m_loopLengthLbl;
+    RotaryKnob m_scaleKnob;
+    ComponentLabel m_scaleLbl;
     RotaryKnob m_gateKnob;
     ComponentLabel m_gateLbl;
     RotaryKnob m_densityKnob;
@@ -71,6 +73,7 @@ private:
     using APVTS = juce::AudioProcessorValueTreeState;
     using Attachment = APVTS::SliderAttachment;
 
+    Attachment m_scaleKnobAttachment;
     Attachment m_bpmKnobAttachment;
     Attachment m_loopLengthKnobAttachment;
     Attachment m_gateKnobAttachment;
