@@ -9,19 +9,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
-{
-    SequencerSettings settings;
-
-    settings.bpm = apvts.getRawParameterValue("bpm")->load();
-    settings.loopLength = apvts.getRawParameterValue("length")->load();
-    settings.gate = apvts.getRawParameterValue("gate")->load();
-    settings.density = apvts.getRawParameterValue("density")->load();
-    settings.mutate = apvts.getRawParameterValue("mutate")->load();
-
-    return settings;
-}
-
 //==============================================================================
 const int GenerativeMelodicSequencerAudioProcessor::m_maxLoopLength{ 16 };
 
@@ -244,6 +231,18 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
     layout.add(std::make_unique<juce::AudioParameterFloat>("mutate", "Mutate", 0.f, 1.f, 1.f));
 
     return layout;
+}
+SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
+{
+    SequencerSettings settings;
+
+    settings.bpm = apvts.getRawParameterValue("bpm")->load();
+    settings.loopLength = apvts.getRawParameterValue("length")->load();
+    settings.gate = apvts.getRawParameterValue("gate")->load();
+    settings.density = apvts.getRawParameterValue("density")->load();
+    settings.mutate = apvts.getRawParameterValue("mutate")->load();
+
+    return settings;
 }
 
 //==============================================================================
