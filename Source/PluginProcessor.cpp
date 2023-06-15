@@ -27,7 +27,8 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_isNoteOn(false),
     m_resetMelody(false),
     m_rootNote(60),
-    m_majorScaleVect({ 0, 2, 4, 5, 7, 9, 11 }),
+    m_scales(),
+    m_scalesVect({ m_scales.major, m_scales.pentatonic }),
     m_melodyVect(),
     m_broadcaster(),
     m_synth(),
@@ -123,7 +124,7 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
 
     SequencerSettings sequencerSettings{ GetSequencerSettings(m_apvts) };
 
-    GenerateMelody(m_majorScaleVect);
+    GenerateMelody(m_scalesVect[0]);
 }
 
 void GenerativeMelodicSequencerAudioProcessor::releaseResources()
@@ -259,7 +260,7 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 //==============================================================================
 int GenerativeMelodicSequencerAudioProcessor::GetCurrentMidiNote()
 {
-    int currentNote{ m_majorScaleVect[m_melodyVect[m_noteCounter]] };
+    int currentNote{ m_scalesVect[0][m_melodyVect[m_noteCounter]] };
     return currentNote;
 }
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
@@ -268,7 +269,7 @@ bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 }
 const std::vector<int>& GenerativeMelodicSequencerAudioProcessor::GetScale()
 {
-    return m_majorScaleVect;
+    return m_scalesVect[0];
 }
 juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::GetAPVTS()
 {
@@ -293,7 +294,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
     {
         if (m_isNoteOn)
         {
-            AddNoteOffMessageToBuffer(midiBuffer, m_majorScaleVect, sequencerSettings);
+            AddNoteOffMessageToBuffer(midiBuffer, m_scalesVect[0], sequencerSettings);
             m_isNoteOn = false;
         }
     }
@@ -301,7 +302,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
     {
         if (!m_isNoteOn)
         {
-            AddNoteOnMessageToBuffer(midiBuffer, m_majorScaleVect, sequencerSettings);
+            AddNoteOnMessageToBuffer(midiBuffer, m_scalesVect[0], sequencerSettings);
             m_isNoteOn = true;
             m_broadcaster.sendChangeMessage();
         }
