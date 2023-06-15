@@ -40,6 +40,7 @@ public:
         m_notesVect(),
         m_border(),
         m_bounds(),
+        m_margin(0.f),
         m_gradient(gradient), 
         m_backgroundClr(bgClr)
     {
@@ -58,9 +59,9 @@ public:
     {
         m_border = newBounds;
 
-        int margin{ 12 };
         m_bounds = newBounds;
-        m_bounds.reduced(margin);
+        m_margin = juce::jmin(m_bounds.getWidth(), m_bounds.getHeight()) * .1f;
+        m_bounds.reduce(m_margin, m_margin);
 
         juce::Rectangle<int> noteBounds = m_bounds;
         noteBounds.setWidth(m_bounds.getWidth() / 12);
@@ -68,7 +69,7 @@ public:
 
         for (auto& note : m_notesVect)
         {
-            noteBounds.setX(noteBounds.getWidth()  * note->m_noteNr + margin);
+            noteBounds.setX(noteBounds.getWidth()  * note->m_noteNr + m_margin);
             m_noteStartPos = m_border.getHeight() - noteBounds.getHeight();
             noteBounds.setY(m_noteStartPos);
             note->m_rect = noteBounds;
@@ -86,14 +87,14 @@ public:
             g.fillRect(note->m_rect);
         }
 
-        g.setColour(m_backgroundClr);
-        g.drawRect(m_border, juce::jmin(m_border.getWidth(), m_border.getHeight()) * .1f);
+        g.setColour(juce::Colours::rebeccapurple.darker(.2f));
+        g.drawRect(m_border, m_margin);
     }
 
     //==============================================================================
     void UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcessor& p)
     {
-        int noteChanged{ p.GetCurrentMidiNote() - p.GetScale()[0] };
+        int noteChanged{ p.GetCurrentMidiNote() };
         int noteIndex = noteChanged * m_nrOfDuplicates;
         m_notesVect[noteIndex]->m_colour = m_gradient.getColourAtPosition( static_cast<float>(noteChanged) / (m_notesVect.size() / m_nrOfDuplicates));
         if (!m_notesVect[noteIndex]->m_isActive)
@@ -143,6 +144,7 @@ private:
     std::vector<std::unique_ptr<NoteVisual>> m_notesVect;
     juce::Rectangle<int> m_border;
     juce::Rectangle<int> m_bounds;
+    float m_margin;
     juce::ColourGradient m_gradient;
     juce::Colour m_backgroundClr;
 };
