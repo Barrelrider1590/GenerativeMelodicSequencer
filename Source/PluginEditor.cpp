@@ -91,10 +91,12 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     //lockBnds = lockBnds.reduced(5);
     //m_lockToggle.setBounds(lockBnds.withSizeKeepingCentre(lockBnds.getHeight(), lockBnds.getHeight()));
 
-    auto randBnds{ buttonBounds };
-    m_randomiseBtn.setBounds(randBnds.removeFromTop(randBnds.getHeight() * .5f));
-    m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(randBnds.getHeight(), randBnds.getHeight()));
-    m_randomiseLbl.setBounds(randBnds);
+    float margin{ juce::jmin(buttonBounds.getWidth(), buttonBounds.getHeight()) * .1f };
+    buttonBounds.reduce(margin, margin);
+    m_randomiseBtn.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .8f));
+    m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(m_randomiseBtn.getBounds().getHeight(),
+                                                                              m_randomiseBtn.getBounds().getHeight()));
+    m_randomiseLbl.setBounds(buttonBounds);
 
     loopParamBounds = loopParamBounds.reduced(10);
     auto bpmBnds{ loopParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
