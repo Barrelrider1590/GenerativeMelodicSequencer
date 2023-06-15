@@ -26,7 +26,8 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_noteCounter(0),
     m_isNoteOn(false),
     m_resetMelody(false),
-    m_majorScaleVect({ 60, 62, 64, 65, 67, 69, 71 }),
+    m_rootNote(60),
+    m_majorScaleVect({ 0, 2, 4, 5, 7, 9, 11 }),
     m_melodyVect(),
     m_broadcaster(),
     m_synth(),
@@ -258,7 +259,8 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 //==============================================================================
 int GenerativeMelodicSequencerAudioProcessor::GetCurrentMidiNote()
 {
-    return m_majorScaleVect[m_melodyVect[m_noteCounter]];
+    int currentNote{ m_majorScaleVect[m_melodyVect[m_noteCounter]] };
+    return currentNote;
 }
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
 {
@@ -313,14 +315,14 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::Mi
                                                                         const std::vector<int>& scaleVect,
                                                                         const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, scaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
+    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, scaleVect[m_melodyVect[m_noteCounter]] + m_rootNote, sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 }
 void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, 
                                                                          const std::vector<int>& scaleVect,
                                                                          const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, scaleVect[m_melodyVect[m_noteCounter]], sequencerSettings.density) };
+    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, scaleVect[m_melodyVect[m_noteCounter]] + m_rootNote, sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 
     UpdateMelody(scaleVect, sequencerSettings);

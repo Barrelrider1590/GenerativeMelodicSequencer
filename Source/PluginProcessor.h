@@ -100,6 +100,7 @@ private:
     bool m_isNoteOn;
     juce::Atomic<bool> m_resetMelody;
 
+    const int m_rootNote;
     const std::vector<int> m_majorScaleVect;
     std::vector<int> m_melodyVect;
 
