@@ -18,7 +18,8 @@ struct NoteVisual
         m_index(0),
         m_isActive(false),
         m_offsetTotal(0),
-        m_colour(juce::Colours::black),
+        m_colourActive(juce::Colours::green),
+        m_colourInactive(juce::Colours::red),
         m_rect() {}
 
     //==============================================================================
@@ -26,7 +27,8 @@ struct NoteVisual
     int m_index;
     bool m_isActive;
     float m_offsetTotal;
-    juce::Colour m_colour;
+    juce::Colour m_colourActive;
+    juce::Colour m_colourInactive;
     juce::Rectangle<int> m_rect;
 };
 
@@ -51,7 +53,7 @@ public:
             m_notesVect[i] = std::make_unique<NoteVisual>();
             m_notesVect[i]->m_noteNr = i / m_nrOfDuplicates;
             m_notesVect[i]->m_index = i % m_nrOfDuplicates;
-            m_notesVect[i]->m_colour = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
+            m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
         }
     }
     //==============================================================================
@@ -76,6 +78,10 @@ public:
             note->m_offsetTotal = m_noteStartPos;
         }
     }
+    void resized()
+    {
+    }
+
     void paint(juce::Graphics& g) override
     {
         g.setColour(m_backgroundClr.darker(.2f));
@@ -83,7 +89,7 @@ public:
 
         for (const auto& note : m_notesVect)
         {
-            g.setColour(note->m_colour);
+            g.setColour((note->m_isActive ? note->m_colourActive : note->m_colourInactive));
             g.fillRect(note->m_rect);
         }
 
@@ -96,7 +102,7 @@ public:
     {
         int noteChanged{ p.GetCurrentMidiNote() };
         int noteIndex = noteChanged * m_nrOfDuplicates;
-        m_notesVect[noteIndex]->m_colour = m_gradient.getColourAtPosition( static_cast<float>(noteChanged) / (m_notesVect.size() / m_nrOfDuplicates));
+
         if (!m_notesVect[noteIndex]->m_isActive)
         {
             m_notesVect[noteIndex]->m_isActive = true;
