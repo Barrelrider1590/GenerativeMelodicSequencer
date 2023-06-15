@@ -40,6 +40,7 @@ public:
         m_noteStartPos(0),
         m_nrOfDuplicates(8),
         m_notesVect(),
+        m_noteNamesVect({ "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b" }),
         m_border(),
         m_bounds(),
         m_margin(0.f),
@@ -66,8 +67,8 @@ public:
         m_bounds.reduce(m_margin, m_margin);
 
         juce::Rectangle<int> noteBounds = m_bounds;
-        noteBounds.setWidth(m_bounds.getWidth() / 12);
-        noteBounds.setHeight(m_bounds.getHeight() / 12);
+        noteBounds.setWidth(m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates));
+        noteBounds.setHeight(m_bounds.getHeight() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates));
 
         for (auto& note : m_notesVect)
         {
@@ -91,6 +92,19 @@ public:
         {
             g.setColour((note->m_isActive ? note->m_colourActive : note->m_colourInactive));
             g.fillRect(note->m_rect);
+
+            if (note->m_index == 0)
+            {
+                juce::Line<float> line{ note->m_rect.getWidth()* note->m_noteNr + m_margin, 0.f,
+                    note->m_rect.getWidth()* note->m_noteNr + m_margin, m_bounds.getHeight() + m_margin };
+                g.setColour(note->m_colourActive.brighter(.2f));
+                g.drawLine(line, 1.f);
+
+                g.drawFittedText(m_noteNamesVect[note->m_noteNr],
+                    note->m_rect.getWidth() * note->m_noteNr + m_margin, m_margin,
+                    note->m_rect.getWidth(), m_notesVect[0]->m_rect.getHeight(),
+                    juce::Justification::centred, 1);
+            }
         }
 
         g.setColour(juce::Colours::rebeccapurple.darker(.2f));
@@ -148,6 +162,7 @@ private:
     int m_noteStartPos;
     int m_nrOfDuplicates;
     std::vector<std::unique_ptr<NoteVisual>> m_notesVect;
+    std::vector<juce::String> m_noteNamesVect;
     juce::Rectangle<int> m_border;
     juce::Rectangle<int> m_bounds;
     float m_margin;
