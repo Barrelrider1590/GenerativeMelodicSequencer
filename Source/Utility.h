@@ -31,3 +31,9 @@ struct NoteVisual
     juce::Colour m_colourInactive;
     juce::Rectangle<int> m_rect;
 };
+
+struct Vector2f
+{
+    float x;
+    float y;
+};

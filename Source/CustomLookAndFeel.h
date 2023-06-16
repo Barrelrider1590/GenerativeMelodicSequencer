@@ -10,12 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
-
-struct Vector2f
-{
-    float x;
-    float y;
-};
+#include "Utility.h"
 
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
