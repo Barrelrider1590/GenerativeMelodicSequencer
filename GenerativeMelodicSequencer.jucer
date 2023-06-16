@@ -6,21 +6,27 @@
               pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="HqLPJY" name="GenerativeMelodicSequencer">
     <GROUP id="{F6DC3AC9-8FC0-1D05-1B17-C7C5A75C5BED}" name="Source">
-      <FILE id="LxxZpX" name="Utility.h" compile="0" resource="0" file="Source/Utility.h"/>
-      <FILE id="KsBTgC" name="PluginProcessor.cpp" compile="1" resource="0"
-            file="Source/PluginProcessor.cpp"/>
-      <FILE id="TI8RU6" name="PluginProcessor.h" compile="0" resource="0"
-            file="Source/PluginProcessor.h"/>
-      <FILE id="SGuNiM" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="eoEt5a" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="I0ulK7" name="CustomLookAndFeel.h" compile="0" resource="0"
-            file="Source/CustomLookAndFeel.h"/>
-      <FILE id="NoqPJy" name="NoteVisualiser.h" compile="0" resource="0"
-            file="Source/NoteVisualiser.h"/>
-      <FILE id="WKM0jP" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
-      <FILE id="TPST7e" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
-      <FILE id="vlTOnA" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
+      <GROUP id="{4F82826F-2C58-6082-775C-7160F281B45C}" name="Custom">
+        <FILE id="hpEbKs" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/CustomLookAndFeel.cpp"/>
+        <FILE id="LxxZpX" name="Utility.h" compile="0" resource="0" file="Source/Utility.h"/>
+        <FILE id="I0ulK7" name="CustomLookAndFeel.h" compile="0" resource="0"
+              file="Source/CustomLookAndFeel.h"/>
+        <FILE id="NoqPJy" name="NoteVisualiser.h" compile="0" resource="0"
+              file="Source/NoteVisualiser.h"/>
+        <FILE id="WKM0jP" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
+        <FILE id="TPST7e" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
+        <FILE id="vlTOnA" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
+      </GROUP>
+      <GROUP id="{7F4F78CF-E7EE-BD02-4579-BBFBA79459B5}" name="Main">
+        <FILE id="KsBTgC" name="PluginProcessor.cpp" compile="1" resource="0"
+              file="Source/PluginProcessor.cpp"/>
+        <FILE id="TI8RU6" name="PluginProcessor.h" compile="0" resource="0"
+              file="Source/PluginProcessor.h"/>
+        <FILE id="SGuNiM" name="PluginEditor.cpp" compile="1" resource="0"
+              file="Source/PluginEditor.cpp"/>
+        <FILE id="eoEt5a" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      </GROUP>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

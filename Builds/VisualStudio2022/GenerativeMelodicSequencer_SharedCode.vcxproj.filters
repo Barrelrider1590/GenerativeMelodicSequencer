@@ -2,6 +2,12 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="GenerativeMelodicSequencer\Source\Custom">
+      <UniqueIdentifier>{827FACE1-9FE8-8BBD-85E5-930E17C69EE0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GenerativeMelodicSequencer\Source\Main">
+      <UniqueIdentifier>{0A0709FC-8679-5468-2183-96F2A747A58A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="GenerativeMelodicSequencer\Source">
       <UniqueIdentifier>{FA03988B-E41B-759D-02CC-25B7A7F6919D}</UniqueIdentifier>
     </Filter>
@@ -601,14 +607,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\PluginProcessor.cpp">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\PluginEditor.cpp">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+    <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\SynthVoice.cpp">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PluginProcessor.cpp">
+      <Filter>GenerativeMelodicSequencer\Source\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PluginEditor.cpp">
+      <Filter>GenerativeMelodicSequencer\Source\Main</Filter>
     </ClCompile>
     <ClCompile Include="E:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
@@ -3049,25 +3058,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Utility.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\PluginProcessor.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\PluginEditor.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\NoteVisualiser.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\SynthSound.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\SynthVoice.h">
-      <Filter>GenerativeMelodicSequencer\Source</Filter>
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PluginProcessor.h">
+      <Filter>GenerativeMelodicSequencer\Source\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PluginEditor.h">
+      <Filter>GenerativeMelodicSequencer\Source\Main</Filter>
     </ClInclude>
     <ClInclude Include="E:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
