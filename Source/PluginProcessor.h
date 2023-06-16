@@ -11,19 +11,9 @@
 #include <JuceHeader.h>
 #include "SynthSound.h"
 #include "SynthVoice.h"
-
-struct SequencerSettings
-{
-    int scale{ 0 }, bpm{ 0 }, loopLength{ 0 };
-    float gate{ 0 }, density{ 0 }, mutate{ 0 };
-};
+#include "Utility.h"
 
 SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&);
-
-struct Scales
-{
-
-};
 
 //==============================================================================
 /**

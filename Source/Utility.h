@@ -32,6 +32,12 @@ struct NoteVisual
     juce::Rectangle<int> m_rect;
 };
 
+struct SequencerSettings
+{
+    int scale{ 0 }, bpm{ 0 }, loopLength{ 0 };
+    float gate{ 0 }, density{ 0 }, mutate{ 0 };
+};
+
 struct Vector2f
 {
     float x;
