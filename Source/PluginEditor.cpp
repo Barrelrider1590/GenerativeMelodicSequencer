@@ -78,7 +78,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     auto bounds{ getLocalBounds() };
 
     auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2f) };
-    auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .2f) };
+    auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .1f) };
     auto loopParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5f) };
     auto noteParamBounds{ bounds.removeFromTop( bounds.getHeight() * .5f) };
     auto melodyParamBounds{ bounds };
@@ -93,7 +93,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     float margin{ juce::jmin(buttonBounds.getWidth(), buttonBounds.getHeight()) * .1f };
     buttonBounds.reduce(margin, margin);
-    m_randomiseBtn.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .8f));
+    m_randomiseBtn.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .6f));
     m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(m_randomiseBtn.getBounds().getHeight(),
                                                                               m_randomiseBtn.getBounds().getHeight()));
     m_randomiseLbl.setBounds(buttonBounds);
