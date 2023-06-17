@@ -267,7 +267,8 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 //==============================================================================
 int GenerativeMelodicSequencerAudioProcessor::GetCurrentMidiNote()
 {
-    int currentNote{ m_scalesVect[m_prevScaleIndex][m_melodyVect[m_noteCounter]] };
+    SequencerSettings sequencerSettings{ GetSequencerSettings(m_apvts) };
+    int currentNote{ m_scalesVect[sequencerSettings.scale][m_melodyVect[m_noteCounter]] };
     return currentNote;
 }
 bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
@@ -293,13 +294,11 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
     int noteOnInterval = numSamples * 60/sequencerSettings.bpm;
     int noteOffInterval = noteOnInterval + (noteOnInterval * sequencerSettings.gate);
 
-    int scale{ m_prevScaleIndex != sequencerSettings.scale ? m_prevScaleIndex : sequencerSettings.scale };
-
     if (m_samplesProcessed >= noteOffInterval)
     {
         if (m_isNoteOn)
         {
-            AddNoteOffMessageToBuffer(midiBuffer, m_scalesVect[scale], sequencerSettings);
+            AddNoteOffMessageToBuffer(midiBuffer, m_scalesVect[sequencerSettings.scale], sequencerSettings);
             m_isNoteOn = false;
         }
     }
@@ -307,7 +306,7 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer
     {
         if (!m_isNoteOn)
         {
-            AddNoteOnMessageToBuffer(midiBuffer, m_scalesVect[scale], sequencerSettings);
+            AddNoteOnMessageToBuffer(midiBuffer, m_scalesVect[sequencerSettings.scale], sequencerSettings);
             m_isNoteOn = true;
             m_broadcaster.sendChangeMessage();
         }
@@ -321,9 +320,9 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::Mi
                                                                         const std::vector<int>& scaleVect,
                                                                         const SequencerSettings& sequencerSettings)
 {
-    if (m_melodyVect[m_noteCounter] >= scaleVect.size())
+    if (m_melodyVect[m_noteCounter] >= scaleVect.size() || m_prevScaleIndex != sequencerSettings.scale)
     {
-        GenerateMelody(scaleVect);
+        GenerateMelody(m_scalesVect[sequencerSettings.scale]);
     }
     juce::MidiMessage message{ juce::MidiMessage::noteOn(1, scaleVect[m_melodyVect[m_noteCounter]] + m_rootNote, sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
@@ -345,7 +344,6 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMelody( const std::vector<i
 {
     if (m_prevScaleIndex != sequencerSettings.scale)
     {
-        GenerateMelody(m_scalesVect[sequencerSettings.scale]);
         m_prevScaleIndex = sequencerSettings.scale;
     }
 
