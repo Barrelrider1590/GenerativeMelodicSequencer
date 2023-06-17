@@ -71,13 +71,3 @@ struct Vector2f
     float y;
 };
 #pragma endregion
-
-juce::Colour RandomColour()
-{
-    juce::Random rand;
-    juce::uint8 r{ static_cast<juce::uint8>(rand.nextInt()) };
-    juce::uint8 g{ static_cast<juce::uint8>(rand.nextInt()) };
-    juce::uint8 b{ static_cast<juce::uint8>(rand.nextInt()) };
-
-    return juce::Colour(r, g, b);
-}
