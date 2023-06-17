@@ -43,7 +43,7 @@ void NoteVisualiser::setBounds(const juce::Rectangle<int>& newBounds)
 
     juce::Rectangle<int> noteBounds = m_bounds;
     noteBounds.setWidth(m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates));
-    noteBounds.setHeight(m_bounds.getHeight() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates));
+    noteBounds.setHeight(m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates));
 
     for (auto& note : m_notesVect)
     {
@@ -89,11 +89,14 @@ void NoteVisualiser::paint(juce::Graphics& g)
 void NoteVisualiser::UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcessor& p)
 {
     int noteChanged{ p.GetCurrentMidiNote() };
-    int noteIndex = noteChanged * m_nrOfDuplicates;
+    int noteIndex{ noteChanged * m_nrOfDuplicates };
+    float noteHeight{ m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates) * p.GetSequencerSettings(*p.GetAPVTS()).gate };
 
     if (!m_notesVect[noteIndex]->m_isActive)
     {
         m_notesVect[noteIndex]->m_isActive = true;
+        m_notesVect[noteIndex]->m_rect.setHeight(noteHeight);
+
     }
     else
     {
@@ -103,6 +106,7 @@ void NoteVisualiser::UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcess
             if (!m_notesVect[noteIndex + i]->m_isActive)
             {
                 m_notesVect[noteIndex + i]->m_isActive = true;
+                m_notesVect[noteIndex + i]->m_rect.setHeight(noteHeight);
                 activatedDuplicate = true;
                 break;
             }
@@ -112,6 +116,7 @@ void NoteVisualiser::UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcess
             jassertfalse;
         }
     }
+
 }
 void NoteVisualiser::UpdateNotePosition(int timerFreqHz)
 {
