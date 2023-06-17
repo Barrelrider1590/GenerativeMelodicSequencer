@@ -85,27 +85,12 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     m_noteVisualiser.setBounds(midiEventBounds);
 
-    //buttonBounds = buttonBounds.withSizeKeepingCentre(buttonBounds.getHeight() * .5f, buttonBounds.getHeight());
-    
-    //auto lockBnds{ buttonBounds.removeFromTop(buttonBounds.getHeight() * .33f) };
-    //lockBnds = lockBnds.reduced(5);
-    //m_lockToggle.setBounds(lockBnds.withSizeKeepingCentre(lockBnds.getHeight(), lockBnds.getHeight()));
-
     float margin{ juce::jmin(buttonBounds.getWidth(), buttonBounds.getHeight()) * .1f };
     buttonBounds.reduce(margin, margin);
     m_randomiseBtn.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .6f));
     m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(m_randomiseBtn.getBounds().getHeight(),
                                                                               m_randomiseBtn.getBounds().getHeight()));
     m_randomiseLbl.setBounds(buttonBounds);
-
-    //loopParamBounds = loopParamBounds.reduced(10);
-    //auto loopParamTop{ loopParamBounds.removeFromBottom(loopParamBounds.getHeight() * .5f) };
-    //auto bpmBnds{ loopParamBounds.removeFromLeft(loopParamBounds.getWidth() * .5f) };
-    //m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .85f));
-    //m_bpmLbl.setBounds(bpmBnds);
-    //auto loopLengthBnds{ loopParamBounds };
-    //m_loopLengthKnob.setBounds(loopLengthBnds.removeFromTop(loopLengthBnds.getHeight() * .85f));
-    //m_loopLengthLbl.setBounds(loopLengthBnds);
 
     loopParamBounds.reduce(10, 10);
     auto LoopTopBnds{ loopParamBounds.removeFromTop(loopParamBounds.getHeight() * .5f) };
@@ -157,7 +142,6 @@ std::vector<juce::Component*> GenerativeMelodicSequencerAudioProcessorEditor::Ge
     return
     {
         &m_noteVisualiser,
-        //&m_lockToggle,
         &m_randomiseBtn,
         &m_scaleKnob,
         &m_bpmKnob,
