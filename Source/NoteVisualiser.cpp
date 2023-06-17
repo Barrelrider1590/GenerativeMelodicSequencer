@@ -63,6 +63,7 @@ void NoteVisualiser::paint(juce::Graphics& g)
     g.fillRect(m_bounds);
 
     float maxNoteWidth{ m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates) };
+    float maxNoteHeight{ m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates) };
 
     for (const auto& note : m_notesVect)
     {
@@ -78,7 +79,7 @@ void NoteVisualiser::paint(juce::Graphics& g)
 
             g.drawFittedText(m_noteNamesVect[note->m_noteNr % 12],
                              maxNoteWidth * note->m_noteNr + m_margin, m_margin,
-                             maxNoteWidth, m_notesVect[0]->m_rect.getHeight(),
+                             maxNoteWidth, maxNoteHeight,
                              juce::Justification::centred, 1);
         }
     }
