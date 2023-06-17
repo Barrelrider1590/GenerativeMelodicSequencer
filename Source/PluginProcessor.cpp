@@ -28,7 +28,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
     m_resetMelody(false),
     m_rootNote(60),
     m_majorScaleVect({ 0, 2, 4, 5, 7, 9, 11 }),
-    m_minorScaleVect({ 0, 2, 3, 5, 6, 7, 8 }),
+    m_minorScaleVect({ 0, 2, 3, 5, 6, 7, 8, 10, 12 }),
     m_pentatonicScaleVect({ 1, 3, 6, 8, 10 }),
     m_scalesVect({ m_majorScaleVect, m_minorScaleVect, m_pentatonicScaleVect }),
     m_prevScaleIndex(0),
@@ -127,6 +127,7 @@ void GenerativeMelodicSequencerAudioProcessor::prepareToPlay (double sampleRate,
 
     SequencerSettings sequencerSettings{ GetSequencerSettings(m_apvts) };
 
+    m_prevScaleIndex = sequencerSettings.scale;
     GenerateMelody(m_scalesVect[sequencerSettings.scale]);
 }
 
@@ -364,9 +365,11 @@ void GenerativeMelodicSequencerAudioProcessor::UpdateMelody( const std::vector<i
 void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(const std::vector<int>& scaleVect)
 {
     juce::Random rand;
+    
     for (int i{ 0 }; i < m_maxLoopLength; ++i)
     {
-        m_melodyVect[i] = rand.nextInt(scaleVect.size());
+        auto size{ scaleVect.size() };
+        m_melodyVect[i] = rand.nextInt(size);
     }
 }
 void GenerativeMelodicSequencerAudioProcessor::MutateNote(int noteIndex,
