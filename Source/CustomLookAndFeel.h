@@ -25,7 +25,9 @@ public:
                           float rotaryStartAngle, float rotaryEndAngle,
                           juce::Slider&) override;
 
-    void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
+    void drawButtonBackground(juce::Graphics& g, 
+                              juce::Button& button, 
+                              const juce::Colour& backgroundColour,
                               bool isMouseOverButton, bool isButtonDown) override;
     void drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) override;
     void drawLabel(juce::Graphics& g, juce::Label& l) override;

@@ -33,11 +33,11 @@ CustomLookAndFeel::CustomLookAndFeel() :
 
 //==============================================================================
 void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
-    int x, int y,
-    int width, int height,
-    float sliderPos,
-    float rotaryStartAngle, float rotaryEndAngle,
-    juce::Slider&)
+                                         int x, int y,
+                                         int width, int height,
+                                         float sliderPos,
+                                         float rotaryStartAngle, float rotaryEndAngle,
+                                         juce::Slider& s)
 {
     float radius{ static_cast<float>(juce::jmin(width, height) * .6f) };
     float angle{ rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle) };
@@ -78,10 +78,12 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
         true);
     m_strokeType.createDashedStroke(arcDashed, arc, dashLengths, 2);
 
-    g.setColour(knobAccentClr);
+    g.setColour(knobBaseClr);
     g.strokePath(arcDashed, m_strokeType);
-}
 
+
+
+}
 void CustomLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
     bool isMouseOverButton, bool isButtonDown)
 {
@@ -109,7 +111,7 @@ void CustomLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& bu
 void CustomLookAndFeel::drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) {    }
 void CustomLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& l)
 {
-    g.setColour(m_gradient.getColourAtPosition((l.getY() % 450) / 450.0).brighter(.1f));
+    g.setColour(juce::Colour(200, 200, 200));
     g.setFont(m_font);
     g.drawFittedText(l.getText(), 0, 0, l.getWidth(), l.getHeight(), l.getJustificationType(), 1);
 }
