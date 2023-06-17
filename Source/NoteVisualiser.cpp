@@ -62,22 +62,24 @@ void NoteVisualiser::paint(juce::Graphics& g)
     g.setColour(m_backgroundClr.darker(.2f));
     g.fillRect(m_bounds);
 
+    float maxNoteWidth{ m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates) };
+
     for (const auto& note : m_notesVect)
     {
         g.setColour((note->m_isActive ? note->m_colourActive : note->m_colourInactive));
         g.fillRect(note->m_rect);
-
+        
         if (note->m_index == 0)
         {
-            juce::Line<float> line{ note->m_rect.getWidth()* note->m_noteNr + m_margin, 0.f,
-                note->m_rect.getWidth()* note->m_noteNr + m_margin, m_bounds.getHeight() + m_margin };
+            juce::Line<float> line{ maxNoteWidth * note->m_noteNr + m_margin, 0.f,
+                                    maxNoteWidth * note->m_noteNr + m_margin, m_bounds.getHeight() + m_margin };
             g.setColour(note->m_colourActive.brighter(.2f));
             g.drawLine(line, 1.f);
 
             g.drawFittedText(m_noteNamesVect[note->m_noteNr % 12],
-                note->m_rect.getWidth() * note->m_noteNr + m_margin, m_margin,
-                note->m_rect.getWidth(), m_notesVect[0]->m_rect.getHeight(),
-                juce::Justification::centred, 1);
+                             maxNoteWidth * note->m_noteNr + m_margin, m_margin,
+                             maxNoteWidth, m_notesVect[0]->m_rect.getHeight(),
+                             juce::Justification::centred, 1);
         }
     }
 
@@ -91,22 +93,27 @@ void NoteVisualiser::UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcess
     int noteChanged{ p.GetCurrentMidiNote() };
     int noteIndex{ noteChanged * m_nrOfDuplicates };
     float noteHeight{ m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates) * p.GetSequencerSettings(*p.GetAPVTS()).gate };
+    float noteDensity{ p.GetSequencerSettings(*p.GetAPVTS()).density };
+    juce::Colour baseColour{m_gradient.getColourAtPosition(noteChanged / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates))};
+
 
     if (!m_notesVect[noteIndex]->m_isActive)
     {
         m_notesVect[noteIndex]->m_isActive = true;
         m_notesVect[noteIndex]->m_rect.setHeight(noteHeight);
-
+        m_notesVect[noteIndex]->m_colourActive = baseColour.darker(.75f - (noteDensity * .75f));
     }
     else
     {
         bool activatedDuplicate{ false };
         for (int i{ 1 }; i < m_nrOfDuplicates; ++i)
         {
-            if (!m_notesVect[noteIndex + i]->m_isActive)
+            int noteDuplicate{ noteIndex + i };
+            if (!m_notesVect[noteDuplicate]->m_isActive)
             {
-                m_notesVect[noteIndex + i]->m_isActive = true;
-                m_notesVect[noteIndex + i]->m_rect.setHeight(noteHeight);
+                m_notesVect[noteDuplicate]->m_isActive = true;
+                m_notesVect[noteDuplicate]->m_rect.setHeight(noteHeight);
+                m_notesVect[noteDuplicate]->m_colourActive = baseColour.darker(.75f - (noteDensity * .75f));
                 activatedDuplicate = true;
                 break;
             }
@@ -120,7 +127,9 @@ void NoteVisualiser::UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcess
 }
 void NoteVisualiser::UpdateNotePosition(int timerFreqHz)
 {
+    float maxNoteWidth{ m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates) };
     float delta = 150.f / timerFreqHz;
+
     for (auto& note : m_notesVect)
     {
         if (note->m_isActive)
