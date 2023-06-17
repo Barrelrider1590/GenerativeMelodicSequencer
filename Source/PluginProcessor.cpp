@@ -321,6 +321,10 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::Mi
                                                                         const std::vector<int>& scaleVect,
                                                                         const SequencerSettings& sequencerSettings)
 {
+    if (m_melodyVect[m_noteCounter] >= scaleVect.size())
+    {
+        GenerateMelody(scaleVect);
+    }
     juce::MidiMessage message{ juce::MidiMessage::noteOn(1, scaleVect[m_melodyVect[m_noteCounter]] + m_rootNote, sequencerSettings.density) };
     midiBuffer.addEvent(message, 0);
 }
@@ -368,11 +372,7 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(const std::vector<
     
     for (int i{ 0 }; i < m_maxLoopLength; ++i)
     {
-        int newNote{ 0 };
-      
-        do(newNote = rand.nextInt(scaleVect.size()));
-        while (newNote >= scaleVect.size());
-
+        int newNote{ rand.nextInt(scaleVect.size()) };
         m_melodyVect[i] = newNote;
     }
 }
