@@ -37,8 +37,6 @@ private:
     std::vector<juce::Component*> GetComponents();
     std::vector<ComponentLabel*> GetLabels();
 
-    juce::Colour RandomColour();
-
     //==============================================================================
     static int const m_maxNrOfNotes;
 
