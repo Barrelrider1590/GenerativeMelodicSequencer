@@ -240,7 +240,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GenerativeMelodicSequencerAu
 
     return layout;
 }
-SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
+SequencerSettings GenerativeMelodicSequencerAudioProcessor::GetSequencerSettings(const juce::AudioProcessorValueTreeState& apvts)
 {
     SequencerSettings settings;
 

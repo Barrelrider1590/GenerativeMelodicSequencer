@@ -12,9 +12,6 @@
 #include "SynthSound.h"
 #include "SynthVoice.h"
 #include "Utility.h"
-
-SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&);
-
 //==============================================================================
 /**
 */
@@ -72,6 +69,7 @@ public:
     int GetCurrentMidiNote();
     bool GetIsNoteOn();
     juce::AudioProcessorValueTreeState* GetAPVTS();
+    SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&);
 
     void ResetMelody();
     
