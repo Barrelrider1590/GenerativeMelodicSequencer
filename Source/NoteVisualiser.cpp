@@ -22,7 +22,7 @@ NoteVisualiser::NoteVisualiser(const juce::ColourGradient& gradient, const juce:
     m_backgroundClr(bgClr)
 {
     int nrOfNotes(12 * 1.3);
-    m_notesVect.resize(nrOfNotes) * m_nrOfDuplicates);
+    m_notesVect.resize(nrOfNotes * m_nrOfDuplicates);
 
     for (int i{}; i < m_notesVect.size(); ++i)
     {
