@@ -38,8 +38,6 @@ private:
     std::vector<ComponentLabel*> GetLabels();
 
     //==============================================================================
-    static int const m_maxNrOfNotes;
-
     GenerativeMelodicSequencerAudioProcessor& m_audioProcessor;
 
     int const m_timerFreq;
