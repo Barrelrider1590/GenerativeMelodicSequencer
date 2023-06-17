@@ -15,7 +15,7 @@ CustomLookAndFeel::CustomLookAndFeel() :
     m_strokeType(juce::PathStrokeType::PathStrokeType(1.0f,
         juce::PathStrokeType::JointStyle::curved,
         juce::PathStrokeType::EndCapStyle::rounded)),
-    m_font(25)
+    m_font(20)
 {
     m_gradient.addColour(0, juce::Colours::rebeccapurple);
     m_gradient.addColour(.25, juce::Colours::blueviolet);
