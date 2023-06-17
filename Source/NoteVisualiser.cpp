@@ -21,14 +21,14 @@ NoteVisualiser::NoteVisualiser(int nrOfNotes, const juce::ColourGradient& gradie
     m_gradient(gradient),
     m_backgroundClr(bgClr)
 {
-    m_notesVect.resize(nrOfNotes * m_nrOfDuplicates);
+    m_notesVect.resize((nrOfNotes * 1.3) * m_nrOfDuplicates);
 
     for (int i{}; i < m_notesVect.size(); ++i)
     {
         m_notesVect[i] = std::make_unique<NoteVisual>();
         m_notesVect[i]->m_noteNr = i / m_nrOfDuplicates;
         m_notesVect[i]->m_index = i % m_nrOfDuplicates;
-        m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
+        m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / (nrOfNotes * 1.3));
     }
 }
 //==============================================================================
@@ -73,7 +73,7 @@ void NoteVisualiser::paint(juce::Graphics& g)
             g.setColour(note->m_colourActive.brighter(.2f));
             g.drawLine(line, 1.f);
 
-            g.drawFittedText(m_noteNamesVect[note->m_noteNr],
+            g.drawFittedText(m_noteNamesVect[note->m_noteNr % 12],
                 note->m_rect.getWidth() * note->m_noteNr + m_margin, m_margin,
                 note->m_rect.getWidth(), m_notesVect[0]->m_rect.getHeight(),
                 juce::Justification::centred, 1);
