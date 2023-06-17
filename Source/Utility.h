@@ -15,7 +15,7 @@
 struct RotaryKnob : public juce::Slider
 {
     RotaryKnob(const juce::String& label = "Label") :
-        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::NoTextBox) {}
+        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxAbove) {}
 };
 class ComponentLabel : public juce::Label
 {
