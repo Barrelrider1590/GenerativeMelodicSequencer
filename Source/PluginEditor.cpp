@@ -10,15 +10,13 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-const int GenerativeMelodicSequencerAudioProcessorEditor::m_maxNrOfNotes{ 12 };
-
 GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioProcessorEditor(GenerativeMelodicSequencerAudioProcessor& p) :
     AudioProcessorEditor(&p),
     m_audioProcessor(p),
     m_timerFreq(30),
     m_midiUpdated(false),
     m_lookAndFeel(),
-    m_noteVisualiser(m_maxNrOfNotes, m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
+    m_noteVisualiser(m_lookAndFeel.GetGradient(), m_lookAndFeel.GetBackgroundColour()),
     m_lockToggle(),
     m_randomiseBtn(),
     m_randomiseLbl(m_randomiseBtn, "Randomise"),

@@ -10,7 +10,7 @@
 
 #include "NoteVisualiser.h"
 
-NoteVisualiser::NoteVisualiser(int nrOfNotes, const juce::ColourGradient& gradient, const juce::Colour& bgClr) :
+NoteVisualiser::NoteVisualiser(const juce::ColourGradient& gradient, const juce::Colour& bgClr) :
     m_noteStartPos(0),
     m_nrOfDuplicates(8),
     m_notesVect(),
@@ -21,14 +21,15 @@ NoteVisualiser::NoteVisualiser(int nrOfNotes, const juce::ColourGradient& gradie
     m_gradient(gradient),
     m_backgroundClr(bgClr)
 {
-    m_notesVect.resize((nrOfNotes * 1.3) * m_nrOfDuplicates);
+    int nrOfNotes(12 * 1.3);
+    m_notesVect.resize(nrOfNotes) * m_nrOfDuplicates);
 
     for (int i{}; i < m_notesVect.size(); ++i)
     {
         m_notesVect[i] = std::make_unique<NoteVisual>();
         m_notesVect[i]->m_noteNr = i / m_nrOfDuplicates;
         m_notesVect[i]->m_index = i % m_nrOfDuplicates;
-        m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / (nrOfNotes * 1.3));
+        m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
     }
 }
 //==============================================================================
