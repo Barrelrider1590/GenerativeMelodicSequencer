@@ -164,13 +164,3 @@ std::vector<ComponentLabel*> GenerativeMelodicSequencerAudioProcessorEditor::Get
         &m_mutateLbl
     };
 }
-
-juce::Colour GenerativeMelodicSequencerAudioProcessorEditor::RandomColour()
-{
-    juce::Random rand;
-    juce::uint8 r{ static_cast<juce::uint8>(rand.nextInt()) };
-    juce::uint8 g{ static_cast<juce::uint8>(rand.nextInt()) };
-    juce::uint8 b{ static_cast<juce::uint8>(rand.nextInt()) };
-
-    return juce::Colour(r, g, b);
-}
