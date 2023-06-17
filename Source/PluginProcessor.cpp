@@ -368,8 +368,12 @@ void GenerativeMelodicSequencerAudioProcessor::GenerateMelody(const std::vector<
     
     for (int i{ 0 }; i < m_maxLoopLength; ++i)
     {
-        auto size{ scaleVect.size() };
-        m_melodyVect[i] = rand.nextInt(size);
+        int newNote{ 0 };
+      
+        do(newNote = rand.nextInt(scaleVect.size()));
+        while (newNote >= scaleVect.size());
+
+        m_melodyVect[i] = newNote;
     }
 }
 void GenerativeMelodicSequencerAudioProcessor::MutateNote(int noteIndex,
