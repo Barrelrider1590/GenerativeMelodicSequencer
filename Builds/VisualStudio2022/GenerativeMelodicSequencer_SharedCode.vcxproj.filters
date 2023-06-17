@@ -606,12 +606,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\SynthVoice.cpp">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>GenerativeMelodicSequencer\Source\Main</Filter>
     </ClCompile>
@@ -2925,26 +2919,17 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\CustomLookAndFeel.cpp">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\NoteVisualiser.cpp">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\SynthVoice.cpp">
       <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\Utility.h">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\NoteVisualiser.h">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\SynthSound.h">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\SynthVoice.h">
-      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>GenerativeMelodicSequencer\Source\Main</Filter>
     </ClInclude>
@@ -5788,6 +5773,21 @@
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h">
       <Filter>JUCE Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CustomLookAndFeel.h">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\NoteVisualiser.h">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\SynthSound.h">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\SynthVoice.h">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Utility.h">
+      <Filter>GenerativeMelodicSequencer\Source\Custom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
