@@ -284,10 +284,10 @@ void GenerativeMelodicSequencerAudioProcessor::SetResetMelody()
 //==============================================================================
 #pragma region Midi Handling
 void GenerativeMelodicSequencerAudioProcessor::UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, 
-                                                                int numSamples, 
+                                                                int sampleRate, 
                                                                 const SequencerSettings& sequencerSettings)
 {
-    int noteOnInterval = numSamples * 60/sequencerSettings.bpm;
+    int noteOnInterval = sampleRate * (60.f / sequencerSettings.bpm);
     int noteOffInterval = noteOnInterval + (noteOnInterval * sequencerSettings.gate);
 
     if (m_samplesProcessed >= noteOffInterval)
@@ -320,16 +320,21 @@ void GenerativeMelodicSequencerAudioProcessor::AddNoteOnMessageToBuffer(juce::Mi
     {
         GenerateMelody(m_scalesVect[sequencerSettings.scale]);
     }
+
+    int midiChannel{ 1 };
     m_activeNote = scaleVect[m_melodyVect[m_noteCounter]];
-    juce::MidiMessage message{ juce::MidiMessage::noteOn(1, m_activeNote + m_rootNote, sequencerSettings.density) };
-    midiBuffer.addEvent(message, 0);
+    int sampleNr{ 0 };
+    juce::MidiMessage message{ juce::MidiMessage::noteOn(midiChannel, m_activeNote + m_rootNote, sequencerSettings.density) };
+    midiBuffer.addEvent(message, sampleNr);
 }
 void GenerativeMelodicSequencerAudioProcessor::AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer,
                                                                          int activeNote,
                                                                          const SequencerSettings& sequencerSettings)
 {
-    juce::MidiMessage message{ juce::MidiMessage::noteOff(1, activeNote  + m_rootNote, sequencerSettings.density) };
-    midiBuffer.addEvent(message, 0);
+    int midiChannel{ 1 };
+    int sampleNr{ 0 };
+    juce::MidiMessage message{ juce::MidiMessage::noteOff(midiChannel, activeNote  + m_rootNote, sequencerSettings.density) };
+    midiBuffer.addEvent(message, sampleNr);
 
     UpdateMelody(sequencerSettings);
 }
