@@ -75,7 +75,8 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 
-    auto bounds{ getLocalBounds() };
+    float margin{ 10 };
+    juce::Rectangle<int> bounds{ getLocalBounds() };
 
     auto midiEventBounds{ bounds.removeFromTop( bounds.getHeight() * .2f) };
     auto buttonBounds{ bounds.removeFromTop(bounds.getHeight() * .1f) };
@@ -85,14 +86,13 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
 
     m_noteVisualiser.setBounds(midiEventBounds);
 
-    float margin{ juce::jmin(buttonBounds.getWidth(), buttonBounds.getHeight()) * .1f };
     buttonBounds.reduce(margin, margin);
     m_randomiseBtn.setBounds(buttonBounds.removeFromTop(buttonBounds.getHeight() * .6f));
     m_randomiseBtn.setBounds(m_randomiseBtn.getBounds().withSizeKeepingCentre(m_randomiseBtn.getBounds().getHeight(),
                                                                               m_randomiseBtn.getBounds().getHeight()));
     m_randomiseLbl.setBounds(buttonBounds);
 
-    loopParamBounds.reduce(10, 10);
+    loopParamBounds.reduce(margin, margin);
     auto LoopTopBnds{ loopParamBounds.removeFromTop(loopParamBounds.getHeight() * .5f) };
     auto bpmBnds{ LoopTopBnds.removeFromLeft(LoopTopBnds.getWidth() * .5f) };
     m_bpmKnob.setBounds(bpmBnds.removeFromTop(bpmBnds.getHeight() * .85f));
@@ -105,7 +105,7 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     m_scaleKnob.setBounds(loopParamBounds.removeFromTop(loopParamBounds.getHeight() * .85f));
     m_scaleLbl.setBounds(loopParamBounds);
     
-    noteParamBounds = noteParamBounds.reduced(10);
+    noteParamBounds.reduce(margin, margin);
     auto gateBnds{ noteParamBounds.removeFromLeft(bounds.getWidth() * .5f) };
     m_gateKnob.setBounds(gateBnds.removeFromTop(gateBnds.getHeight() * .85f));
     m_gateLbl.setBounds(gateBnds);
@@ -113,9 +113,9 @@ void GenerativeMelodicSequencerAudioProcessorEditor::resized()
     m_densityKnob.setBounds(densityBnds.removeFromTop(densityBnds.getHeight() * .85f));
     m_densityLbl.setBounds(densityBnds);
 
-    auto mutateBnds{ melodyParamBounds.reduced(10) };
-    m_mutateKnob.setBounds(mutateBnds.removeFromTop(mutateBnds.getHeight() * .85f));
-    m_mutateLbl.setBounds(mutateBnds);
+    melodyParamBounds.reduce(margin, margin);
+    m_mutateKnob.setBounds(melodyParamBounds.removeFromTop(melodyParamBounds.getHeight() * .85f));
+    m_mutateLbl.setBounds(melodyParamBounds);
 }
 
 //==============================================================================
