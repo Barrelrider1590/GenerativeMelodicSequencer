@@ -74,7 +74,7 @@ public:
     
 
 private:
-    void UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int numSamples, const SequencerSettings& sequencerSettings);
+    void UpdateMidiBuffer(juce::MidiBuffer& midiBuffer, int sampleRate, const SequencerSettings& sequencerSettings);
     void AddNoteOnMessageToBuffer(juce::MidiBuffer& midiBuffer, const std::vector<int>& scaleVect, const SequencerSettings& sequencerSettings);
     void AddNoteOffMessageToBuffer(juce::MidiBuffer& midiBuffer, int activeNote, const SequencerSettings& sequencerSettings);
     
