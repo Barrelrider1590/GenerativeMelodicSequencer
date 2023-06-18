@@ -34,6 +34,8 @@ NoteVisualiser::NoteVisualiser(const juce::ColourGradient& gradient, const juce:
         m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
     }
 }
+NoteVisualiser::~NoteVisualiser() {}
+
 //==============================================================================
 void NoteVisualiser::setBounds(const juce::Rectangle<int>& newBounds)
 {

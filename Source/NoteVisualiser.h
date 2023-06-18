@@ -17,6 +17,7 @@ class NoteVisualiser : public juce::Component
 {
 public:
     NoteVisualiser(const juce::ColourGradient& gradient, const juce::Colour& bgClr);
+    ~NoteVisualiser();
     //==============================================================================
     void setBounds(const juce::Rectangle<int>& newBounds);
     void resized();
