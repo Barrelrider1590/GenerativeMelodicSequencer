@@ -16,6 +16,7 @@ struct RotaryKnob : public juce::Slider
 {
     RotaryKnob(const juce::String& label = "Label") :
         juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxAbove) {}
+    ~RotaryKnob() {}
 };
 class ComponentLabel : public juce::Label
 {
@@ -23,6 +24,7 @@ public:
     ComponentLabel(juce::Component& comp, const juce::String& labelText = "Name") :
         m_comp(comp),
         juce::Label::Label(labelText + "Label", labelText) { }
+    ~ComponentLabel() {}
 
     //==============================================================================
     void InitialiseLabel()
@@ -32,6 +34,7 @@ public:
         setJustificationType(juce::Justification::centredTop);
         attachToComponent(&m_comp, false);
     }
+
 private:
     juce::Component& m_comp;
 };
@@ -48,6 +51,7 @@ struct NoteVisual
         m_colourActive(juce::Colours::green),
         m_colourInactive(juce::Colours::red),
         m_rect() {}
+    ~NoteVisual() {}
 
     //==============================================================================
     int m_noteNr;
