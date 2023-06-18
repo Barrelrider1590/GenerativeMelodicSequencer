@@ -51,7 +51,7 @@ void NoteVisualiser::setBounds(const juce::Rectangle<int>& newBounds)
 
     for (auto& note : m_notesVect)
     {
-        noteBounds.setX(noteBounds.getWidth() * note->m_noteNr + m_margin);
+        noteBounds.setX(std::ceil(noteBounds.getWidth() * note->m_noteNr + m_margin));
         m_noteStartPos = m_border.getHeight() - noteBounds.getHeight();
         noteBounds.setY(m_noteStartPos);
         note->m_rect = noteBounds;
