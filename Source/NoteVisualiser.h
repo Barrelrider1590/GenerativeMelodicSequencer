@@ -28,11 +28,13 @@ public:
 private:
     int m_noteStartPos;
     int m_nrOfDuplicates;
+    float m_margin;
+    float m_maxNoteWidth;
+    float m_maxNoteHeight;
     std::vector<std::unique_ptr<NoteVisual>> m_notesVect;
     std::vector<juce::String> m_noteNamesVect;
     juce::Rectangle<int> m_border;
     juce::Rectangle<int> m_bounds;
-    float m_margin;
     juce::ColourGradient m_gradient;
     juce::Colour m_backgroundClr;
 };
