@@ -50,15 +50,17 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
     g.setColour(knobBaseClr);
     g.fillEllipse(ellipseCentre.x, ellipseCentre.y, radius, radius);
 
+    float lineThickness{ 5.f };
     g.setColour(knobAccentClr);
-    g.drawEllipse(ellipseCentre.x, ellipseCentre.y, radius, radius, 5.f);
+    g.drawEllipse(ellipseCentre.x, ellipseCentre.y, radius, radius, lineThickness);
 
     // drawing pointer
     juce::Path pointer{};
     float pointerLength{ radius * .25f };
     float pointerThickness{ 10.f };
+    float cornerSize{ 2.f };
 
-    pointer.addRoundedRectangle(-pointerThickness * .5f, -radius * .5f, pointerThickness, pointerLength, 2.f);
+    pointer.addRoundedRectangle(-pointerThickness * .5f, -radius * .5f, pointerThickness, pointerLength, cornerSize);
     pointer.applyTransform(juce::AffineTransform::rotation(angle).scaled(1.2f).translated(containerCentre.x, containerCentre.y));
 
     g.setColour(knobBaseClr);
@@ -69,51 +71,50 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
     // drawing arc around knob
     juce::Path arc{};
     juce::Path arcDashed{};
-    const float dashLengths[2] = { 10.f, 15.f };
+    const int nrOfDashLengths{ 2 };
+    const float dashLengths[nrOfDashLengths] = { 10.f, 15.f };
+    float rotation{ 0 };
 
     arc.addCentredArc(containerCentre.x, containerCentre.y,
-        radius * .75f, radius * .75f,
-        0.f,
-        rotaryStartAngle, rotaryEndAngle,
-        true);
-    m_strokeType.createDashedStroke(arcDashed, arc, dashLengths, 2);
+                      radius * .75f, radius * .75f,
+                      rotation,
+                      rotaryStartAngle, rotaryEndAngle,
+                      true);
+    m_strokeType.createDashedStroke(arcDashed, arc, dashLengths, nrOfDashLengths);
 
     g.setColour(knobBaseClr);
     g.strokePath(arcDashed, m_strokeType);
-
-
-
 }
 void CustomLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
     bool isMouseOverButton, bool isButtonDown)
 {
-
-    //g.fillAll(juce::Colours::green);
+    float cornerSize{ 5.f };
     juce::Colour colourA{ juce::Colours::crimson };
     juce::Colour btnBorderClr(isButtonDown ? colourA.brighter(0.1f) : colourA);
-
     juce::Colour colourB{ juce::Colours::goldenrod };
     juce::Colour btnCenterClr(isMouseOverButton ? (isButtonDown ? colourB.darker(.2f) : colourB.brighter(.2f)) : colourB);
-
     juce::Rectangle<int> bounds = button.getLocalBounds();
     juce::Rectangle<float> buttonBnds{ static_cast<float>(bounds.getTopLeft().getX()),
         static_cast<float>(bounds.getTopLeft().getY()),
         static_cast<float>(bounds.getWidth()),
         static_cast<float>(bounds.getHeight()) };
+
     g.setColour(btnBorderClr);
     buttonBnds.reduce(buttonBnds.getWidth() * .05f, buttonBnds.getHeight() * .05f);
-    g.fillRoundedRectangle(buttonBnds, 5.f);
+    g.fillRoundedRectangle(buttonBnds, cornerSize);
     g.setColour(btnCenterClr);
     buttonBnds.reduce(buttonBnds.getWidth() * .05f, buttonBnds.getHeight() * .05f);
-    g.fillRoundedRectangle(buttonBnds, 5.f);
-
+    g.fillRoundedRectangle(buttonBnds, cornerSize);
 }
 void CustomLookAndFeel::drawButtonText(juce::Graphics&, juce::TextButton&, bool, bool) {    }
 void CustomLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& l)
 {
+    Vector2f position{ 0,0 };
+    int nrOfLines{ 1 };
+
     g.setColour(juce::Colour(200, 200, 200));
     g.setFont(m_font);
-    g.drawFittedText(l.getText(), 0, 0, l.getWidth(), l.getHeight(), l.getJustificationType(), 1);
+    g.drawFittedText(l.getText(), position.x, position.y, l.getWidth(), l.getHeight(), l.getJustificationType(), nrOfLines);
 }
 
 //==============================================================================
