@@ -24,6 +24,7 @@ GenerativeMelodicSequencerAudioProcessor::GenerativeMelodicSequencerAudioProcess
                        ),
     m_samplesProcessed(0), 
     m_noteCounter(0),
+    m_activeNote(-1),
     m_isNoteOn(false),
     m_resetMelody(false),
     m_rootNote(60),
@@ -265,20 +266,16 @@ void GenerativeMelodicSequencerAudioProcessor::RemoveListenerFromBroadcaster(juc
 }
 
 //==============================================================================
-int GenerativeMelodicSequencerAudioProcessor::GetCurrentMidiNote()
+int GenerativeMelodicSequencerAudioProcessor::GetActiveNote()
 {
     return m_activeNote;
-}
-bool GenerativeMelodicSequencerAudioProcessor::GetIsNoteOn()
-{
-    return m_isNoteOn;
 }
 juce::AudioProcessorValueTreeState* GenerativeMelodicSequencerAudioProcessor::GetAPVTS()
 {
     return &m_apvts;
 }
 
-void GenerativeMelodicSequencerAudioProcessor::ResetMelody()
+void GenerativeMelodicSequencerAudioProcessor::SetResetMelody()
 {
     m_resetMelody = true;
 }

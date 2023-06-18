@@ -91,7 +91,7 @@ void NoteVisualiser::paint(juce::Graphics& g)
 //==============================================================================
 void NoteVisualiser::UpdateNoteVisibility(GenerativeMelodicSequencerAudioProcessor& p)
 {
-    int noteChanged{ p.GetCurrentMidiNote() };
+    int noteChanged{ p.GetActiveNote() };
     int noteIndex{ noteChanged * m_nrOfDuplicates };
     float noteHeight{ m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates) * p.GetSequencerSettings(*p.GetAPVTS()).gate };
     float noteDensity{ p.GetSequencerSettings(*p.GetAPVTS()).density };

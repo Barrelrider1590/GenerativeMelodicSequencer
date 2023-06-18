@@ -49,7 +49,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
         l->InitialiseLabel();
     }
 
-    auto generateMelody{ [this]() { m_audioProcessor.ResetMelody();  } };
+    auto generateMelody{ [this]() { m_audioProcessor.SetResetMelody();  } };
     
     m_randomiseBtn.onClick = generateMelody;
 

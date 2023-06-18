@@ -66,12 +66,11 @@ public:
     void RemoveListenerFromBroadcaster(juce::ChangeListener* listener);
 
     //==============================================================================
-    int GetCurrentMidiNote();
-    bool GetIsNoteOn();
+    int GetActiveNote();
     juce::AudioProcessorValueTreeState* GetAPVTS();
     SequencerSettings GetSequencerSettings(const juce::AudioProcessorValueTreeState&);
 
-    void ResetMelody();
+    void SetResetMelody();
     
 
 private:
