@@ -168,19 +168,20 @@ void GenerativeMelodicSequencerAudioProcessor::processBlock (juce::AudioBuffer<f
 {
     juce::ScopedNoDenormals noDenormals{};
 
-    int totalNumInputChannels = getTotalNumInputChannels();
-    int totalNumOutputChannels = getTotalNumOutputChannels();
+    int totalNumInputChannels{ getTotalNumInputChannels() };
+    int totalNumOutputChannels{ getTotalNumOutputChannels() };
+    int startSample{ 0 };
 
     for (int i{ totalNumInputChannels }; i < totalNumOutputChannels; ++i)
     {
-        buffer.clear(i, 0, buffer.getNumSamples());
+        buffer.clear(i, startSample, buffer.getNumSamples());
     }
 
     SequencerSettings sequencerSettings{ GetSequencerSettings(m_apvts) };
 
     UpdateMidiBuffer(midiMessages, getSampleRate(), sequencerSettings);
 
-    m_synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    m_synth.renderNextBlock(buffer, midiMessages, startSample, buffer.getNumSamples());
 
     m_samplesProcessed += buffer.getNumSamples();
 }
