@@ -14,7 +14,6 @@
 class SynthVoice : public juce::SynthesiserVoice
 {
 public:
-
     bool canPlaySound(juce::SynthesiserSound* sound)                    override;
     void startNote(int midiNoteNumber,
         float velocity,
@@ -41,8 +40,3 @@ private:
     bool m_isPrepared = false;
     
 };
-
-// wave shape formula
-// sine: return std::sin(x);
-// saw: return x / juce::MathConstants<float>::pi;
-// square: return x < 0.0f ? -1.0f : 1.0f;
