@@ -30,6 +30,7 @@ CustomLookAndFeel::CustomLookAndFeel() :
     m_font.setTypefaceStyle("Light");
     m_font.setFallbackFontName("Arial");
 }
+CustomLookAndFeel::~CustomLookAndFeel() {}
 
 //==============================================================================
 void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
