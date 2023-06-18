@@ -18,7 +18,6 @@ NoteVisualiser::NoteVisualiser(const juce::ColourGradient& gradient, const juce:
     m_maxNoteHeight(0.f),
     m_notesVect(),
     m_noteNamesVect({ "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b" }),
-    m_border(),
     m_bounds(),
     m_gradient(gradient),
     m_backgroundClr(bgClr)
@@ -32,6 +31,7 @@ NoteVisualiser::NoteVisualiser(const juce::ColourGradient& gradient, const juce:
         m_notesVect[i]->m_noteNr = i / m_nrOfDuplicates;
         m_notesVect[i]->m_index = i % m_nrOfDuplicates;
         m_notesVect[i]->m_colourActive = m_gradient.getColourAtPosition(static_cast<float>(m_notesVect[i]->m_noteNr) / nrOfNotes);
+        m_notesVect[i]->m_colourInactive = m_backgroundClr;
     }
 }
 NoteVisualiser::~NoteVisualiser() {}
@@ -39,9 +39,8 @@ NoteVisualiser::~NoteVisualiser() {}
 //==============================================================================
 void NoteVisualiser::setBounds(const juce::Rectangle<int>& newBounds)
 {
-    m_border = newBounds;
     m_bounds = newBounds;
-    m_margin = juce::jmin(m_bounds.getWidth(), m_bounds.getHeight()) * .1f;
+    m_margin = (juce::jmin(m_bounds.getWidth(), m_bounds.getHeight()) * .1f) * .4f;
     m_bounds.reduce(m_margin, m_margin);
 
     juce::Rectangle<int> noteBounds = m_bounds;
@@ -54,7 +53,7 @@ void NoteVisualiser::setBounds(const juce::Rectangle<int>& newBounds)
     for (auto& note : m_notesVect)
     {
         noteBounds.setX(noteBounds.getWidth() * note->m_noteNr + m_margin);
-        m_noteStartPos = m_border.getHeight() - noteBounds.getHeight();
+        m_noteStartPos = newBounds.getHeight() - noteBounds.getHeight() + m_margin;
         noteBounds.setY(m_noteStartPos);
         note->m_rect = noteBounds;
         note->m_offsetTotal = m_noteStartPos;
@@ -70,16 +69,22 @@ void NoteVisualiser::paint(juce::Graphics& g)
 
     for (const auto& note : m_notesVect)
     {
-        g.setColour((note->m_isActive ? note->m_colourActive : note->m_colourInactive));
-        g.fillRect(note->m_rect);
-        
+        if (note->m_isActive)
+        {
+            g.setColour(note->m_colourActive);
+            g.fillRect(note->m_rect);
+        }
+
         if (note->m_index == 0)
         {
-            juce::Line<float> line{ m_maxNoteWidth * note->m_noteNr + m_margin, 0.f,
+            juce::Line<float> line{ m_maxNoteWidth * note->m_noteNr + m_margin, m_margin,
                                     m_maxNoteWidth * note->m_noteNr + m_margin, m_bounds.getHeight() + m_margin };
             g.setColour(m_gradient.getColourAtPosition(note->m_noteNr / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates)).brighter(.2f));
-            g.drawLine(line, 1.f);
+            if (note->m_noteNr != 0)
+            {
+                g.drawLine(line, 1.f);
 
+            }
             g.drawFittedText(m_noteNamesVect[note->m_noteNr % 12],
                              m_maxNoteWidth * note->m_noteNr + m_margin, m_margin,
                              m_maxNoteWidth, m_maxNoteHeight,
@@ -87,8 +92,10 @@ void NoteVisualiser::paint(juce::Graphics& g)
         }
     }
 
-    g.setColour(juce::Colours::rebeccapurple.darker(.2f));
-    g.drawRect(m_border, m_margin);
+    g.setColour(m_backgroundClr);
+    Vector2f position{ m_margin, 0 };
+    g.fillRect(position.x, position.y,
+               static_cast<float>(m_bounds.getWidth()), m_margin);
 }
 
 //==============================================================================

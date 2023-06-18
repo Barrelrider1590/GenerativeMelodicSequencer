@@ -34,7 +34,6 @@ private:
     float m_maxNoteHeight;
     std::vector<std::unique_ptr<NoteVisual>> m_notesVect;
     std::vector<juce::String> m_noteNamesVect;
-    juce::Rectangle<int> m_border;
     juce::Rectangle<int> m_bounds;
     juce::ColourGradient m_gradient;
     juce::Colour m_backgroundClr;
