@@ -43,8 +43,8 @@ void NoteVisualiser::setBounds(const juce::Rectangle<int>& newBounds)
     m_bounds.reduce(m_margin, m_margin);
 
     juce::Rectangle<int> noteBounds = m_bounds;
-    m_maxNoteWidth = m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates);
-    m_maxNoteHeight = m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates);
+    m_maxNoteWidth = std::ceil(m_bounds.getWidth() / static_cast<float>(m_notesVect.size() / m_nrOfDuplicates));
+    m_maxNoteHeight = std::ceil(m_bounds.getHeight() / static_cast<float>(m_nrOfDuplicates));
 
     noteBounds.setWidth(m_maxNoteWidth);
     noteBounds.setHeight(m_maxNoteHeight);
