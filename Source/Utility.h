@@ -12,12 +12,61 @@
 #include <JuceHeader.h>
 
 #pragma region Custom Components
-struct RotaryKnob : public juce::Slider
+struct RotaryKnob : public juce::Slider,
+                    private juce::OSCReceiver,
+                    private juce::OSCReceiver::ListenerWithOSCAddress<juce::OSCReceiver::MessageLoopCallback>
 {
-    RotaryKnob(const juce::String& label = "Label") :
-        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxAbove) {}
+    RotaryKnob(const juce::String& label = "Label",
+        const juce::String& oscReceiver = "/juce/",
+        int valueStep = 1,
+        int port = 1000) :
+        juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxAbove),
+        m_label(label),
+        m_valueStep(valueStep)
+    {
+        if (!connect(port))
+            showConnectionErrorMessage("Error: could not connect to UDP port");
+
+        juce::OSCReceiver::addListener(this, oscReceiver);
+    }
     ~RotaryKnob() {}
+
+private:
+    void oscMessageReceived(const juce::OSCMessage& message)
+    {
+        DBG(m_label);
+        if (message[0].getFloat32() != 0)
+        {
+            if (message[1].getFloat32() > 0 && getValue() < getMaximum())
+            {
+                DBG("Value increasing");
+                setValue(getValue() + m_valueStep);
+                
+            }
+            else if (message[1].getFloat32() < 0 && getValue() > getMinimum())
+            {
+                DBG("Value decreasing");
+                setValue(getValue() - m_valueStep);
+            }
+        }
+        else
+        {
+            DBG("Value will not change");
+        }
+    }
+    void showConnectionErrorMessage(const juce::String& messageText)
+    {
+        juce::AlertWindow::showMessageBoxAsync(juce::AlertWindow::WarningIcon,
+            "Connection error",
+            messageText,
+            "OK");
+    }
+
+    juce::String m_label;
+
+    int m_valueStep;
 };
+
 class ComponentLabel : public juce::Label
 {
 public:
