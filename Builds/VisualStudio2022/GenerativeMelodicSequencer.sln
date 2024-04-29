@@ -10,9 +10,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenerativeMelodicSequencer - VST3", "GenerativeMelodicSequencer_VST3.vcxproj", "{63BF5C3B-5CA7-EF65-2303-CC090061888D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{097A3AF1-641F-A577-3F3D-2612132E0AD0} = {097A3AF1-641F-A577-3F3D-2612132E0AD0}
+		{5DD71DBB-4F75-750A-A3AC-75CE090E17F8} = {5DD71DBB-4F75-750A-A3AC-75CE090E17F8}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenerativeMelodicSequencer - Shared Code", "GenerativeMelodicSequencer_SharedCode.vcxproj", "{097A3AF1-641F-A577-3F3D-2612132E0AD0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenerativeMelodicSequencer - VST3 Manifest Helper", "GenerativeMelodicSequencer_VST3ManifestHelper.vcxproj", "{5DD71DBB-4F75-750A-A3AC-75CE090E17F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +35,10 @@ Global
 		{097A3AF1-641F-A577-3F3D-2612132E0AD0}.Debug|x64.Build.0 = Debug|x64
 		{097A3AF1-641F-A577-3F3D-2612132E0AD0}.Release|x64.ActiveCfg = Release|x64
 		{097A3AF1-641F-A577-3F3D-2612132E0AD0}.Release|x64.Build.0 = Release|x64
+		{5DD71DBB-4F75-750A-A3AC-75CE090E17F8}.Debug|x64.ActiveCfg = Debug|x64
+		{5DD71DBB-4F75-750A-A3AC-75CE090E17F8}.Debug|x64.Build.0 = Debug|x64
+		{5DD71DBB-4F75-750A-A3AC-75CE090E17F8}.Release|x64.ActiveCfg = Release|x64
+		{5DD71DBB-4F75-750A-A3AC-75CE090E17F8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
