@@ -34,24 +34,48 @@ struct RotaryKnob : public juce::Slider,
 private:
     void oscMessageReceived(const juce::OSCMessage& message)
     {
-        DBG(m_label);
+        //DBG(m_label);
         if (message[0].getFloat32() != 0)
         {
-            if (message[1].getFloat32() > 0 && getValue() < getMaximum())
+            if (message[1].getFloat32() == 1)
             {
-                DBG("Value increasing");
-                setValue(getValue() + m_valueStep);
-                
+                DBG(m_label);
+                if (message[2].getFloat32() > 0 && getValue() < getMaximum())
+                {
+                    if (getMaximum() <= 1.0f)
+                    {
+                        double scaledValue{ getValue() * 100 };
+                        scaledValue += m_valueStep;
+                        setValue(scaledValue * .01);
+                    }
+                    else
+                    {
+                        DBG("Value increasing");
+                        setValue(getValue() + m_valueStep);
+                    }
+                }
+                else if (message[2].getFloat32() < 0 && getValue() > getMinimum())
+                {
+                    
+                    if (getMaximum() <= 1.0f)
+                    {
+                        double scaledValue{ getValue() * 100 };
+                        scaledValue -= m_valueStep;
+                        setValue(scaledValue * .01);
+                    }
+                    else
+                    {
+                        DBG("Value decreasing");
+                        setValue(getValue() - m_valueStep);
+                    }
+
+                }
             }
-            else if (message[1].getFloat32() < 0 && getValue() > getMinimum())
-            {
-                DBG("Value decreasing");
-                setValue(getValue() - m_valueStep);
-            }
+            
         }
         else
         {
-            DBG("Value will not change");
+            //DBG(m_label);
         }
     }
     void showConnectionErrorMessage(const juce::String& messageText)
@@ -64,7 +88,7 @@ private:
 
     juce::String m_label;
 
-    int m_valueStep;
+    double m_valueStep;
 };
 
 class ComponentLabel : public juce::Label
