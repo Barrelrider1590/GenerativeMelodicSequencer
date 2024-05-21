@@ -23,7 +23,7 @@ GenerativeMelodicSequencerAudioProcessorEditor::GenerativeMelodicSequencerAudioP
     m_scaleKnob("Scale", "/juce/scale", 1, 12002),
     m_scaleKnobAttachment(*p.GetAPVTS(), "scale", m_scaleKnob),
     m_scaleLbl(m_scaleKnob, "Scale"),
-    m_bpmKnob("BPM", "/juce/bpm", 1, 12000),
+    m_bpmKnob("BPM", "/juce/bpm", 10, 12000),
     m_bpmKnobAttachment(*p.GetAPVTS(), "bpm", m_bpmKnob),
     m_bpmLbl(m_bpmKnob, "BPM"),
     m_loopLengthKnob("Length", "/juce/length", 1, 12001),
