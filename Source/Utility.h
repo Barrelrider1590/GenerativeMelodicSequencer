@@ -34,43 +34,9 @@ struct RotaryKnob : public juce::Slider,
 private:
     void oscMessageReceived(const juce::OSCMessage& message)
     {
-        //DBG(m_label);
-        if (message[0].getFloat32() != 0) // check if sensor value is below threshold
+        if (message[0].getFloat32())
         {
-            if (message[1].getFloat32() == 1) // check if value should be changed based on nr of fingers bent
-            {
-                DBG(m_label);
-                if (message[2].getFloat32() > 0 && getValue() < getMaximum()) // check if value should be altered
-                {
-                    DBG("Accelerometer threshold crossed");
-                    if(message[3].getFloat32() > 0 && getValue() < getMaximum()) // check if value should be incr or decr
-                        if (getMaximum() <= 1.0f)
-                        {
-                            double scaledValue{ getValue() * 100 };
-                            scaledValue += m_valueStep;
-                            setValue(scaledValue * .01);
-                        }
-                        else
-                        {
-                            DBG("Value increasing");
-                            setValue(getValue() + m_valueStep);
-                        }
-                    else
-                    {
-                        if (getMaximum() <= 1.0f)
-                        {
-                            double scaledValue{ getValue() * 100 };
-                            scaledValue -= m_valueStep;
-                            setValue(scaledValue * .01);
-                        }
-                        else
-                        {
-                            DBG("Value decreasing");
-                            setValue(getValue() - m_valueStep);
-                        }
-                    }
-                }
-            }
+            setValue(message[0].getFloat32());
         }
     }
 
