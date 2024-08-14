@@ -18,11 +18,9 @@ struct RotaryKnob : public juce::Slider,
 {
     RotaryKnob(const juce::String& label = "Label",
         const juce::String& oscReceiver = "/juce/",
-        int valueStep = 1,
         int port = 1000) :
         juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextBoxAbove),
-        m_label(label),
-        m_valueStep(valueStep)
+        m_label(label)
     {
         if (!connect(port))
             showConnectionErrorMessage("Error: could not connect to UDP port");
